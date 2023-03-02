@@ -53,3 +53,9 @@ TODO
 
 TODO
 
+## Run Units Tests
+
+```bash
+>>> pip install pytest
+>>> pytest -v
+```
