@@ -28,6 +28,8 @@ You can search by category:
 
 Function Name    | Description                                                             | Location                      | Code Completed | Documented | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+ascii_barplot           | A function which draws a barplot using only raw text symbols            | functions/ascii_barplot.py           |                |            |                             | 2                |
+ascii_density_histogram | A function which draws a histogram using only raw text symbols          | functions/ascii_density_histogram.py |                |            |                             | 2                |
 make_url_request | A convenience function for making API requests using the urllib library | functions/make_url_request.py | x              | x          | tests/make_url_request.py   | 3                |
 
 ## API and Web
