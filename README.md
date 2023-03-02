@@ -37,7 +37,7 @@ make_url_request | A convenience function for making API requests using the urll
 
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-make_url_request | A convenience function for making API requests using the urllib library | functions/make_url_request.py | x              | x          | tests/make_url_request.py   | 3                |
+make_url_request | A convenience function for making API requests using the urllib library | functions/test_make_url_request.py | x              | x          | tests/make_url_request.py   | 3                |
 
 ## Data Visualisation
 
