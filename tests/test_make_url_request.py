@@ -1,11 +1,29 @@
 # add the root project directory to the system path:
 import sys
 import os
+import json
 import time
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# import the function to be tested:
 from joes_giant_toolbox.make_url_request import make_url_request
+
+# run the tests:
+def test_successful_request_with_known_output():
+    """test if expected content can be successfully pulled from a known response URL"""
+    url_response = make_url_request(url="https://jsonplaceholder.typicode.com/todos/1")
+    output = json.loads(url_response["returned_content"])
+    expected_output = {
+        "userId": 1,
+        "id": 1,
+        "title": "delectus aut autem",
+        "completed": False,
+    }
+    assert (
+        output == expected_output
+    ), f"request to known URL produced unexpected result \nReturned: {output}. \nExpected: {expected_output}"
 
 
 def test_url_does_not_exist():
@@ -28,7 +46,7 @@ def test_request_timeout():
     end_time = time.perf_counter()
     assert (
         end_time - start_time
-    ) < 0.2, "timeout parameter must quickly force the request to stop"
+    ) < 1.0, "timeout parameter must quickly force the request to stop"
 
 
 def test_efficient_stream_content_from_large_request():

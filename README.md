@@ -30,6 +30,7 @@ Function Name    | Description                                                  
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
 ascii_barplot           | A function which draws a barplot using only raw text symbols            | functions/ascii_barplot.py           |                |            |                             | 2                |
 ascii_density_histogram | A function which draws a histogram using only raw text symbols          | functions/ascii_density_histogram.py |                |            |                             | 2                |
+conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | functions/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
 list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | functions/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
 make_url_request | A convenience function for making API requests using the urllib library | functions/make_url_request.py | x              | x          | tests/make_url_request.py   | 3                |
 
@@ -55,11 +56,13 @@ list_files_in_gcloud_bucket | Function which returns a list of the files present
 
 ## Statistical Inference and Hypothesis Testing 
 
-TODO
+Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
+-----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | functions/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
 
 ## Run Units Tests
 
 ```bash
->>> pip install pytest
->>> pytest -v
+pip install pytest
+pytest -v
 ```
