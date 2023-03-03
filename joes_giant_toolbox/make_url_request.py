@@ -69,7 +69,7 @@ def make_url_request(
       'status_desc': socket.gaierror(8,'nodename nor servname provided, or not known')
     }
 
-    ## specify headers so that website will let us in
+    ## specify headers so that website will let us in ##
     >> make_url_request(url="https://www.amazon.com")
     { 'returned_content': None, 'response_status_code': 503, 'status_desc': 'Service Unavailable'}
     >> make_request(url="https://www.amazon.com", headers={"User-Agent":"let me in please"})
