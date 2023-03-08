@@ -1,6 +1,26 @@
-# Joe's Giant ToolBox
+# Joe's Giant Tool Box
 
 This is a large collection of general python functions and classes that I use in my daily work
+
+```
+                                                     .-.
+                                                    /   \
+                                     _____.....-----|(o) |
+                               _..--'          _..--|  .''
+                             .'  o      _..--''     |  | |
+                            /  _/_..--''            |  | |
+                   ________/  / /                   |  | |
+                  | _  ____\ / /                    |  | |
+ _.-----._________|| ||    \\ /                     |  | |
+|=================||=||_____\\                      |__|-'
+|                 ||_||_____//                      (o\ |
+|_________________|_________/                        |-\|
+ `-------------._______.----'                        /  `.
+    .,.,.,.,.,.,.,.,.,.,.,.,.,                      /     \
+   ((O) o o o o ======= o o(O))                 ._.'      /
+LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
+```
+ascii art source: https://ascii.co.uk
 
 The various functions/classes exist at varying levels of completeness (e.g. some will have incomplete documentation or missing unit tests)
 
