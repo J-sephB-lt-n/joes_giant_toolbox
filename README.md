@@ -24,43 +24,56 @@ You can search by category:
 
 * [Statistical Inference and Hypothesis Testing](#statistical-inference-and-hypothesis-testing)
 
+* [Text and Natural Language Processing](#text-and-natural-language-processing)
+
 ..or you can just scroll through the master list:
 
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-ascii_barplot           | A function which draws a barplot using only raw text symbols            | functions/ascii_barplot.py           |                |            |                             | 2                |
-ascii_density_histogram | A function which draws a histogram using only raw text symbols          | functions/ascii_density_histogram.py |                |            |                             | 2                |
-conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | functions/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
-list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | functions/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
-make_url_request | A convenience function for making API requests using the urllib library | functions/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
+ascii_barplot           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
+ascii_density_histogram | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
+conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
+list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
+make_url_request | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
+string_cleaner | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
+view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py |                |            |                             | 2                |
+write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
 
 ## API and Web
 
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-make_url_request | A convenience function for making API requests using the urllib library | functions/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
+make_url_request | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
 
 ## Data Visualisation
 
 Function Name           | Description                                                             | Location                             | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 ------------------------|-------------------------------------------------------------------------|--------------------------------------|----------------|------------|-----------------------------|----------
-ascii_barplot           | A function which draws a barplot using only raw text symbols            | functions/ascii_barplot.py           |                |            |                             | 2                |
-ascii_density_histogram | A function which draws a histogram using only raw text symbols          | functions/ascii_density_histogram.py |                |            |                             | 2                |
+ascii_barplot           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
+ascii_density_histogram | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
+view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py |                |            |                             | 2                |
 
 ## Google Cloud
 
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | functions/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
-
+list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
+write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
 
 ## Statistical Inference and Hypothesis Testing 
 
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | functions/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
+conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
 
-## Run Units Tests
+## Text and Natural Language Processing
+Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
+-----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+string_cleaner | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
+
+
+
+# Run Units Tests
 
 ```bash
 pip install pytest
