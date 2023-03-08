@@ -1,18 +1,47 @@
 import re
 
 
-class string_cleaner:
+class StringCleaner:
     """
     A utility for performing common string-cleaning operations.
 
-    Cleaning operations can also be chained sequentially.
+    Multiple cleaning operations can also be chained sequentially
 
-    Notes
-    -----
-    TODO
+    Attributes
+    ----------
+    operations: dict
+        A dictionary containing each individual string cleaning function
 
     Methods
     -------
+    apply_sequential_operations
+        documentation TODO
+
+    Notes
+    -----
+    You can get a list of the available string cleaning functions as follows:
+    >>> string_cleaner_instance = StringCleaner()
+    >>> print("operations available:")
+    >>> for op in string_cleaner_instance.operations:
+    ...     print("\t","o ",op)
+        o  extract_domain_from_url
+        o  remove_specific_words
+        ...
+        o  join_single_space_separated_letters_together
+
+    You can get help on a specific string cleaning function using the built-in python help() function:
+    >>> string_cleaner_instance = StringCleaner()
+    >>> help(string_cleaner_instance.operations["to_lowercase"])
+
+    A single string cleaning operation can be accessed directly:
+    >>> string_cleaner_instance.operations["remove_punctuation"]("j!o@e#i$s%t^h&e&b*e(s)t")
+    joeisthebest
+        ...or called via a chain consisting of only that 1 operation:
+    >>> string_cleaner_instance.apply_sequential_operations("j!o@e#i$s%t^h&e&b*e(s)t", ["remove_punctuation"])
+    joeisthebest
+
+    Available String Cleaning Operations
+    ------------------------------------
     extract_domain_from_url
         Extracts the base domain from a given website URL
     apply_sequential_operations
@@ -30,23 +59,23 @@ class string_cleaner:
     remove_numbers
         Removes all number characters from a given string
     remove_spaces
-        - DOCUMENTATION TODO
+        Removes all spaces from a given string
     newlines_to_spaces
-        - DOCUMENTATION TODO
+        Turn newline characters ("\\n") into space characters in a given string
     multiple_spaces_to_single_spaces
-        - DOCUMENTATION TODO
+        Turns every sequence of space characters in a given string into a single space character
     remove_spaces_at_start_and_end
-        - DOCUMENTATION TODO
+        Remove any spaces characters
     non_letters_to_spaces
-        - DOCUMENTATION TODO
+        Turn every character in a given string which is not a letter into a single space character
     remove_non_letters
-        - DOCUMENTATION TODO
+        Remove every character in a given string which is not a letter
     join_single_space_separated_letters_together
-        - DOCUMENTATION TODO
+        Removes the space characters between sequences of single letter characters separated by a single space (e.g. "a  B c D  e" becomes "a  BcD  e")
 
     Example Usage
     -------------
-    string_cleaner_obj = string_cleaner()
+    string_cleaner_obj = StringCleaner()
     print("operations available:")
     for op in string_cleaner_obj.operations:
         print("\t","o ",op)
@@ -84,10 +113,6 @@ class string_cleaner:
     """
 
     def __init__(self):
-        import re
-
-        self.version = 1.01
-
         self.operations = {}
 
         def extract_domain_from_url(raw_str):
@@ -109,6 +134,7 @@ class string_cleaner:
             return re.sub("|".join([re.escape(x) for x in remove_list]), "", raw_str)
 
         def to_lowercase(raw_str):
+            """Converts all upper case characters in the given string to lower case"""
             return raw_str.lower()
 
         def punctuation_to_spaces(raw_str):

@@ -22,14 +22,12 @@ LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
 ```
 ascii art source: https://ascii.co.uk
 
-The various functions/classes exist at varying levels of completeness (e.g. some will have incomplete documentation or missing unit tests)
-
-I have added in a confidence score for each function/class:
+The scripts exist at varying levels of completeness (some have seen extensive use in many projects whereas others have been used little or have incomplete documentation and missing unit tests). In order to measure this, I have added in a confidence score for each:
 
 Confidence Score | Description                      
 -----------------|-----------------------------------------
-5                | Code has been used (without any failures) in multiple production environments (or large real world projects)
-4                | Code has been used (without any failures) in a production environment (or large real world project)
+5                | Code has been used (without any observed failures) in multiple production environments (or large real world projects)
+4                | Code has been used (without any observed failures) in a production environment (or large real world project)
 3                | Code appears to work perfectly and passes a suite of unit tests but has not yet been used in a production environment or large real world project 
 2                | The code appears to work perfectly but has not been thoroughly tested
 1                | Skeleton of function/class is present but the code does not work fully yet 
@@ -93,7 +91,7 @@ string_cleaner | A class for chaining common string-cleaning operations | joes_g
 
 
 
-# Run Units Tests
+# Run Unit Tests
 
 ```bash
 pip install pytest
