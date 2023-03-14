@@ -53,6 +53,7 @@ ascii_density_histogram | A function which draws a histogram using only raw text
 conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
 list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
 make_url_request | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
+query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 string_cleaner | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
 view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py |                |            |                             | 2                |
 write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
@@ -76,7 +77,11 @@ view_nested_dict_structure | Provides a simple printout for understanding the st
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
 list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
+query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
+
+
+/Users/josephbolton/personal_projects/joes_giant_toolbox/joes_giant_toolbox/query_bigquery_to_pandas_df.py
 
 ## Statistical Inference and Hypothesis Testing 
 
