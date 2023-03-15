@@ -1,18 +1,20 @@
 def longest_portion_of_phrase_in_search_string(phrase_str: str, search_str: str) -> str:
-    """returns longest sequence of words from phrase present in search string
+    """Finds longest subsequence of words in a phrase string that occur within a search string
 
     Parameters
     ----------
     phrase_str: str
-        The phrase (sequence of words) which we want to find in the search string
+        The phrase (sequence of words) which we want to find a subsequence of within [search_str]
     search_str: str
-        The string in which to search for a portion of the phrase
+        The string in which to search for a subsequence of [phrase_str]
+
     Returns
     -------
     str
-        The longest portion of the phrase that was found in the search string
+        The longest subsequence of words in [phrase_str] that was found in the search string
         In the case of a tie for sequence length, returns the first one found
         If no word from the phrase appears in the search string, returns None
+
     Example Usage
     -------------
     >>>longest_portion_of_phrase_in_search_string(
