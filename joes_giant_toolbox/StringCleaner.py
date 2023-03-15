@@ -4,49 +4,42 @@ import typing
 
 class StringCleaner:
     """
-    A utility for performing common string-cleaning operations.
+    A utility for performing common string-cleaning operations. Multiple operations can be chained sequentially.
 
-    Multiple cleaning operations can also be chained sequentially
+    Example Usage
+    -------------
+    >> string_cleaner = StringCleaner(verbose=True)
+    >>
 
     Attributes
     ----------
     operations: dict
         A dictionary containing each individual string cleaning function
+    verbose: str, optional (default: True)
+        A global parameter dictating the verbosity of every string cleaning function
 
     Methods
     -------
     apply_sequential_operations
-        Sequentially applies a sequence of 1 or more string cleaning operations to a given string
+        Sequentially applies 1 or more string cleaning operations to a given string
 
     Notes
     -----
-    You can get a list of the available string cleaning functions as follows:
-    >>> string_cleaner_instance = StringCleaner()
-    >>> print("operations available:")
-    >>> for op in string_cleaner_instance.operations:
-    ...     print("\t","o ",op)
-        o  extract_domain_from_url
-        o  remove_specific_words
-        ...
-        o  join_single_space_separated_letters_together
-
     You can get help on a specific string cleaning function using the built-in python help() function:
-    >>> string_cleaner_instance = StringCleaner()
-    >>> help(string_cleaner_instance.operations["to_lowercase"])
+    >>> string_cleaner = StringCleaner()
+    >>> help( string_cleaner.operations["to_lowercase"] )
 
     A single string cleaning operation can be accessed directly:
-    >>> string_cleaner_instance.operations["remove_punctuation"]("j!o@e#i$s%t^h&e&b*e(s)t")
+    >>> string_cleaner.operations["remove_punctuation"]("j!o@e#i$s%t^h&e&b*e(s)t")
     joeisthebest
         ...or called via a chain consisting of only that 1 operation:
-    >>> string_cleaner_instance.apply_sequential_operations("j!o@e#i$s%t^h&e&b*e(s)t", ["remove_punctuation"])
+    >>> string_cleaner.apply_sequential_operations("j!o@e#i$s%t^h&e&b*e(s)t", operation_names_list=["remove_punctuation"])
     joeisthebest
 
     Available String Cleaning Operations
     ------------------------------------
     extract_domain_from_url
         Extracts the base domain from a given website URL
-    apply_sequential_operations
-        To a given string, applies cleaning operations one after the other
     remove_words_or_phrases
         Removes specific 'words' or 'phrases' (i.e. specific characters in a specific order) from a given string, possibly observing word boundaries
     to_lowercase
@@ -75,10 +68,30 @@ class StringCleaner:
         Removes the space characters between sequences of single letter characters separated by a single space (e.g. "a  B c D  e" becomes "a  BcD  e")
     """
 
-    def __init__(self):
+    def __init__(self, verbose: bool = True) -> None:
         self.operations = {}
+        self.verbose = verbose
 
         def extract_domain_from_url(raw_str: str) -> str:
+            """Extracts the base domain from a given website URL
+
+            Example Usage
+            -------------
+            >>> string_cleaner = StringCleaner()
+            >>> string_cleaner.operations["extract_domain_from_url"]("https://www.google.co.uk/media/contact-us.php")
+            'https://www.google.co.uk'
+            """
+            if self.verbose:
+                print(
+                    f"""
+" ".join(
+    re.findall(
+        "(?P<url>https?://[^/]+)",
+        "{raw_str}",
+    )     
+)           
+"""
+                )
             return " ".join(
                 re.findall(
                     "(?P<url>https?://[^/]+)",
@@ -92,25 +105,60 @@ class StringCleaner:
             enforce_word_boundaries: bool,
             **kwargs,
         ) -> str:
-            """
-            documentation TODO
+            """Removes specific 'words' or 'phrases' (i.e. specific characters in a specific order) from a given string, possibly observing word boundaries
+
+            Example Usage
+            -------------
+            >>> string_cleaner = StringCleaner()
+            >>> string_cleaner.operations["remove_words_or_phrases"](
+            ...    raw_str="the company name is big stinc inc",
+            ...    remove_list=["inc"],
+            ...    enforce_word_boundaries=False
+            ... )
+            'the company name is big st '
+            >>> string_cleaner.operations["remove_words_or_phrases"](
+            ...    raw_str="the company name is big stinc inc",
+            ...    remove_list=["inc"],
+            ...    enforce_word_boundaries=True
+            ... )
+            'the company name is big stinc '
             """
             if enforce_word_boundaries:
+                if self.verbose:
+                    print(
+                        f"""
+re.sub(
+    "|".join([f"(\\\\b{{re.escape(x)}}\\\\b)" for x in {remove_list}]),
+    "",
+    "{raw_str}",
+)"""
+                    )
                 return re.sub(
-                    "|".join([f"\\b{re.escape(x)}\\b" for x in remove_list]),
+                    "|".join([f"(\\b{re.escape(x)}\\b)" for x in remove_list]),
                     "",
                     raw_str,
                 )
             else:
+                if self.verbose:
+                    print(
+                        f"""
+re.sub( 
+    "|".join( [f"({{re.escape(x)}})" for x in {remove_list}] ), 
+    "", 
+    "{raw_str}"
+)                    
+"""
+                    )
                 return re.sub(
-                    "|".join([re.escape(x) for x in remove_list]), "", raw_str
+                    "|".join([f"({re.escape(x)})" for x in remove_list]), "", raw_str
                 )
 
         def to_lowercase(raw_str):
-            """Converts all upper case characters in the given string to lower case"""
+            """Converts all upper case characters in a given string to lower case"""
             return raw_str.lower()
 
         def punctuation_to_spaces(raw_str):
+            """Turns any character in a given string that is not a number or letter"""
             return re.sub(r"[^A-Za-z0-9 ]+", " ", raw_str)
 
         def remove_punctuation(raw_str):
@@ -166,13 +214,19 @@ class StringCleaner:
             "join_single_space_separated_letters_together"
         ] = join_single_space_separated_letters_together
 
+        if self.verbose:
+            print("-- Initiated StringCleaner() --")
+            print("available string-cleaning operations:")
+            for op_name in self.operations:
+                print(f"\to {op_name}")
+
     def apply_sequential_operations(
         self,
         raw_str: str,
         operation_names_list: typing.List[str],
         operation_params_dict: dict = {},
     ) -> str:
-        """Sequentially applies a sequence of 1 or more string cleaning operations to a given string
+        """Sequentially applies 1 or more string cleaning operations to a given string
 
         Parameters
         ----------

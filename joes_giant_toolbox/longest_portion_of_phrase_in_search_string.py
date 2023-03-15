@@ -12,6 +12,7 @@ def longest_portion_of_phrase_in_search_string(phrase_str: str, search_str: str)
     str
         The longest portion of the phrase that was found in the search string
         In the case of a tie for sequence length, returns the first one found
+        If no word from the phrase appears in the search string, returns None
     Example Usage
     -------------
     >>>longest_portion_of_phrase_in_search_string(
@@ -39,6 +40,9 @@ def longest_portion_of_phrase_in_search_string(phrase_str: str, search_str: str)
                     search_idx += 1
             all_seq_found.append(seq_found)
         search_idx += 1
-    max_seq_len_found = max([len(x) for x in all_seq_found])
-    gen = (seq for seq in all_seq_found if len(seq) == max_seq_len_found)
-    return " ".join(next(gen))
+    if len(all_seq_found) == 0:
+        return None
+    else:
+        max_seq_len_found = max([len(x) for x in all_seq_found])
+        gen = (seq for seq in all_seq_found if len(seq) == max_seq_len_found)
+        return " ".join(next(gen))
