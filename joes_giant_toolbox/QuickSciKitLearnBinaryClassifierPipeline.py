@@ -407,6 +407,18 @@ models_to_fit_dict = {{
 
     def compare_models_test_set_roc_curves(self, model_names_list: List[str]) -> None:
         """TODO: function documentation here"""
+
+        roc_curve_explanation_text = """
+-- Explanation of ROC Curve --
+TPR = "True Positive Rate" = "Recall" = The proportion of true y=1 cases which the model has correctly labelled as y=1
+FPR = "False Positive Rate" = The proportion of y=0 cases which the model incorrectly labelled as y=1
+        
+The ROC Curve plots the TPR and FPR achieved under a range of different "decision thresholds" (between 0.0 and 1.0)..
+..where for a given "decision threshold" all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
+        
+A good resource: https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc        
+        """
+        print(roc_curve_explanation_text)
         roc_curve_data = {}
         roc_auc_scores = {}
         for model_name in model_names_list:
@@ -427,7 +439,12 @@ models_to_fit_dict = {{
             sorted(roc_auc_scores.items(), key=lambda item: item[1], reverse=True)
         )
 
-        print("--ROC AUC Scores (test data)--")
+        print(
+            f"""--ROC AUC Scores (test data)--
+The "ROC AUC Score" is the area under the ROC Curve
+It is also the probability that a random positive (y=1) case and a random negative (y=0) case are ranked correctly by the model 
+        """
+        )
         for model_name in roc_auc_scores:
             print(f"\t{model_name}: {roc_auc_scores[model_name]:.2f}")
 
@@ -440,15 +457,23 @@ models_to_fit_dict = {{
             )
         plt.axline([0, 0], [1, 1])
         plt.legend()
-        plt.title("ROC AUC Curves")
+        plt.title("ROC Curves")
         plt.xlabel("False Positive Rate")
-        plt.ylabel("True Positive Rate")
+        plt.ylabel("True Positive Rate (Recall)")
+        [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+        [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
         plt.show()
 
     def compare_models_calibration_test_set(
         self, model_names_list: List[str], n_bins
     ) -> None:
         """TODO: function documentation here"""
+        model_calibration_explanation_text = """
+-- Explanation of Model Calibration --
+TODO
+        """
+        print(model_calibration_explanation_text)
+
         calibration_curve_data = {}
         for model_name in model_names_list:
             calib_p_true, calib_p_pred = sklearn.calibration.calibration_curve(
@@ -470,9 +495,52 @@ models_to_fit_dict = {{
             )
         plt.axline([0, 0], [1, 1], color="black", linestyle="dotted")
         plt.legend()
-        plt.title("Calibration Curves")
-        plt.xlabel("Predicted Proportion")
-        plt.ylabel("Observed Proportion")
+        plt.title("Calibration Curves (Test Set)")
+        plt.xlabel("Mean Predicted y=1 Probability")
+        plt.ylabel("Observed y=1 Proportion")
+        [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+        [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+        plt.show()
+
+    def compare_models_test_set_precision_recall(
+        self, model_names_list: List[str]
+    ) -> None:
+        """TODO: function documentation here"""
+        precision_recall_explanation_text = """
+-- Explanation of Precision/Recall Curve --
+   "Recall" = The proportion of true y=1 cases which the model has correctly labelled as y=1
+"Precision" = The proportion of predicted y=1 cases which are truly y=1 cases
+        
+The Precision/Recall Curve plots the Precision and Recall achieved under a range of different "decision thresholds" (between 0.0 and 1.0)..
+..where for a given "decision threshold" all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
+        """
+        print(precision_recall_explanation_text)
+
+        precision_recall_curve_data = {}
+        for model_name in model_names_list:
+            model_pred_y = self.sklearn_components["test_set_predictions"][model_name]
+            precision, recall, thresholds = sklearn.metrics.precision_recall_curve(
+                y_true=self.data["y_test_for_model"],
+                probas_pred=model_pred_y,
+            )
+            precision_recall_curve_data[model_name] = {
+                "precision": precision,
+                "recall": recall,
+                "thresholds": thresholds,
+            }
+        plt.figure(figsize=(10, 7))
+        for model_name in precision_recall_curve_data:
+            plt.plot(
+                precision_recall_curve_data[model_name]["recall"],
+                precision_recall_curve_data[model_name]["precision"],
+                label=model_name,
+            )
+        plt.legend()
+        plt.title("Precision Recall Curves")
+        plt.xlabel("Recall")
+        plt.ylabel("Precision")
+        [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+        [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
         plt.show()
 
 
@@ -497,7 +565,7 @@ if __name__ == "__main__":
             "native-country",
             "annual_salary",
         ],
-    ).sample(10_000)
+    )
     data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(
         int
     )
@@ -544,36 +612,26 @@ if __name__ == "__main__":
             "random_forest": sklearn.ensemble.RandomForestClassifier(),
         }
     )
+    all_model_names = [
+        "adaboost",
+        "decision_tree",
+        "extremely_random_trees",
+        "gaussian_naive_bayes",
+        # "gaussian_process",
+        "hist_gbm",
+        "logistic_regression",
+        # "neural_net",
+        "quadratic_discriminant_analysis",
+        "random_forest",
+    ]
     sk_classifier.fit_cross_valid_models(
         k_folds=10,
-        model_names_list=[
-            "adaboost",
-            "decision_tree",
-            "extremely_random_trees",
-            "gaussian_naive_bayes",
-            # "gaussian_process",
-            "hist_gbm",
-            "logistic_regression",
-            # "neural_net",
-            "quadratic_discriminant_analysis",
-            "random_forest",
-        ],
+        model_names_list=all_model_names,
     )
     sk_classifier.compare_models_cross_valid_roc_auc()
     sk_classifier.add_ensemble_model(
         ensemble_name="all_models_ensemble",
-        model_names_list=[
-            "adaboost",
-            "decision_tree",
-            "extremely_random_trees",
-            "gaussian_naive_bayes",
-            # "gaussian_process",
-            "hist_gbm",
-            "logistic_regression",
-            # "neural_net",
-            "quadratic_discriminant_analysis",
-            "random_forest",
-        ],
+        model_names_list=all_model_names,
         weight_models_by_mean_test_fold_performance=True,
     )
     sk_classifier.add_ensemble_model(
@@ -596,7 +654,6 @@ if __name__ == "__main__":
         "adaboost",
         "hist_gbm",
         "logistic_regression",
-        "random_forest",
         "all_models_ensemble",
         "best_models_ensemble",
     ]
@@ -609,4 +666,7 @@ if __name__ == "__main__":
     )
     sk_classifier.compare_models_calibration_test_set(
         model_names_list=final_chosen_model_names_list, n_bins=10
+    )
+    sk_classifier.compare_models_test_set_precision_recall(
+        model_names_list=final_chosen_model_names_list
     )
