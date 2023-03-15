@@ -1,4 +1,5 @@
 import re
+import typing
 
 
 class StringCleaner:
@@ -15,7 +16,7 @@ class StringCleaner:
     Methods
     -------
     apply_sequential_operations
-        documentation TODO
+        Sequentially applies a sequence of 1 or more string cleaning operations to a given string
 
     Notes
     -----
@@ -46,8 +47,8 @@ class StringCleaner:
         Extracts the base domain from a given website URL
     apply_sequential_operations
         To a given string, applies cleaning operations one after the other
-    remove_specific_words
-        Removes specific 'words' (i.e. specific characters in a specific order) from a given string
+    remove_words_or_phrases
+        Removes specific 'words' or 'phrases' (i.e. specific characters in a specific order) from a given string, possibly observing word boundaries
     to_lowercase
         Converts all upper case characters in the given string to lower case
     punctuation_to_spaces
@@ -72,50 +73,12 @@ class StringCleaner:
         Remove every character in a given string which is not a letter
     join_single_space_separated_letters_together
         Removes the space characters between sequences of single letter characters separated by a single space (e.g. "a  B c D  e" becomes "a  BcD  e")
-
-    Example Usage
-    -------------
-    string_cleaner_obj = StringCleaner()
-    print("operations available:")
-    for op in string_cleaner_obj.operations:
-        print("\t","o ",op)
-
-    string_cleaner_obj.apply_sequential_operations( "https://pola-rs.github.io/polars/py-polars/html/reference/dataframe/api/polars.DataFrame.apply.html", ops_list=["extract_domain_from_url"])
-    string_cleaner_obj.apply_sequential_operations( "j.o/e i*s NOT the best", ops_list=["remove_specific_words"], remove_words_list=["NOT", ".", "/", "*"])
-    string_cleaner_obj.apply_sequential_operations( "j.o/e i*s NOT the best", ops_list=["remove_specific_words", "multiple_spaces_to_single_spaces"], remove_words_list=["NOT", ".", "/", "*"])
-    string_cleaner_obj.apply_sequential_operations( "DirTy StRiNg", ops_list=["to_lowercase"] )
-    string_cleaner_obj.apply_sequential_operations( "!_=,j>?@o#e$i%s^t&h*e(B[E}S|T.", ops_list=["remove_punctuation"] )
-    string_cleaner_obj.apply_sequential_operations( "!_=,j>?@o#e$i%s^t&h*e(B[E}S|T.",ops_list=["punctuation_to_spaces"])
-    string_cleaner_obj.apply_sequential_operations( "!_=,j>?@o#e$i%s^t&h*e(B[E}S|T.", ops_list=["to_lowercase","remove_punctuation"] )
-    string_cleaner_obj.apply_sequential_operations( "012345678901!_=,j2>?@o3#e$456i%s7^8t9&h00*e(1B2[3E4}5S6|7T8.9", ops_list=["to_lowercase","remove_punctuation","remove_numbers"] )
-    string_cleaner_obj.apply_sequential_operations( "1 2  3   4    5     6", ops_list=["multiple_spaces_to_single_spaces"] )
-    string_cleaner_obj.apply_sequential_operations( "1 2  3   4    5     6", ops_list=["remove_spaces"] )
-    string_cleaner_obj.apply_sequential_operations( '''1\n
-
-        2
-
-        3
-        ''',
-        ops_list=["newlines_to_spaces"]
-    )
-    string_cleaner_obj.apply_sequential_operations( '''1\n
-
-        2
-
-        3
-        ''',
-        ops_list=["newlines_to_spaces","multiple_spaces_to_single_spaces", "remove_spaces_at_start_and_end"]
-    )
-    string_cleaner_obj.apply_sequential_operations( "  I AM     SHOUTING ", ops_list=["to_lowercase","remove_spaces"] )
-    string_cleaner_obj.apply_sequential_operations( "!j_O:e.F|o'R+p=R-e0S9i8D7e6N7t", ops_list=["remove_non_letters"])
-    string_cleaner_obj.apply_sequential_operations( "!j_O:e.F|o'R+p=R-e0S9i8D7e6N7t", ops_list=["non_letters_to_spaces"])
-    string_cleaner_obj.apply_sequential_operations("j O   e's favourite number is 6 9 420 a    c tually", ops_list=["multiple_spaces_to_single_spaces", "join_single_space_separated_letters_together"])
     """
 
     def __init__(self):
         self.operations = {}
 
-        def extract_domain_from_url(raw_str):
+        def extract_domain_from_url(raw_str: str) -> str:
             return " ".join(
                 re.findall(
                     "(?P<url>https?://[^/]+)",
@@ -123,15 +86,25 @@ class StringCleaner:
                 )
             )
 
-        def remove_specific_words(raw_str, remove_list):
+        def remove_words_or_phrases(
+            raw_str: str,
+            remove_list: typing.List[str],
+            enforce_word_boundaries: bool,
+            **kwargs,
+        ) -> str:
             """
-            # example #
-            remove_specific_words(
-                "j.o/e i*s NOT the best",
-                remove_list=["NOT", ".", "/", "*"]
-            )
+            documentation TODO
             """
-            return re.sub("|".join([re.escape(x) for x in remove_list]), "", raw_str)
+            if enforce_word_boundaries:
+                return re.sub(
+                    "|".join([f"\\b{re.escape(x)}\\b" for x in remove_list]),
+                    "",
+                    raw_str,
+                )
+            else:
+                return re.sub(
+                    "|".join([re.escape(x) for x in remove_list]), "", raw_str
+                )
 
         def to_lowercase(raw_str):
             """Converts all upper case characters in the given string to lower case"""
@@ -144,14 +117,12 @@ class StringCleaner:
             return re.sub(r"[^A-Za-z0-9 ]+", "", raw_str)
 
         def numbers_to_spaces(raw_str):
-            from string import digits
-
-            return raw_str.translate(str.maketrans(digits, " " * len(digits)))
+            return raw_str.translate(
+                str.maketrans("0123456789", " " * len("0123456789"))
+            )
 
         def remove_numbers(raw_str):
-            from string import digits
-
-            return raw_str.translate(str.maketrans("", "", digits))
+            return raw_str.translate(str.maketrans("", "", "0123456789"))
 
         def remove_spaces(raw_str):
             return re.sub(" ", "", raw_str)
@@ -175,7 +146,7 @@ class StringCleaner:
             return re.sub(r"\b([a-zA-Z]) (?=[a-zA-Z]\b)", r"\1", raw_str)
 
         self.operations["extract_domain_from_url"] = extract_domain_from_url
-        self.operations["remove_specific_words"] = remove_specific_words
+        self.operations["remove_words_or_phrases"] = remove_words_or_phrases
         self.operations["to_lowercase"] = to_lowercase
         self.operations["punctuation_to_spaces"] = punctuation_to_spaces
         self.operations["remove_punctuation"] = remove_punctuation
@@ -195,13 +166,39 @@ class StringCleaner:
             "join_single_space_separated_letters_together"
         ] = join_single_space_separated_letters_together
 
-    def apply_sequential_operations(self, raw_string, ops_list, remove_words_list=None):
-        for operation in ops_list:
-            if operation == "remove_specific_words":
-                raw_string = self.operations["remove_specific_words"](
-                    raw_string, remove_list=remove_words_list
+    def apply_sequential_operations(
+        self,
+        raw_str: str,
+        operation_names_list: typing.List[str],
+        operation_params_dict: dict = {},
+    ) -> str:
+        """Sequentially applies a sequence of 1 or more string cleaning operations to a given string
+
+        Parameters
+        ----------
+        raw_str: str
+            The string to be processed
+        operation_names_list: List[str]
+            A list containing the names (operations will be applied in the order provided in this list)
+        operation_params_dict: dict, optional
+            This dictionary is used to passed named parameters to string cleaning functions which require specific parameters
+            (refer to example usage below)
+
+        Returns
+        -------
+        str
+            The input string, after having applied all of the string cleaning operations to it
+
+        Example Usage
+        -------------
+        TODO
+        """
+        for op_name in operation_names_list:
+            if op_name in operation_params_dict:
+                raw_str = self.operations[op_name](
+                    raw_str, **operation_params_dict[op_name]
                 )
             else:
-                raw_string = self.operations[operation](raw_string)
+                raw_str = self.operations[op_name](raw_str)
 
-        return raw_string
+        return raw_str
