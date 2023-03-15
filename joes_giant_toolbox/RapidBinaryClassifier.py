@@ -1,6 +1,7 @@
 from typing import List
+import warnings
 import time
-
+import pprint
 import pandas as pd
 import numpy as np
 import sklearn
@@ -18,60 +19,8 @@ import sklearn.calibration
 from matplotlib import pyplot as plt
 
 
-class QuickSciKitLearnBinaryClassifierPipeline:
-    """This class facilitates the rapid generation of binary classifier models using scikit-learn
-
-    Example Usage
-    -------------
-    >>> data_df = pd.read_csv(
-            "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data",
-            header = None,
-            names = ["age","workclass","fnlwgt","education","education-num","marital-status","occupation","relationship","race","sex","capital-gain","capital-loss","hours-per-week","native-country","annual_salary"],
-        )
-    >>> data_df["annual_salary_over_50k"] = (data_df["annual_salary"]==" >50K").astype(int)
-    >>> sk_classifier = QuickSciKitLearnBinaryClassifierPipeline(
-            data_df = data_df,
-            verbose = True
-        )
-    >>> sk_classifier.set_variable_roles_in_model(
-            y_varname="annual_salary_over_50k",
-            x_numeric_varnames=[
-                "age",
-                "fnlwgt",
-                "education-num",
-                "capital-gain",
-                "capital-loss",
-                "hours-per-week",
-            ],
-            x_categorical_varnames=[
-                "workclass",
-                "education",
-                "marital-status",
-                "occupation",
-                "relationship",
-                "race",
-                "sex",
-                "native-country",
-            ],
-        )
-    >>> sk_classifier.generate_train_test_split( test_percent=0.2 )
-    >>> sk_classifier.transform_x_features(rare_category_min_freq=500)
-    >>> sk_classifier.define_models()
-    >>> sk_classifier.fit_cross_valid_models(
-            k_folds=10,
-            models_list = [
-                "adaboost",
-                "decision_tree",
-                "gaussian_naive_bayes",
-                "gaussian_process",
-                "logistic_regression",
-                "neural_net",
-                "quadratic_discriminant_analysis",
-                "random_forest"
-            ]
-        )
-    >>> sk_classifier.compare_models()
-    """
+class RapidBinaryClassifier:
+    """This class facilitates the rapid generation of binary classifier models using scikit-learn [https://github.com/scikit-learn/scikit-learn]"""
 
     def __init__(self, data_df: pd.DataFrame, verbose: bool, eval_code: bool) -> None:
         self.global_params = {
@@ -79,7 +28,7 @@ class QuickSciKitLearnBinaryClassifierPipeline:
             "eval_code": eval_code,
         }
         self.data = {
-            "data_df": data_df,
+            "data_df": data_df.copy(),
             "y": None,
             "x_df": None,
             "y_train_for_model": None,
@@ -106,7 +55,9 @@ class QuickSciKitLearnBinaryClassifierPipeline:
         }
         self.full_model_script = """
 # import packages #
+import time
 import pandas as pd
+import numpy as np
 import sklearn
 import sklearn.preprocessing
 import sklearn.model_selection
@@ -117,6 +68,9 @@ import sklearn.neural_network
 import sklearn.discriminant_analysis
 import sklearn.ensemble
 import sklearn.gaussian_process
+import sklearn.metrics
+import sklearn.calibration
+from matplotlib import pyplot as plt
         """
         self.full_model_script += """
 # import data #
@@ -125,44 +79,76 @@ data_df = pd.read_csv(...)
         if self.global_params["verbose"]:
             print(self.full_model_script)
 
+    def assess_input_data_quality(self) -> None:
+        """Checks the quality of the raw input data self.data["data_df"]"""
+        code_str = f"""
+# Quantify missing values in input data #
+print("Count of missing values per column:")
+print(data_df.isna().sum())
+assert self.data["data_df"].isna().sum().sum() == 0, "Missing values in input data currently not supported"
+"""
+        self.full_model_script += code_str
+        if self.global_params["verbose"]:
+            print(code_str)
+        if self.global_params["eval_code"]:
+            print("Count of missing values per column:")
+            print(self.data["data_df"].isna().sum())
+            assert (
+                self.data["data_df"].isna().sum().sum() == 0
+            ), "Missing values in input data currently not supported (future version will include missing data imputation)"
+            warnings.warn(
+                "Missing value imputation is not yet implemented - input data must have no missing values",
+                UserWarning,
+            )
+
     def set_variable_roles_in_model(
         self,
         y_varname: str,
         x_numeric_varnames: List[str],
         x_categorical_varnames: List[str],
     ) -> None:
-        """docstring TODO"""
-        self.data["y"] = self.data["data_df"][y_varname]
-        self.user_inputs["x_numeric_varnames"] = x_numeric_varnames
-        self.user_inputs["x_categorical_varnames"] = x_categorical_varnames
-        self.data["x_df"] = self.data["data_df"][
-            x_numeric_varnames + x_categorical_varnames
-        ]
+        """Specifies which variables are to be included in the model, and the role of each
+
+        Parameters
+        ----------
+        y_varname: str
+            The column name of the outcome variable (binary variable to be predicted)
+        x_numeric_varnames: List[str]
+            List of column names of continuous (real-values) variables to included as predictors in the model
+        x_categorical_varnames: List[str]
+            List of column names of categorical variables to be included as predictors in the model
+        """
         code_str = f"""
 # define variable roles in model #
 y = data_df["{y_varname}"]
-x_numeric_varnames = [{",".join([f'"{x}"'for x in self.user_inputs["x_numeric_varnames"]])}]
-x_categorical_varnames = [{",".join([f'"{x}"'for x in self.user_inputs["x_categorical_varnames"]])}]
+x_numeric_varnames = [{",".join([f'"{x}"'for x in x_numeric_varnames])}]
+x_categorical_varnames = [{",".join([f'"{x}"'for x in x_categorical_varnames])}]
 x_df = data_df[x_numeric_varnames + x_categorical_varnames]
 """
         self.full_model_script += code_str
         if self.global_params["verbose"]:
             print(code_str)
 
+        if self.global_params["eval_code"]:
+            self.data["y"] = self.data["data_df"][y_varname]
+            self.user_inputs["x_numeric_varnames"] = x_numeric_varnames
+            self.user_inputs["x_categorical_varnames"] = x_categorical_varnames
+            self.data["x_df"] = self.data["data_df"][
+                x_numeric_varnames + x_categorical_varnames
+            ]
+
     def generate_train_test_split(self, test_percent: float) -> None:
-        """explanation here"""
-        train_percent = 1.0 - test_percent
-        (
-            self.data["x_train"],
-            self.data["x_test"],
-            self.data["y_train_for_model"],
-            self.data["y_test_for_model"],
-        ) = sklearn.model_selection.train_test_split(
-            self.data["x_df"], self.data["y"], test_size=test_percent
-        )
+        """Splits data into 2 non-overlapping partitions ("training" and "test")
+
+        Parameters
+        ----------
+        test_percent: float in (0.0, 1.0)
+            Proportion of the input data to include in the test partition
+            The training partition is then 100(1-test_percent)% of the input data
+        """
         code_str = f"""
 # train/test split #
-train_percent = {train_percent}
+train_percent = {1.0-test_percent}
 test_percent = {test_percent}
 x_train, x_test, y_train_for_model, y_test_for_model = train_test_split(
         x_df, y, test_size=test_percent
@@ -172,131 +158,160 @@ x_train, x_test, y_train_for_model, y_test_for_model = train_test_split(
         if self.global_params["verbose"]:
             print(code_str)
 
+        if self.global_params["eval_code"]:
+            (
+                self.data["x_train"],
+                self.data["x_test"],
+                self.data["y_train_for_model"],
+                self.data["y_test_for_model"],
+            ) = sklearn.model_selection.train_test_split(
+                self.data["x_df"], self.data["y"], test_size=test_percent
+            )
+
     def transform_x_features(self, rare_category_min_freq: int) -> None:
-        """TODO docstring here"""
-        one_hot_var_transformer = sklearn.preprocessing.OneHotEncoder(
-            sparse_output=False,  # return output as sparse array
-            handle_unknown="ignore",  # ignore levels unseen in training data
-            min_frequency=rare_category_min_freq,  # categories with fewer samples will be labelled "infrequent_sklearn"
-            dtype=np.int8,  # Data type of output columns
-        )
+        """1-hot encodes categorical predictors and scales numeric predictors
 
-        numeric_scaler_transformer = sklearn.preprocessing.StandardScaler()
-
-        self.sklearn_components["feature_engineering"][
-            "one_hot_transformer"
-        ] = one_hot_var_transformer
-
-        one_hot_var_transformer.fit(
-            self.data["x_train"][self.user_inputs["x_categorical_varnames"]]
-        )
-        numeric_scaler_transformer.fit(
-            self.data["x_train"][self.user_inputs["x_numeric_varnames"]]
-        )
-
-        self.data["x_train_categorical_1hot"] = pd.DataFrame(
-            one_hot_var_transformer.transform(
-                self.data["x_train"][self.user_inputs["x_categorical_varnames"]]
-            ),
-            columns=one_hot_var_transformer.get_feature_names_out(),
-        )
-        self.data["x_test_categorical_1hot"] = pd.DataFrame(
-            one_hot_var_transformer.transform(
-                self.data["x_test"][self.user_inputs["x_categorical_varnames"]]
-            ),
-            columns=one_hot_var_transformer.get_feature_names_out(),
-        )
-
-        self.data["x_train_numeric"] = pd.DataFrame(
-            numeric_scaler_transformer.transform(
-                self.data["x_train"][self.user_inputs["x_numeric_varnames"]]
-            ),
-            columns=numeric_scaler_transformer.get_feature_names_out(),
-        )
-        self.data["x_test_numeric"] = pd.DataFrame(
-            numeric_scaler_transformer.transform(
-                self.data["x_test"][self.user_inputs["x_numeric_varnames"]]
-            ),
-            columns=numeric_scaler_transformer.get_feature_names_out(),
-        )
-
-        self.data["x_train_for_model"] = pd.concat(
-            [
-                self.data["x_train_categorical_1hot"],
-                self.data["x_train_numeric"],
-            ],
-            axis=1,
-        )
-        self.data["x_test_for_model"] = pd.concat(
-            [
-                self.data["x_test_categorical_1hot"],
-                self.data["x_test_numeric"],
-            ],
-            axis=1,
-        )
-
+        Parameters
+        ----------
+        rare_category_min_freq: int
+            (only applies to categorical predictors)
+            Categories must have at least this many samples, otherwise they are put into the category "infrequent_sklearn"
+        """
         code_str = f"""
 # feature preprocessing #
 one_hot_var_transformer = sklearn.preprocessing.OneHotEncoder(
     sparse_output=False,  # return output as sparse array
-    handle_unknown="ignore",  # ignore levels unseen in training data
+    handle_unknown="ignore",  # ignore levels (categories) unseen in training data
     min_frequency={rare_category_min_freq},  # categories with fewer samples will be labelled "infrequent_sklearn"
     dtype=np.int8,  # Data type of output columns
 )
 
 numeric_scaler_transformer = sklearn.preprocessing.StandardScaler()
 
-one_hot_var_transformer.fit( x_train["x_categorical_varnames"] )
-numeric_scaler_transformer.fit( x_train["x_numeric_varnames"] )
+one_hot_var_transformer.fit( x_train[x_categorical_varnames] )
+numeric_scaler_transformer.fit( x_train[x_numeric_varnames] )
 
 x_train_categorical_1hot = pd.DataFrame(
-    one_hot_var_transformer.transform( x_train["x_categorical_varnames"] ),
+    one_hot_var_transformer.transform( x_train[x_categorical_varnames] ),
     columns = one_hot_var_transformer.get_feature_names_out(),
 )
 x_test_categorical_1hot = pd.DataFrame(
-    one_hot_var_transformer.transform( x_test["x_categorical_varnames"] ),
+    one_hot_var_transformer.transform( x_test[x_categorical_varnames] ),
     columns = one_hot_var_transformer.get_feature_names_out(),
 )
 
 x_train_numeric = pd.DataFrame(
-    numeric_scaler_transformer.transform( x_train["x_numeric_varnames"] ),
+    numeric_scaler_transformer.transform( x_train[x_numeric_varnames] ),
     columns = numeric_scaler_transformer.get_feature_names_out(),
 )
 x_test_numeric = pd.DataFrame(
-    numeric_scaler_transformer.transform( x_test["x_numeric_varnames"] ),
+    numeric_scaler_transformer.transform( x_test[x_numeric_varnames] ),
     columns = numeric_scaler_transformer.get_feature_names_out(),
 )
 
 x_train_for_model = pd.concat( [x_train_categorical_1hot, x_train_numeric], axis=1 )
 x_test_for_model = pd.concat( [x_test_categorical_1hot, x_test_numeric], axis=1 )
 """
-
         self.full_model_script += code_str
         if self.global_params["verbose"]:
             print(code_str)
 
+        if self.global_params["eval_code"]:
+            one_hot_var_transformer = sklearn.preprocessing.OneHotEncoder(
+                sparse_output=False,  # return output as sparse array
+                handle_unknown="ignore",  # ignore levels (categories) unseen in training data
+                min_frequency=rare_category_min_freq,  # categories with fewer samples will be labelled "infrequent_sklearn"
+                dtype=np.int8,  # Data type of output columns
+            )
+
+            numeric_scaler_transformer = sklearn.preprocessing.StandardScaler()
+
+            one_hot_var_transformer.fit(
+                self.data["x_train"][self.user_inputs["x_categorical_varnames"]]
+            )
+            numeric_scaler_transformer.fit(
+                self.data["x_train"][self.user_inputs["x_numeric_varnames"]]
+            )
+
+            self.sklearn_components["feature_engineering"][
+                "one_hot_transformer"
+            ] = one_hot_var_transformer
+            self.sklearn_components["feature_engineering"][
+                "numeric_scaler_transformer"
+            ] = numeric_scaler_transformer
+
+            self.data["x_train_categorical_1hot"] = pd.DataFrame(
+                one_hot_var_transformer.transform(
+                    self.data["x_train"][self.user_inputs["x_categorical_varnames"]]
+                ),
+                columns=one_hot_var_transformer.get_feature_names_out(),
+            )
+            self.data["x_test_categorical_1hot"] = pd.DataFrame(
+                one_hot_var_transformer.transform(
+                    self.data["x_test"][self.user_inputs["x_categorical_varnames"]]
+                ),
+                columns=one_hot_var_transformer.get_feature_names_out(),
+            )
+
+            self.data["x_train_numeric"] = pd.DataFrame(
+                numeric_scaler_transformer.transform(
+                    self.data["x_train"][self.user_inputs["x_numeric_varnames"]]
+                ),
+                columns=numeric_scaler_transformer.get_feature_names_out(),
+            )
+            self.data["x_test_numeric"] = pd.DataFrame(
+                numeric_scaler_transformer.transform(
+                    self.data["x_test"][self.user_inputs["x_numeric_varnames"]]
+                ),
+                columns=numeric_scaler_transformer.get_feature_names_out(),
+            )
+
+            self.data["x_train_for_model"] = pd.concat(
+                [
+                    self.data["x_train_categorical_1hot"],
+                    self.data["x_train_numeric"],
+                ],
+                axis=1,
+            )
+            self.data["x_test_for_model"] = pd.concat(
+                [
+                    self.data["x_test_categorical_1hot"],
+                    self.data["x_test_numeric"],
+                ],
+                axis=1,
+            )
+
     def define_models(self, models_dict: dict) -> None:
-        """TODO: function documentation here"""
-        self.sklearn_components["models"] = models_dict
+        """Initiates the sklearn binary classifier models to be fit
+
+        Parameters
+        ----------
+        models_dict: dict
+            A dictionary containing the sklearn models to be fit
+
+        Example Usage
+        -------------
+        >>>sk_classifier = RapidBinaryClassifier(data_df=data_df, verbose=True, eval_code=True)
+        >>>sk_classifier.define_models(
+        ...     models_dict = {
+        ...         "adaboost": sklearn.ensemble.AdaBoostClassifier(),
+        ...         "logistic_regression": sklearn.linear_model.LogisticRegression(
+        ...             penalty=None,
+        ...             max_iter=1_000,
+        ...         )
+        ...     }
+        ... )
+        """
         code_str = f"""
 # define models #
-models_to_fit_dict = {{
-    "gaussian_naive_bayes": sklearn.naive_bayes.GaussianNB(),
-    "decision_tree": sklearn.tree.DecisionTreeClassifier(),
-    "logistic_regression": sklearn.linear_model.LogisticRegression(
-        penalty=None,
-        max_iter=1_000,
-    ),
-    "neural_net": sklearn.neural_network.MLPClassifier(),
-    "quadratic_discriminant_analysis": sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis(),
-    "random_forest": sklearn.ensemble.RandomForestClassifier(),
-    "adaboost": sklearn.ensemble.AdaBoostClassifier(),
-    "gaussian_process": sklearn.gaussian_process.GaussianProcessClassifier(),
-}}
+models_to_fit_dict = {pprint.pformat(models_dict)}
 """
         self.full_model_script += code_str
         if self.global_params["verbose"]:
             print(code_str)
+
+        if self.global_params["eval_code"]:
+            self.sklearn_components["models"] = models_dict
 
     def fit_cross_valid_models(self, model_names_list: List[str], k_folds: int) -> None:
         """TODO: function documentation here"""
@@ -569,9 +584,8 @@ if __name__ == "__main__":
     data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(
         int
     )
-    sk_classifier = QuickSciKitLearnBinaryClassifierPipeline(
-        data_df=data_df, verbose=True, eval_code=True
-    )
+    sk_classifier = RapidBinaryClassifier(data_df=data_df, verbose=True, eval_code=True)
+    sk_classifier.assess_input_data_quality()
     sk_classifier.set_variable_roles_in_model(
         y_varname="annual_salary_over_50k",
         x_numeric_varnames=[
