@@ -1,3 +1,7 @@
+"""
+This script defines the function scrape_webpage_and_all_linked_webpages
+"""
+
 import random
 import time
 from typing import List, Tuple
@@ -30,9 +34,9 @@ def scrape_webpage_and_all_linked_webpages(
     url_pref_regex: List[str], optional (default=None)
         <This is not yet implemented>
         A list of regex strings
-        The first regex match defines the priority of the hyperlink
-        Higher priority hyperlinks
-        If set to None (default), then hyperlinks are attempted in a random order
+        The position of the first regex string matched in this list by a particular URL defines the priority rank of the hyperlink
+        Higher priority hyperlinks are scraped first
+        If set to None (default), then hyperlinks are scraped in a random order
     verbose: bool, optional (default=True)
         If set to True, the function will print logging information while it is running
     **kwargs
