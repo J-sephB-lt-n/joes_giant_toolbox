@@ -19,7 +19,16 @@ from matplotlib import pyplot as plt
 
 
 class RapidBinaryClassifier:
-    """This class facilitates the rapid generation of binary classifier models using scikit-learn [https://github.com/scikit-learn/scikit-learn]"""
+    """This class facilitates the rapid generation of binary classifier models using scikit-learn [https://github.com/scikit-learn/scikit-learn]
+
+    Future Additions
+    ----------------
+    This class will include the following functionality in future:
+        * Missing data imputation
+        * A stacking metamodel: sklearn.ensemble.StackingClassifier()
+        * Hyperparameter tuning (probably using Optuna)
+        * Additional models: Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
+    """
 
     def __init__(self, data_df: pd.DataFrame, verbose: bool, eval_code: bool) -> None:
         self.global_params = {
@@ -332,7 +341,7 @@ models_to_fit_dict = {
         ----------
         model_names_list: List[str]
             List of models to be fit (list of model names)
-            Note that the name format must match the model names given previously in the define_models() function (although this can be a subset of those models)
+            Note that the name format must match the format of the model names given previously in the define_models() function
         k_folds: int
             The number of folds to create for k-Fold Cross Validation
         """
@@ -447,10 +456,42 @@ plt.show()
         self,
         ensemble_name: str,
         model_names_list: List[str],
-        weight_models_by_mean_test_fold_performance: bool,
+        combine_strategy: str,
+        meta_model=None,
     ) -> None:
-        """TODO: function documentation here"""
-        if weight_models_by_mean_test_fold_performance:
+        """Add a new composite model which combines the predictions of multiple component models
+
+        Parameters
+        ----------
+        ensemble_name: str
+            The name which will be used to identify the model at later stages of the modelling process
+        model_names_list: List[str]
+            The list of models to include in the ensemble
+            Note that the name format must match the format of the model names given previously in the define_models() function
+        combine_strategy: str, one of {"weighted_average","stacked_classifier"}
+            The strategy to use for combining the predictions of the component models in the ensemble
+                * "weighted_average" creates a combined prediction by averaging the scores of the component models, where the weights are relative to the models' cross validation performance
+                * "stacked_classifier" uses the component models' predictions as features and trains a new model using these features
+        meta_model, default=None
+            A SciKit-Learn model object
+            This parameter is ignored if combine_strategy="weighted_average"
+            This model is used as the meta-model, combining the predictions of the component models in order to generate a single prediction per sample
+        """
+        if combine_strategy == "stacked_classifier":
+            self.sklearn_components["models"][
+                ensemble_name
+            ] = sklearn.ensemble.StackingClassifier(
+                estimators=[
+                    (k, self.sklearn_components["models"][k])
+                    for k in self.sklearn_components["models"]
+                ],
+                final_estimator=meta_model,
+                cv=5,
+                stack_method="predict_proba",
+                n_jobs=-1,
+                passthrough=True,
+            )
+        elif combine_strategy == "weighted_average":
             mean_cv_performance_test_fold = [
                 self.sklearn_components["k_fold_cv_results"][model_name][
                     "test_score"
@@ -458,27 +499,30 @@ plt.show()
                 for model_name in model_names_list
             ]
 
-        self.sklearn_components["models"][
-            ensemble_name
-        ] = sklearn.ensemble.VotingClassifier(
-            estimators=[
-                (model_name, self.sklearn_components["models"][model_name])
-                for model_name in model_names_list
-            ],
-            voting="soft",
-            weights=[
-                x / sum(mean_cv_performance_test_fold)
-                for x in mean_cv_performance_test_fold
-            ],
-        )
-        print(f"fitting models in ensemble '{ensemble_name}'..", end="")
-        start_time = time.perf_counter()
-        self.sklearn_components["models"][ensemble_name].fit(
-            X=self.data["x_train_for_model"],
-            y=self.data["y_train_for_model"],
-        )
-        minutes_elapsed = (time.perf_counter() - start_time) / 60
-        print(f"..done ({minutes_elapsed:.2f} minutes)")
+            self.sklearn_components["models"][
+                ensemble_name
+            ] = sklearn.ensemble.VotingClassifier(
+                estimators=[
+                    (model_name, self.sklearn_components["models"][model_name])
+                    for model_name in model_names_list
+                ],
+                voting="soft",
+                weights=[
+                    x / sum(mean_cv_performance_test_fold)
+                    for x in mean_cv_performance_test_fold
+                ],
+            )
+            print(
+                f"fitting models in weighted-average ensemble '{ensemble_name}'..",
+                end="",
+            )
+            start_time = time.perf_counter()
+            self.sklearn_components["models"][ensemble_name].fit(
+                X=self.data["x_train_for_model"],
+                y=self.data["y_train_for_model"],
+            )
+            minutes_elapsed = (time.perf_counter() - start_time) / 60
+            print(f"..done ({minutes_elapsed:.2f} minutes)")
 
     def fit_models(self, model_names_list: List[str]) -> None:
         """TODO: function documentation here"""
@@ -663,7 +707,7 @@ if __name__ == "__main__":
             "native-country",
             "annual_salary",
         ],
-    ).sample(2_000)
+    ).sample(10_000)
     data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(
         int
     )
@@ -727,24 +771,22 @@ if __name__ == "__main__":
     )
     sk_classifier.compare_models_cross_valid_roc_auc()
     sk_classifier.add_ensemble_model(
-        ensemble_name="all_models_ensemble",
+        ensemble_name="weighted_avg_ensemble_all_models",
         model_names_list=all_model_names,
-        weight_models_by_mean_test_fold_performance=True,
+        combine_strategy="weighted_average",
     )
     sk_classifier.add_ensemble_model(
-        ensemble_name="best_models_ensemble",
-        model_names_list=[
-            "adaboost",
-            "extremely_random_trees",
-            "hist_gbm",
-            "logistic_regression",
-            "random_forest",
-        ],
-        weight_models_by_mean_test_fold_performance=True,
+        ensemble_name="stacked_classifier_ensemble_all_models",
+        model_names_list=all_model_names,
+        combine_strategy="stacked_classifier",
+        meta_model=sklearn.ensemble.HistGradientBoostingClassifier(),
     )
     sk_classifier.fit_cross_valid_models(
         k_folds=10,
-        model_names_list=["all_models_ensemble", "best_models_ensemble"],
+        model_names_list=[
+            "weighted_avg_ensemble_all_models",
+            "stacked_classifier_ensemble_all_models",
+        ],
     )
     sk_classifier.compare_models_cross_valid_roc_auc()
     final_chosen_model_names_list = [
