@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # import the function to be tested:
-from joes_giant_toolbox.StringCleaner import StringCleaner
+from joes_giant_toolbox.string_cleaner import StringCleaner
 
 # run the tests:
 def test_remove_words_or_phrases():
