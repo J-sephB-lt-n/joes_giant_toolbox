@@ -1,7 +1,6 @@
 from typing import List
 import warnings
 import time
-import pprint
 import pandas as pd
 import numpy as np
 import sklearn
@@ -85,7 +84,7 @@ data_df = pd.read_csv(...)
 # Quantify missing values in input data #
 print("Count of missing values per column:")
 print(data_df.isna().sum())
-assert self.data["data_df"].isna().sum().sum() == 0, "Missing values in input data currently not supported"
+assert data_df.isna().sum().sum() == 0, "Missing values in input data currently not supported"
 """
         self.full_model_script += code_str
         if self.global_params["verbose"]:
@@ -150,7 +149,7 @@ x_df = data_df[x_numeric_varnames + x_categorical_varnames]
 # train/test split #
 train_percent = {1.0-test_percent}
 test_percent = {test_percent}
-x_train, x_test, y_train_for_model, y_test_for_model = train_test_split(
+x_train, x_test, y_train_for_model, y_test_for_model = sklearn.model_selection.train_test_split(
         x_df, y, test_size=test_percent
 )
         """
@@ -282,7 +281,7 @@ x_test_for_model = pd.concat( [x_test_categorical_1hot, x_test_numeric], axis=1 
             )
 
     def define_models(self, models_dict: dict) -> None:
-        """Initiates the sklearn binary classifier models to be fit
+        """Initiates the sklearn models to be fit
 
         Parameters
         ----------
@@ -302,11 +301,24 @@ x_test_for_model = pd.concat( [x_test_categorical_1hot, x_test_numeric], axis=1 
         ...     }
         ... )
         """
-        code_str = f"""
+        model_name_path_hack = {}
+        for model_name in models_dict:
+            model_name_path_hack[model_name] = (
+                ".".join(models_dict[model_name].__module__.split(".")[:2])
+                + "."
+                + models_dict[model_name].__class__.__name__
+                + "()"
+            )
+        code_str = """
 # define models #
-models_to_fit_dict = {pprint.pformat(models_dict)}
+models_to_fit_dict = {
 """
+        for model_name in models_dict:
+            code_str += f"\t\"{model_name}\": {'.'.join(models_dict[model_name].__module__.split('.')[:2])}.{models_dict[model_name].__class__.__name__}(),\n"
+        code_str += "}\n"
+
         self.full_model_script += code_str
+
         if self.global_params["verbose"]:
             print(code_str)
 
@@ -314,52 +326,122 @@ models_to_fit_dict = {pprint.pformat(models_dict)}
             self.sklearn_components["models"] = models_dict
 
     def fit_cross_valid_models(self, model_names_list: List[str], k_folds: int) -> None:
-        """TODO: function documentation here"""
+        """Estimates out-of-sample performance (ROC AUC) of each model using k-Fold Cross Validation (i.e. each model is trained from scratch k times)
+
+        Parameters
+        ----------
+        model_names_list: List[str]
+            List of models to be fit (list of model names)
+            Note that the name format must match the model names given previously in the define_models() function (although this can be a subset of those models)
+        k_folds: int
+            The number of folds to create for k-Fold Cross Validation
+        """
         self.sklearn_components["k_folds"] = k_folds
-        model_fit_counter = 1
-        for model_name in model_names_list:
-            start_time = time.perf_counter()
-            print(
-                f"fitting model {model_fit_counter} of {len(model_names_list)} [{model_name}] ({k_folds} folds)..",
-                end="",
-            )
-            self.sklearn_components["k_fold_cv_results"][
-                model_name
-            ] = sklearn.model_selection.cross_validate(
-                estimator=self.sklearn_components["models"][model_name],
-                X=self.data["x_train_for_model"],
-                y=self.data["y_train_for_model"],
-                scoring="roc_auc",
-                cv=k_folds,
-                return_train_score=True,
-                return_estimator=False,
-            )
-            minutes_elapsed = (time.perf_counter() - start_time) / 60
-            print(f"..done ({minutes_elapsed:.2f} minutes)")
-            model_fit_counter += 1
+
+        code_str = f"""
+# run {k_folds}-fold cross validation #
+model_fit_counter = 1
+model_names_list = {model_names_list} 
+k_fold_cv_results_dict = {{}}
+for model_name in model_names_list:
+    start_time = time.perf_counter()
+    print(
+        f"fitting model {{model_fit_counter}} of {{len(model_names_list)}} [{{model_name}}] ({k_folds} folds)..",
+        end="",
+    )
+    k_fold_cv_results_dict[model_name] = sklearn.model_selection.cross_validate(
+        estimator=models_to_fit_dict[model_name],
+        X=x_train_for_model,
+        y=y_train_for_model,
+        scoring="roc_auc",
+        cv={k_folds},
+        return_train_score=True,
+        return_estimator=False,
+    )
+    minutes_elapsed = (time.perf_counter() - start_time) / 60
+    print(f"..done ({{minutes_elapsed:.2f}} minutes)")
+    model_fit_counter += 1
+"""
+
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            model_fit_counter = 1
+            for model_name in model_names_list:
+                start_time = time.perf_counter()
+                print(
+                    f"fitting model {model_fit_counter} of {len(model_names_list)} [{model_name}] ({k_folds} folds)..",
+                    end="",
+                )
+                self.sklearn_components["k_fold_cv_results"][
+                    model_name
+                ] = sklearn.model_selection.cross_validate(
+                    estimator=self.sklearn_components["models"][model_name],
+                    X=self.data["x_train_for_model"],
+                    y=self.data["y_train_for_model"],
+                    scoring="roc_auc",
+                    cv=k_folds,
+                    return_train_score=True,
+                    return_estimator=False,
+                )
+                minutes_elapsed = (time.perf_counter() - start_time) / 60
+                print(f"..done ({minutes_elapsed:.2f} minutes)")
+                model_fit_counter += 1
 
     def compare_models_cross_valid_roc_auc(self) -> None:
-        """TODO: function documentation here"""
-        x_axis_values = []
-        y_axis_values = []
-        model_counter = 0
-        model_names = list(self.sklearn_components["k_fold_cv_results"].keys())
-        for model_name in model_names:
-            test_score_each_fold = self.sklearn_components["k_fold_cv_results"][
-                model_name
-            ]["test_score"].tolist()
-            x_axis_values += [model_counter] * len(test_score_each_fold)
-            y_axis_values += test_score_each_fold
-            model_counter += 1
-        plt.figure(figsize=(10, 5))
-        plt.scatter(x_axis_values, y_axis_values, alpha=0.5)
-        plt.xticks(ticks=range(len(model_names)), labels=model_names, rotation=45)
-        plt.xlabel("Model Name")
-        plt.ylabel("ROC AUC")
-        plt.title(
-            f"Model Performance (ROC AUC) on Each Test Fold Using {self.sklearn_components['k_folds']}-Fold Cross Validation"
-        )
-        plt.show()
+        """Plots the ROC AUC Score achieved by each model on each Cross Validation Fold"""
+
+        code_str = f"""
+# compare model cross-validation performance (ROC AUC) #
+x_axis_values = []
+y_axis_values = []
+model_counter = 0
+model_names = list(k_fold_cv_results_dict.keys())
+for model_name in model_names:
+    test_score_each_fold = k_fold_cv_results_dict[model_name]["test_score"].tolist()
+    x_axis_values += [model_counter] * len(test_score_each_fold)
+    y_axis_values += test_score_each_fold
+    model_counter += 1
+
+plt.figure(figsize=(10, 5))
+plt.scatter(x_axis_values, y_axis_values, alpha=0.5)
+plt.xticks(ticks=range(len(model_names)), labels=model_names, rotation=45)
+plt.xlabel("Model Name")
+plt.ylabel("ROC AUC")
+plt.title(
+    f"Model Performance (ROC AUC) on Each Test Fold Using {self.sklearn_components['k_folds']}-Fold Cross Validation"
+)
+plt.show()
+"""
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            x_axis_values = []
+            y_axis_values = []
+            model_counter = 0
+            model_names = list(self.sklearn_components["k_fold_cv_results"].keys())
+            for model_name in model_names:
+                test_score_each_fold = self.sklearn_components["k_fold_cv_results"][
+                    model_name
+                ]["test_score"].tolist()
+                x_axis_values += [model_counter] * len(test_score_each_fold)
+                y_axis_values += test_score_each_fold
+                model_counter += 1
+            plt.figure(figsize=(10, 5))
+            plt.scatter(x_axis_values, y_axis_values, alpha=0.5)
+            plt.xticks(ticks=range(len(model_names)), labels=model_names, rotation=45)
+            plt.xlabel("Model Name")
+            plt.ylabel("ROC AUC")
+            plt.title(
+                f"Model Performance (ROC AUC) on Each Test Fold Using {self.sklearn_components['k_folds']}-Fold Cross Validation"
+            )
+            plt.show()
 
     def add_ensemble_model(
         self,
@@ -560,6 +642,7 @@ The Precision/Recall Curve plots the Precision and Recall achieved under a range
 
 
 if __name__ == "__main__":
+    # run example #
     data_df = pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data",
         header=None,
@@ -580,7 +663,7 @@ if __name__ == "__main__":
             "native-country",
             "annual_salary",
         ],
-    )
+    ).sample(2_000)
     data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(
         int
     )
@@ -615,13 +698,13 @@ if __name__ == "__main__":
             "decision_tree": sklearn.tree.DecisionTreeClassifier(),
             "extremely_random_trees": sklearn.ensemble.ExtraTreesClassifier(),
             "gaussian_naive_bayes": sklearn.naive_bayes.GaussianNB(),
-            "gaussian_process": sklearn.gaussian_process.GaussianProcessClassifier(),
+            # "gaussian_process": sklearn.gaussian_process.GaussianProcessClassifier(),
             "hist_gbm": sklearn.ensemble.HistGradientBoostingClassifier(),
             "logistic_regression": sklearn.linear_model.LogisticRegression(
                 penalty=None,
                 max_iter=1_000,
             ),
-            "neural_net": sklearn.neural_network.MLPClassifier(),
+            # "neural_net": sklearn.neural_network.MLPClassifier(),
             "quadratic_discriminant_analysis": sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis(),
             "random_forest": sklearn.ensemble.RandomForestClassifier(),
         }
