@@ -1,11 +1,11 @@
 # add the root project directory to the system path:
 import sys
-import os
+import pathlib
 import json
 import time
 
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+parent_dir_path = pathlib.Path(__file__).parent.parent
+sys.path.append(str(parent_dir_path))
 
 # import the function to be tested:
 from joes_giant_toolbox.make_url_request import make_url_request
