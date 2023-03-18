@@ -25,7 +25,6 @@ class RapidBinaryClassifier:
     ----------------
     This class will include the following functionality in future:
         * Missing data imputation
-        * A stacking metamodel: sklearn.ensemble.StackingClassifier()
         * Hyperparameter tuning (probably using Optuna)
         * Additional models: Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
     """
@@ -310,20 +309,13 @@ x_test_for_model = pd.concat( [x_test_categorical_1hot, x_test_numeric], axis=1 
         ...     }
         ... )
         """
-        model_name_path_hack = {}
-        for model_name in models_dict:
-            model_name_path_hack[model_name] = (
-                ".".join(models_dict[model_name].__module__.split(".")[:2])
-                + "."
-                + models_dict[model_name].__class__.__name__
-                + "()"
-            )
         code_str = """
 # define models #
-models_to_fit_dict = {
+models_dict = {
 """
         for model_name in models_dict:
-            code_str += f"\t\"{model_name}\": {'.'.join(models_dict[model_name].__module__.split('.')[:2])}.{models_dict[model_name].__class__.__name__}(),\n"
+            code_str += f"\t\"{model_name}\": {'.'.join(models_dict[model_name].__module__.split('.')[:2])}.{models_dict[model_name]},\n"
+            # code_str += f"\t\"{model_name}\": {'.'.join(models_dict[model_name].__module__.split('.')[:2])}.{models_dict[model_name].__class__.__name__}(),\n"
         code_str += "}\n"
 
         self.full_model_script += code_str
@@ -350,16 +342,16 @@ models_to_fit_dict = {
         code_str = f"""
 # run {k_folds}-fold cross validation #
 model_fit_counter = 1
-model_names_list = {model_names_list} 
+cv_model_names_list = {model_names_list} 
 k_fold_cv_results_dict = {{}}
-for model_name in model_names_list:
+for model_name in cv_model_names_list:
     start_time = time.perf_counter()
     print(
         f"fitting model {{model_fit_counter}} of {{len(model_names_list)}} [{{model_name}}] ({k_folds} folds)..",
         end="",
     )
     k_fold_cv_results_dict[model_name] = sklearn.model_selection.cross_validate(
-        estimator=models_to_fit_dict[model_name],
+        estimator=sklearn.base.clone(models_dict[model_name]),
         X=x_train_for_model,
         y=y_train_for_model,
         scoring="roc_auc",
@@ -371,7 +363,6 @@ for model_name in model_names_list:
     print(f"..done ({{minutes_elapsed:.2f}} minutes)")
     model_fit_counter += 1
 """
-
         self.full_model_script += code_str
 
         if self.global_params["verbose"]:
@@ -388,7 +379,9 @@ for model_name in model_names_list:
                 self.sklearn_components["k_fold_cv_results"][
                     model_name
                 ] = sklearn.model_selection.cross_validate(
-                    estimator=self.sklearn_components["models"][model_name],
+                    estimator=sklearn.base.clone(
+                        self.sklearn_components["models"][model_name]
+                    ),
                     X=self.data["x_train_for_model"],
                     y=self.data["y_train_for_model"],
                     scoring="roc_auc",
@@ -408,8 +401,8 @@ for model_name in model_names_list:
 x_axis_values = []
 y_axis_values = []
 model_counter = 0
-model_names = list(k_fold_cv_results_dict.keys())
-for model_name in model_names:
+cv_model_names_list = list(k_fold_cv_results_dict.keys())
+for model_name in cv_model_names_list:
     test_score_each_fold = k_fold_cv_results_dict[model_name]["test_score"].tolist()
     x_axis_values += [model_counter] * len(test_score_each_fold)
     y_axis_values += test_score_each_fold
@@ -417,7 +410,7 @@ for model_name in model_names:
 
 plt.figure(figsize=(10, 5))
 plt.scatter(x_axis_values, y_axis_values, alpha=0.5)
-plt.xticks(ticks=range(len(model_names)), labels=model_names, rotation=45)
+plt.xticks(ticks=range(len(cv_model_names_list)), labels=cv_model_names_list, rotation=45)
 plt.xlabel("Model Name")
 plt.ylabel("ROC AUC")
 plt.title(
@@ -478,62 +471,137 @@ plt.show()
             This model is used as the meta-model, combining the predictions of the component models in order to generate a single prediction per sample
         """
         if combine_strategy == "stacked_classifier":
-            self.sklearn_components["models"][
-                ensemble_name
-            ] = sklearn.ensemble.StackingClassifier(
-                estimators=[
-                    (k, self.sklearn_components["models"][k])
-                    for k in self.sklearn_components["models"]
+            code_str = f"""
+\n# create (stacked classifier) ensemble model [{ensemble_name}] #            
+models_in_ensemble = {model_names_list}
+models_dict["{ensemble_name}"] = sklearn.ensemble.StackingClassifier(
+    estimators=[
+                    (
+                        model_name,
+                        sklearn.base.clone(
+                            models_dict[model_name]
+                        ),
+                    )
+                    for model_name in models_in_ensemble
                 ],
-                final_estimator=meta_model,
+                final_estimator={'.'.join(meta_model.__module__.split('.')[:2])}.{meta_model},
                 cv=5,
                 stack_method="predict_proba",
                 n_jobs=-1,
                 passthrough=True,
-            )
+            )            
+            """
         elif combine_strategy == "weighted_average":
-            mean_cv_performance_test_fold = [
-                self.sklearn_components["k_fold_cv_results"][model_name][
-                    "test_score"
-                ].mean()
-                for model_name in model_names_list
-            ]
-
-            self.sklearn_components["models"][
-                ensemble_name
-            ] = sklearn.ensemble.VotingClassifier(
-                estimators=[
-                    (model_name, self.sklearn_components["models"][model_name])
-                    for model_name in model_names_list
+            code_str = f"""
+\n# create (weighted average) ensemble model [{ensemble_name}] #                       
+models_in_ensemble = {model_names_list}
+mean_cv_performance_test_fold = [k_fold_cv_results_dict[model_name]["test_score"].mean() for model_name in {model_names_list}]        
+models_dict["{ensemble_name}"] = sklearn.ensemble.VotingClassifier(
+    estimators=[    
+                (
+                    model_name,
+                        sklearn.base.clone(
+                            models_dict[model_name]
+                        ),
+                    )
+                    for model_name in models_in_ensemble
                 ],
                 voting="soft",
                 weights=[
                     x / sum(mean_cv_performance_test_fold)
                     for x in mean_cv_performance_test_fold
                 ],
-            )
-            print(
-                f"fitting models in weighted-average ensemble '{ensemble_name}'..",
-                end="",
-            )
-            start_time = time.perf_counter()
-            self.sklearn_components["models"][ensemble_name].fit(
-                X=self.data["x_train_for_model"],
-                y=self.data["y_train_for_model"],
-            )
-            minutes_elapsed = (time.perf_counter() - start_time) / 60
-            print(f"..done ({minutes_elapsed:.2f} minutes)")
+)  
+            """
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            if combine_strategy == "stacked_classifier":
+                self.sklearn_components["models"][
+                    ensemble_name
+                ] = sklearn.ensemble.StackingClassifier(
+                    estimators=[
+                        (
+                            model_name,
+                            sklearn.base.clone(
+                                self.sklearn_components["models"][model_name]
+                            ),
+                        )
+                        for model_name in model_names_list
+                    ],
+                    final_estimator=meta_model,
+                    cv=5,
+                    stack_method="predict_proba",
+                    n_jobs=-1,
+                    passthrough=True,
+                )
+            elif combine_strategy == "weighted_average":
+                mean_cv_performance_test_fold = [
+                    self.sklearn_components["k_fold_cv_results"][model_name][
+                        "test_score"
+                    ].mean()
+                    for model_name in model_names_list
+                ]
+
+                self.sklearn_components["models"][
+                    ensemble_name
+                ] = sklearn.ensemble.VotingClassifier(
+                    estimators=[
+                        (
+                            model_name,
+                            sklearn.base.clone(
+                                self.sklearn_components["models"][model_name]
+                            ),
+                        )
+                        for model_name in model_names_list
+                    ],
+                    voting="soft",
+                    weights=[
+                        x / sum(mean_cv_performance_test_fold)
+                        for x in mean_cv_performance_test_fold
+                    ],
+                )
 
     def fit_models(self, model_names_list: List[str]) -> None:
-        """TODO: function documentation here"""
-        for model_name in model_names_list:
-            print(f"fitting model '{model_name}'..", end="")
-            start_time = time.perf_counter()
-            self.sklearn_components["models"][model_name].fit(
-                X=self.data["x_train_for_model"], y=self.data["y_train_for_model"]
-            )
-            minutes_elapsed = (time.perf_counter() - start_time) / 60
-            print(f"..done ({minutes_elapsed:.2f} minutes)")
+        """Fit selected models on the full training data
+
+        Parameters
+        ----------
+        model_names_list: List[str]
+            The list of models to train
+            Note that the name format must match the format of the model names given previously in the define_models() function
+        """
+        code_str = f"""
+# Train models on full training dataset #
+models_to_train_list = {model_names_list}  
+for model_name in models_to_train_list:
+    print(f"fitting model '{{model_name}}'..", end="")
+    start_time = time.perf_counter()
+    models_dict[model_name].fit(
+        X=x_train_for_model, 
+        y=y_train_for_model,
+    )
+    minutes_elapsed = (time.perf_counter() - start_time) / 60
+    print(f"..done ({{minutes_elapsed:.2f}} minutes)")         
+"""
+
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            for model_name in model_names_list:
+                print(f"fitting model '{model_name}'..", end="")
+                start_time = time.perf_counter()
+                self.sklearn_components["models"][model_name].fit(
+                    X=self.data["x_train_for_model"], y=self.data["y_train_for_model"]
+                )
+                minutes_elapsed = (time.perf_counter() - start_time) / 60
+                print(f"..done ({minutes_elapsed:.2f} minutes)")
 
     def generate_test_set_predictions(self, model_names_list: List[str]) -> None:
         """TODO: function documentation here"""
@@ -748,7 +816,9 @@ if __name__ == "__main__":
                 penalty=None,
                 max_iter=1_000,
             ),
-            # "neural_net": sklearn.neural_network.MLPClassifier(),
+            "neural_net": sklearn.neural_network.MLPClassifier(
+                hidden_layer_sizes=(30, 20, 10), activation="relu", max_iter=1000
+            ),
             "quadratic_discriminant_analysis": sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis(),
             "random_forest": sklearn.ensemble.RandomForestClassifier(),
         }
@@ -761,7 +831,7 @@ if __name__ == "__main__":
         # "gaussian_process",
         "hist_gbm",
         "logistic_regression",
-        # "neural_net",
+        "neural_net",
         "quadratic_discriminant_analysis",
         "random_forest",
     ]
@@ -776,6 +846,16 @@ if __name__ == "__main__":
         combine_strategy="weighted_average",
     )
     sk_classifier.add_ensemble_model(
+        ensemble_name="weighted_avg_ensemble_best_models",
+        model_names_list=[
+            "adaboost",
+            "hist_gbm",
+            "logistic_regression",
+            "random_forest",
+        ],
+        combine_strategy="weighted_average",
+    )
+    sk_classifier.add_ensemble_model(
         ensemble_name="stacked_classifier_ensemble_all_models",
         model_names_list=all_model_names,
         combine_strategy="stacked_classifier",
@@ -785,6 +865,7 @@ if __name__ == "__main__":
         k_folds=10,
         model_names_list=[
             "weighted_avg_ensemble_all_models",
+            "weighted_avg_ensemble_best_models",
             "stacked_classifier_ensemble_all_models",
         ],
     )
@@ -793,8 +874,8 @@ if __name__ == "__main__":
         "adaboost",
         "hist_gbm",
         "logistic_regression",
-        "all_models_ensemble",
-        "best_models_ensemble",
+        "weighted_avg_ensemble_best_models",
+        "stacked_classifier_ensemble_all_models",
     ]
     sk_classifier.fit_models(model_names_list=final_chosen_model_names_list)
     sk_classifier.generate_test_set_predictions(
