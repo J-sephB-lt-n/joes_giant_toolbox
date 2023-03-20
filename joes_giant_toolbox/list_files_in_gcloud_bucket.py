@@ -1,26 +1,24 @@
-from google.cloud import storage
+from typing import List
+import google.cloud.storage
 
 
-def list_files_in_gcloud_bucket(
-    project_name: str, bucket_name: str, prefix: str = None
-) -> list:
+def list_files_in_gcloud_bucket(bucket_name: str, prefix: str = None) -> List[str]:
     """
-    Returns a list of the files present in a specified google cloud bucket
+    Returns a list of the files (filenames) present in a google cloud bucket
 
     Parameters
     ----------
-    project_name: str
-        The name of the google cloud project containing the bucket of interest
     bucket_name: str
         The name of the google cloud bucket
-    prefix: str, optional
+    prefix: str, optional (default=None)
         If present, only returns files whose path starts with the given prefix
+
     Returns
     -------
-    list
-        List of files in the bucket (file pathes)
+    List[str]
+        List of filenames in the google cloud bucket (file pathes)
     """
-    storage_client = storage.Client(project=project_name)
+    storage_client = google.cloud.storage.Client()
     if prefix is not None:
         blobs = storage_client.list_blobs(bucket_name, prefix=prefix)
     else:

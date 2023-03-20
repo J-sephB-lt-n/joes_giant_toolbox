@@ -50,8 +50,8 @@ class RapidBinaryClassifier:
             "x_test_for_model": None,
         }
         self.user_inputs = {
-            "x_numeric_varnames": None,
-            "x_categorical_varnames": None,
+            "x_numeric_varnames": [],
+            "x_categorical_varnames": [],
         }
         self.sklearn_components = {
             "feature_engineering": {"one_hot_transformer": None},
@@ -316,7 +316,9 @@ models_dict = {
         for model_name in models_dict:
             code_str += f"\t\"{model_name}\": {'.'.join(models_dict[model_name].__module__.split('.')[:2])}.{models_dict[model_name]},\n"
             # code_str += f"\t\"{model_name}\": {'.'.join(models_dict[model_name].__module__.split('.')[:2])}.{models_dict[model_name].__class__.__name__}(),\n"
-        code_str += "}\n"
+        code_str += """}
+k_fold_cv_results_dict = {}
+"""
 
         self.full_model_script += code_str
 
@@ -343,11 +345,10 @@ models_dict = {
 # run {k_folds}-fold cross validation #
 model_fit_counter = 1
 cv_model_names_list = {model_names_list} 
-k_fold_cv_results_dict = {{}}
 for model_name in cv_model_names_list:
     start_time = time.perf_counter()
     print(
-        f"fitting model {{model_fit_counter}} of {{len(model_names_list)}} [{{model_name}}] ({k_folds} folds)..",
+        f"fitting model {{model_fit_counter}} of {{len(cv_model_names_list)}} [{{model_name}}] ({k_folds} folds)..",
         end="",
     )
     k_fold_cv_results_dict[model_name] = sklearn.model_selection.cross_validate(
@@ -566,13 +567,13 @@ models_dict["{ensemble_name}"] = sklearn.ensemble.VotingClassifier(
                 )
 
     def fit_models(self, model_names_list: List[str]) -> None:
-        """Fit selected models on the full training data
+        """Fit (train) selected models on the full training data
 
         Parameters
         ----------
         model_names_list: List[str]
-            The list of models to train
-            Note that the name format must match the format of the model names given previously in the define_models() function
+            The list of models to train (list of model names)
+            Note that the model name format must match the format of the model names given previously in the define_models() function
         """
         code_str = f"""
 # Train models on full training dataset #
@@ -587,7 +588,6 @@ for model_name in models_to_train_list:
     minutes_elapsed = (time.perf_counter() - start_time) / 60
     print(f"..done ({{minutes_elapsed:.2f}} minutes)")         
 """
-
         self.full_model_script += code_str
 
         if self.global_params["verbose"]:
@@ -604,19 +604,46 @@ for model_name in models_to_train_list:
                 print(f"..done ({minutes_elapsed:.2f} minutes)")
 
     def generate_test_set_predictions(self, model_names_list: List[str]) -> None:
-        """TODO: function documentation here"""
-        for model_name in model_names_list:
-            self.sklearn_components["test_set_predictions"][
-                model_name
-            ] = self.sklearn_components["models"][model_name].predict_proba(
-                X=self.data["x_test_for_model"]
-            )[
-                :, 1
-            ]
+        """Generate model predictions on the test data partition
+
+        Parameters
+        ----------
+        model_names_list: List[str]
+            List of models for which to generate predictions
+            Note that the model name format must match the format of the model names given previously in the define_models() function
+        """
+        code_str = f"""
+# generate model predictions on test data #
+models_to_predict_list = {model_names_list}
+test_data_predictions = {{}}
+for model_name in models_to_predict_list:
+    test_data_predictions[model_name] = models_dict[model_name].predict_proba(
+        X = x_test_for_model
+    )[:, 1]
+"""
+
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            for model_name in model_names_list:
+                self.sklearn_components["test_set_predictions"][
+                    model_name
+                ] = self.sklearn_components["models"][model_name].predict_proba(
+                    X=self.data["x_test_for_model"]
+                )[
+                    :, 1
+                ]
 
     def compare_models_test_set_roc_curves(self, model_names_list: List[str]) -> None:
-        """TODO: function documentation here"""
+        """Plot ROC curve for each model using their test data predictions
 
+        model_names_list: List[str]
+            List of models to include in the plot (list of model names)
+            Note that the model name format must match the format of the model names given previously in the define_models() function
+        """
         roc_curve_explanation_text = """
 -- Explanation of ROC Curve --
 TPR = "True Positive Rate" = "Recall" = The proportion of true y=1 cases which the model has correctly labelled as y=1
@@ -627,51 +654,108 @@ The ROC Curve plots the TPR and FPR achieved under a range of different "decisio
         
 A good resource: https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc        
         """
-        print(roc_curve_explanation_text)
-        roc_curve_data = {}
-        roc_auc_scores = {}
-        for model_name in model_names_list:
-            model_pred_y = self.sklearn_components["test_set_predictions"][model_name]
-            fpr, tpr, thresholds = sklearn.metrics.roc_curve(
-                y_true=self.data["y_test_for_model"],
-                y_score=model_pred_y,
-            )
-            roc_curve_data[model_name] = {
-                "fpr": fpr,
-                "tpr": tpr,
-                "thresholds": thresholds,
-            }
-            roc_auc_scores[model_name] = sklearn.metrics.roc_auc_score(
-                y_true=self.data["y_test_for_model"], y_score=model_pred_y
-            )
-        roc_auc_scores = dict(
-            sorted(roc_auc_scores.items(), key=lambda item: item[1], reverse=True)
-        )
-
-        print(
-            f"""--ROC AUC Scores (test data)--
+        code_str = f"""
+# compare models performance on test data: ROC curves #
+\"\"\"
+{roc_curve_explanation_text}
+\"\"\"
+roc_curve_data = {{}}
+roc_auc_scores = {{}}
+model_names_list = {model_names_list}
+for model_name in model_names_list:
+    model_pred_y = test_data_predictions[model_name]
+    fpr, tpr, thresholds = sklearn.metrics.roc_curve(
+        y_true=y_test_for_model,
+        y_score=model_pred_y,
+    )
+    roc_curve_data[model_name] = {{
+        "fpr": fpr,
+        "tpr": tpr,
+        "thresholds": thresholds,
+    }}
+    roc_auc_scores[model_name] = sklearn.metrics.roc_auc_score(
+        y_true=y_test_for_model, y_score=model_pred_y
+    )
+roc_auc_scores = dict(
+    sorted(roc_auc_scores.items(), key=lambda item: item[1], reverse=True)
+)
+print(\"\"\"--ROC AUC Scores (test data)--
 The "ROC AUC Score" is the area under the ROC Curve
 It is also the probability that a random positive (y=1) case and a random negative (y=0) case are ranked correctly by the model 
-        """
-        )
-        for model_name in roc_auc_scores:
-            print(f"\t{model_name}: {roc_auc_scores[model_name]:.2f}")
+\"\"\"
+)
+for model_name in roc_auc_scores:
+    print(f"\t{{model_name}}: {{roc_auc_scores[model_name]:.2f}}")
 
-        plt.figure(figsize=(10, 7))
-        for model_name in roc_curve_data:
-            plt.plot(
-                roc_curve_data[model_name]["fpr"],
-                roc_curve_data[model_name]["tpr"],
-                label=model_name,
+plt.figure(figsize=(10, 7))
+for model_name in roc_curve_data:
+    plt.plot(
+        roc_curve_data[model_name]["fpr"],
+        roc_curve_data[model_name]["tpr"],
+        label=model_name,
+    )
+plt.axline([0, 0], [1, 1])
+plt.legend()
+plt.title("ROC Curves")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate (Recall)")
+[plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+[plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+plt.show()
+"""
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            print(roc_curve_explanation_text)
+            roc_curve_data = {}
+            roc_auc_scores = {}
+            for model_name in model_names_list:
+                model_pred_y = self.sklearn_components["test_set_predictions"][
+                    model_name
+                ]
+                fpr, tpr, thresholds = sklearn.metrics.roc_curve(
+                    y_true=self.data["y_test_for_model"],
+                    y_score=model_pred_y,
+                )
+                roc_curve_data[model_name] = {
+                    "fpr": fpr,
+                    "tpr": tpr,
+                    "thresholds": thresholds,
+                }
+                roc_auc_scores[model_name] = sklearn.metrics.roc_auc_score(
+                    y_true=self.data["y_test_for_model"], y_score=model_pred_y
+                )
+            roc_auc_scores = dict(
+                sorted(roc_auc_scores.items(), key=lambda item: item[1], reverse=True)
             )
-        plt.axline([0, 0], [1, 1])
-        plt.legend()
-        plt.title("ROC Curves")
-        plt.xlabel("False Positive Rate")
-        plt.ylabel("True Positive Rate (Recall)")
-        [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
-        [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
-        plt.show()
+
+            print(
+                """--ROC AUC Scores (test data)--
+The "ROC AUC Score" is the area under the ROC Curve
+It is also the probability that a random positive (y=1) case and a random negative (y=0) case are ranked correctly by the model 
+            """
+            )
+            for model_name in roc_auc_scores:
+                print(f"\t{model_name}: {roc_auc_scores[model_name]:.2f}")
+
+            plt.figure(figsize=(10, 7))
+            for model_name in roc_curve_data:
+                plt.plot(
+                    roc_curve_data[model_name]["fpr"],
+                    roc_curve_data[model_name]["tpr"],
+                    label=model_name,
+                )
+            plt.axline([0, 0], [1, 1])
+            plt.legend()
+            plt.title("ROC Curves")
+            plt.xlabel("False Positive Rate")
+            plt.ylabel("True Positive Rate (Recall)")
+            [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+            [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+            plt.show()
 
     def compare_models_calibration_test_set(
         self, model_names_list: List[str], n_bins
