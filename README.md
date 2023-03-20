@@ -56,6 +56,7 @@ duckduckgo_search_multipage | Function fetches search results from the DuckDuckG
 list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
 longest_portion_of_phrase_in_search_string | A function for finding the longest subsequence of words in a phrase string that occur within a search string | joes_giant_toolbox/longest_portion_of_phrase_in_search_string.py | x | x | | 2 |
 make_url_request | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
+move_or_rename_file_in_gcloud_bucket | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
 query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 scrape_webpage_and_all_linked_webpages | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
 string_cleaner | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
@@ -84,8 +85,10 @@ Function Name    | Description                                                  
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
 download_file_from_gcloud_bucket_to_python | Function which reads a file from a google cloud bucket into python memory | joes_giant_toolbox/download_file_from_gcloud_bucket_to_python.py | x | x | | 4 |
 list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
+move_or_rename_file_in_gcloud_bucket | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
 query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
+
 
 
 /Users/josephbolton/personal_projects/joes_giant_toolbox/joes_giant_toolbox/query_bigquery_to_pandas_df.py
