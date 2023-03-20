@@ -60,7 +60,8 @@ move_or_rename_file_in_gcloud_bucket | Function to move or rename a file which i
 query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 scrape_webpage_and_all_linked_webpages | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
 string_cleaner | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
-view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py |                |            |                             | 2                |
+upload_file_python_to_gcloud_bucket | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
+view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py | x               |            |                             | 2                |
 write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
 
 ## API and Web
@@ -77,7 +78,7 @@ Function Name           | Description                                           
 ------------------------|-------------------------------------------------------------------------|--------------------------------------|----------------|------------|-----------------------------|----------
 ascii_barplot           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
 ascii_density_histogram | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
-view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py |                |            |                             | 2                |
+view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py | x              |            |                             | 2                |
 
 ## Google Cloud
 
@@ -87,11 +88,13 @@ download_file_from_gcloud_bucket_to_python | Function which reads a file from a 
 list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
 move_or_rename_file_in_gcloud_bucket | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
 query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
+upload_file_python_to_gcloud_bucket | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
 write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
 
 
 
-/Users/josephbolton/personal_projects/joes_giant_toolbox/joes_giant_toolbox/query_bigquery_to_pandas_df.py
+
+
 
 ## Statistical Inference and Hypothesis Testing 
 
