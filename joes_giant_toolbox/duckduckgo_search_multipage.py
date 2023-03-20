@@ -2,6 +2,7 @@ import random
 import re
 import time
 import urllib
+import warnings
 import requests
 import bs4
 
@@ -99,7 +100,8 @@ def duckduckgo_search_multipage(
     results_dict["request_log"]["page_1"] = {
         "query": kwargs["params"]["q"],
         "response_code": ddg_response.status_code,
-        "n_results": None,  # this is updated later
+        "n_results": None,  # this can be updated later
+        "additional_desc": "no_problems_detected",  # this can be updated later
     }
     if verbose:
         print(
@@ -119,15 +121,22 @@ def duckduckgo_search_multipage(
         results_dict["request_log"]["page_1"]["n_results"] = len(result_desc_list)
         if verbose:
             print(f"{len(result_link_list)} results returned")
-        for result_idx in range(len(result_link_list)):
-            results_dict["search_results_list"].append(
-                {
-                    "result_page": 1,
-                    "result_title": result_title_list[result_idx],
-                    "result_desc": result_desc_list[result_idx],
-                    "result_link": result_link_list[result_idx],
-                }
-            )
+        if len(result_title_list) == len(result_link_list) == len(result_desc_list):
+            for result_idx in range(len(result_link_list)):
+                results_dict["search_results_list"].append(
+                    {
+                        "result_page": 1,
+                        "result_title": result_title_list[result_idx],
+                        "result_desc": result_desc_list[result_idx],
+                        "result_link": result_link_list[result_idx],
+                    }
+                )
+        else:
+            results_dict["request_log"]["page_1"][
+                "additional_desc"
+            ] = "error_while_parsing_response_html"
+            warnings.warn("page_1: error_while_parsing_response_html")
+
         if n_pages > 1:
             for page_num in range(2, n_pages + 1):
                 # find parameters for [NEXT PAGE] post request #
@@ -147,7 +156,8 @@ def duckduckgo_search_multipage(
                 results_dict["request_log"][f"page_{page_num}"] = {
                     "query": kwargs["params"]["q"],
                     "response_code": ddg_response.status_code,
-                    "n_results": 0,  # updated later
+                    "n_results": 0,  # this can be updated later
+                    "additional_desc": "no_problems_detected",  # this can be updated later
                 }
                 if verbose:
                     print(
@@ -172,14 +182,28 @@ def duckduckgo_search_multipage(
                     )
                     if verbose:
                         print(f"{len(result_link_list)} results returned")
-                    for result_idx in range(len(result_link_list)):
-                        results_dict["search_results_list"].append(
-                            {
-                                "result_page": page_num,
-                                "result_title": result_title_list[result_idx],
-                                "result_desc": result_desc_list[result_idx],
-                                "result_link": result_link_list[result_idx],
-                            }
+                    if (
+                        len(result_title_list)
+                        == len(result_link_list)
+                        == len(result_desc_list)
+                    ):
+                        for result_idx in range(len(result_link_list)):
+                            results_dict["search_results_list"].append(
+                                {
+                                    "result_page": page_num,
+                                    "result_title": result_title_list[result_idx],
+                                    "result_desc": result_desc_list[result_idx],
+                                    "result_link": result_link_list[result_idx],
+                                }
+                            )
+                    else:
+                        results_dict["request_log"][f"page_{page_num}"][
+                            "additional_desc"
+                        ] = "error_while_parsing_response_html"
+                        warnings.warn(
+                            f"page_{page_num}: error_while_parsing_response_html"
                         )
+                else:
+                    break
 
     return results_dict
