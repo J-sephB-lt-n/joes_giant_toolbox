@@ -1,6 +1,4 @@
-import json
 import google.cloud.storage
-import pandas as pd
 
 
 def download_file_from_gcloud_bucket_to_python(
