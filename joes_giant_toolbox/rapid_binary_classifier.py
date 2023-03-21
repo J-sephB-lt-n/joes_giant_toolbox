@@ -640,6 +640,8 @@ for model_name in models_to_predict_list:
     def compare_models_test_set_roc_curves(self, model_names_list: List[str]) -> None:
         """Plot ROC curve for each model using their test data predictions
 
+        Parameters
+        ----------
         model_names_list: List[str]
             List of models to include in the plot (list of model names)
             Note that the model name format must match the format of the model names given previously in the define_models() function
@@ -680,8 +682,8 @@ roc_auc_scores = dict(
     sorted(roc_auc_scores.items(), key=lambda item: item[1], reverse=True)
 )
 print(\"\"\"--ROC AUC Scores (test data)--
-The "ROC AUC Score" is the area under the ROC Curve
-It is also the probability that a random positive (y=1) case and a random negative (y=0) case are ranked correctly by the model 
+The "ROC AUC Score" is the area under the ROC Curve (a value between 0.0 and 1.0)
+It is also the probability that a randomly drawn positive (y=1) case and negative (y=0) case are ranked correctly by the model 
 \"\"\"
 )
 for model_name in roc_auc_scores:
@@ -758,49 +760,113 @@ It is also the probability that a random positive (y=1) case and a random negati
             plt.show()
 
     def compare_models_calibration_test_set(
-        self, model_names_list: List[str], n_bins
+        self, model_names_list: List[str], n_bins: int = 5
     ) -> None:
-        """TODO: function documentation here"""
-        model_calibration_explanation_text = """
--- Explanation of Model Calibration --
-TODO
+        """Plots a Calibration Curve for each model (on the same plot) using their test data predictions
+
+        Parameters
+        ----------
+        model_names_list: List[str]
+            The models to include in the plot (list of model names)
+            Note that the model name format must match the format of the model names given previously in the define_models() function
+        n_bins: int, optional (default=5)
+            The number of bins to use when constructing the calibration curves
         """
-        print(model_calibration_explanation_text)
+        model_calibration_explanation_text = r"""
+-- Model Calibration --
+A well-calibrated classifier is one whose predictions are directly interpretable as probabilities
+    e.g. 44% of samples with predicted outcome Pr[Y=1]=0.44 are observed to have outcome y=1  
+This can be assessed using a "Calbration Curve", which is constructed as follows:
+    * The samples are ordered by model predicted outcome Pr[Y=1]
+    * The samples are binned (typically equal-sized bins)
+    * Average (mean) model predicted outcome Pr[Y=1] is plotted against observed proportion of postive (y=1) cases for each bin
+A model with perfect calibration has a "Calibration Curve" which is an upward 45 degree straight line
+A binary classifier model with poor calibration can still be very useful (e.g. it can still rank order samples well)
+The importance of model calibration depends upon the use case
+        """
+        code_str = f"""
+# plot calibration curves using the test data #        
+\"\"\"
+{model_calibration_explanation_text}
+\"\"\"
+calibration_curve_data = {{}}
+model_names_list = {model_names_list}
+for model_name in model_names_list:
+    calib_p_true, calib_p_pred = sklearn.calibration.calibration_curve(
+        y_true=y_test_for_model,
+        y_prob=test_data_predictions[model_name],
+        n_bins={n_bins},
+    )
+    calibration_curve_data[model_name] = {{
+        "p_true": calib_p_true,
+        "p_pred": calib_p_pred,
+    }}
 
-        calibration_curve_data = {}
-        for model_name in model_names_list:
-            calib_p_true, calib_p_pred = sklearn.calibration.calibration_curve(
-                y_true=self.data["y_test_for_model"],
-                y_prob=self.sklearn_components["test_set_predictions"][model_name],
-                n_bins=n_bins,
-            )
-            calibration_curve_data[model_name] = {
-                "p_true": calib_p_true,
-                "p_pred": calib_p_pred,
-            }
+plt.figure(figsize=(10, 7))
+for model_name in calibration_curve_data:
+    plt.plot(
+        calibration_curve_data[model_name]["p_pred"],
+        calibration_curve_data[model_name]["p_true"],
+        label=model_name,
+    )
+plt.axline([0, 0], [1, 1], color="black", linestyle="dotted")
+plt.legend()
+plt.title("Calibration Curves (Test Set)")
+plt.xlabel("Mean Predicted Pr[Y=1]")
+plt.ylabel("Observed y=1 Proportion")
+[plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+[plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+plt.show()
+"""
+        self.full_model_script += code_str
 
-        plt.figure(figsize=(10, 7))
-        for model_name in calibration_curve_data:
-            plt.plot(
-                calibration_curve_data[model_name]["p_pred"],
-                calibration_curve_data[model_name]["p_true"],
-                label=model_name,
-            )
-        plt.axline([0, 0], [1, 1], color="black", linestyle="dotted")
-        plt.legend()
-        plt.title("Calibration Curves (Test Set)")
-        plt.xlabel("Mean Predicted y=1 Probability")
-        plt.ylabel("Observed y=1 Proportion")
-        [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
-        [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
-        plt.show()
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            print(model_calibration_explanation_text)
+
+            calibration_curve_data = {}
+            for model_name in model_names_list:
+                calib_p_true, calib_p_pred = sklearn.calibration.calibration_curve(
+                    y_true=self.data["y_test_for_model"],
+                    y_prob=self.sklearn_components["test_set_predictions"][model_name],
+                    n_bins=n_bins,
+                )
+                calibration_curve_data[model_name] = {
+                    "p_true": calib_p_true,
+                    "p_pred": calib_p_pred,
+                }
+
+            plt.figure(figsize=(10, 7))
+            for model_name in calibration_curve_data:
+                plt.plot(
+                    calibration_curve_data[model_name]["p_pred"],
+                    calibration_curve_data[model_name]["p_true"],
+                    label=model_name,
+                )
+            plt.axline([0, 0], [1, 1], color="black", linestyle="dotted")
+            plt.legend()
+            plt.title("Calibration Curves (Test Set)")
+            plt.xlabel("Mean Predicted Pr[Y=1]")
+            plt.ylabel("Observed y=1 Proportion")
+            [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+            [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+            plt.show()
 
     def compare_models_test_set_precision_recall(
         self, model_names_list: List[str]
     ) -> None:
-        """TODO: function documentation here"""
+        """Plots a Precision vs Recall Curve for each model (on the same plot) using their test data predictions
+
+        Parameters
+        ----------
+        model_names_list: List[str]
+            The models to include in the plot (list of model names)
+            Note that the model name format must match the format of the model names given previously in the define_models() function
+        """
         precision_recall_explanation_text = """
--- Explanation of Precision/Recall Curve --
+-- Model Precision vs Recall --
    "Recall" = The proportion of true y=1 cases which the model has correctly labelled as y=1
 "Precision" = The proportion of predicted y=1 cases which are truly y=1 cases
         
