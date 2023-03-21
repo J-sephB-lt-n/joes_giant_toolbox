@@ -33,9 +33,9 @@ def write_pandas_df_to_google_bigquery_table(
       pandas_df = example_df,
       bigquery_table_path = "project_name.dataset_name.table_name",
       column_schema = [
-        bigquery.SchemaField("string_column", bigquery.enums.SqlTypeNames.STRING),
-        bigquery.SchemaField("integer_column", bigquery.enums.SqlTypeNames.INT64),
-        bigquery.SchemaField("float_column", bigquery.enums.SqlTypeNames.FLOAT64),
+        google.cloud.bigquery.SchemaField("string_column", google.cloud.bigquery.enums.SqlTypeNames.STRING),
+        google.cloud.bigquery.SchemaField("integer_column", google.cloud.bigquery.enums.SqlTypeNames.INT64),
+        google.cloud.bigquery.SchemaField("float_column", google.cloud.bigquery.enums.SqlTypeNames.FLOAT64),
       ],
     )
     """
