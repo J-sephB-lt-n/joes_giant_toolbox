@@ -17,6 +17,7 @@ def run_python_function_in_parallel(
         The method to use for parallelisation: one of ['multi_core', 'multi_thread']
     **kwargs
         Additional keyword arguments to pass to concurrent.futures.ProcessPoolExecutor() or concurrent.futures.ThreadPoolExecutor()
+
     Returns
     -------
     Iterator

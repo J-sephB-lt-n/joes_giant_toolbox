@@ -9,7 +9,7 @@ def upload_file_python_to_gcloud_bucket(
     Parameters
     ----------
     contents_str: str
-        The file, represented as a string (e.g. using "str(python_object)")
+        The file, represented as a string e.g. using "str(python_object)" or json.dumps(python_dict)
     bucket_name: str
         The name of the bucket to which the file should be written
     filename_on_bucket: str
