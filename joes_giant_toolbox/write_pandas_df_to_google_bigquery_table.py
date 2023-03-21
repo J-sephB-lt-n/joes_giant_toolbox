@@ -1,5 +1,5 @@
 import pandas as pd
-from google.cloud import bigquery
+import google.cloud.bigquery
 
 
 def write_pandas_df_to_google_bigquery_table(
@@ -39,10 +39,10 @@ def write_pandas_df_to_google_bigquery_table(
       ],
     )
     """
-    client = bigquery.Client()
+    client = google.cloud.bigquery.Client()
     job = client.load_table_from_dataframe(
         pandas_df,
         bigquery_table_path,
-        job_config=bigquery.LoadJobConfig(schema=column_schema),
+        job_config=google.cloud.bigquery.LoadJobConfig(schema=column_schema),
     )
     job.result()  # wait for the job to complete
