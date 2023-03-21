@@ -20,7 +20,7 @@ This is a large collection of general python functions and classes that I use in
    ((O) o o o o ======= o o(O))                 ._.'      /
 LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
 ```
-ascii art source: https://ascii.co.uk
+source: https://ascii.co.uk
 
 The scripts exist at varying levels of completeness (some have seen extensive use in many projects whereas others have been used little or have incomplete documentation and missing unit tests). In order to measure this, I have added in a confidence score for each:
 
@@ -40,6 +40,8 @@ You can search by category:
 
 * [Google Cloud](#google-cloud)
 
+* [Python Convenience Functions](#python-convenience-functions) 
+
 * [Statistical Inference and Hypothesis Testing](#statistical-inference-and-hypothesis-testing)
 
 * [Text and Natural Language Processing](#text-and-natural-language-processing)
@@ -58,6 +60,7 @@ Function Name    | Description                                                  
 [make_url_request](joes_giant_toolbox/make_url_request.py) | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
 [move_or_rename_file_in_gcloud_bucket](joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py) | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
 [query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
+[run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | joes_giant_toolbox/run_python_function_in_parallel.py | x | x | | 2 |
 [scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
 [string_cleaner](joes_giant_toolbox/string_cleaner.py) | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
 [upload_file_python_to_gcloud_bucket](joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py) | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
@@ -90,6 +93,11 @@ Function Name    | Description                                                  
 [query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 [upload_file_python_to_gcloud_bucket](joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py) | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
 [write_pandas_df_to_google_bigquery_table](joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py)  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
+
+## Python Convenience Functions 
+Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
+-----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+[run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | joes_giant_toolbox/run_python_function_in_parallel.py | x | x | | 2 |
 
 ## Statistical Inference and Hypothesis Testing 
 
