@@ -85,16 +85,11 @@ view_nested_dict_structure | Provides a simple printout for understanding the st
 Function Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
 download_file_from_gcloud_bucket_to_python | Function which reads a file from a google cloud bucket into python memory | joes_giant_toolbox/download_file_from_gcloud_bucket_to_python.py | x | x | | 4 |
-list_files_in_gcloud_bucket | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
+[list_files_in_gcloud_bucket](joes_giant_toolbox/list_files_in_gcloud_bucket.py) | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
 move_or_rename_file_in_gcloud_bucket | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
 query_bigquery_to_pandas_df | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 upload_file_python_to_gcloud_bucket | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
 write_pandas_df_to_google_bigquery_table  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
-
-
-
-
-
 
 ## Statistical Inference and Hypothesis Testing 
 
