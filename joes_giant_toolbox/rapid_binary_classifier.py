@@ -19,14 +19,122 @@ from matplotlib import pyplot as plt
 
 
 class RapidBinaryClassifier:
-    """This class facilitates the rapid generation of binary classifier models using scikit-learn [https://github.com/scikit-learn/scikit-learn]
+    """Facilitates the ultra rapid generation of binary classifier models by abstracting away a lot of the decisions and model code
+
+    Notes
+    -----
+    Scikit-Learn GitHub repository: https://github.com/scikit-learn/scikit-learn
+
 
     Future Additions
     ----------------
-    This class will include the following functionality in future:
-        * Missing data imputation
-        * Hyperparameter tuning (probably using Optuna)
-        * Additional models: Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
+    * Missing data imputation
+    * Hyperparameter tuning (probably using Optuna)
+    * Additional models: Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
+    * Make the automatically generated code more beautiful
+
+    Example Usage
+    -------------
+    >>> data_df = pd.read_csv(
+    ...     "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data",
+    ...     header=None,
+    ...     names=["age","workclass","fnlwgt","education","education-num","marital-status","occupation","relationship","race","sex","capital-gain","capital-loss","hours-per-week","native-country","annual_salary"],
+    ... ).sample(5_000)
+    >>> data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(int)
+    >>> sk_classifier = RapidBinaryClassifier(data_df=data_df, verbose=True, eval_code=True)
+    >>> sk_classifier.assess_input_data_quality()
+    >>> sk_classifier.set_variable_roles_in_model(
+    ...    y_varname="annual_salary_over_50k",
+    ...    x_numeric_varnames=[
+    ...        "age",
+    ...        "fnlwgt",
+    ...        "education-num",
+    ...        "capital-gain",
+    ...        "capital-loss",
+    ...        "hours-per-week",
+    ...    ],
+    ...    x_categorical_varnames=[
+    ...        "workclass",
+    ...        "education",
+    ...        "marital-status",
+    ...        "occupation",
+    ...        "relationship",
+    ...        "race",
+    ...        "sex",
+    ...        "native-country",
+    ...    ],
+    ... )
+    >>> sk_classifier.generate_train_test_split(test_percent=0.2)
+    >>> sk_classifier.transform_x_features(rare_category_min_freq=250)
+    >>> sk_classifier.define_models(
+    ...     {
+    ...         "adaboost": sklearn.ensemble.AdaBoostClassifier(),
+    ...         "decision_tree": sklearn.tree.DecisionTreeClassifier(),
+    ...         "extremely_random_trees": sklearn.ensemble.ExtraTreesClassifier(),
+    ...         "gaussian_naive_bayes": sklearn.naive_bayes.GaussianNB(),
+    ...         # "gaussian_process": sklearn.gaussian_process.GaussianProcessClassifier(),
+    ...         "hist_gbm": sklearn.ensemble.HistGradientBoostingClassifier(),
+    ...         "logistic_regression": sklearn.linear_model.LogisticRegression(
+    ...             penalty=None,
+    ...             max_iter=1_000,
+    ...         ),
+    ...         "neural_net": sklearn.neural_network.MLPClassifier(
+    ...             hidden_layer_sizes=(50, 30, 10, 5), activation="relu", max_iter=1_000
+    ...         ),
+    ...         "quadratic_discriminant_analysis": sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis(),
+    ...         "random_forest": sklearn.ensemble.RandomForestClassifier(),
+    ...     }
+    ... )
+    >>> all_model_names = list(sk_classifier.sklearn_components["models"].keys())
+    >>> sk_classifier.fit_cross_valid_models(
+    ...     k_folds=10,
+    ...     model_names_list=all_model_names,
+    ... )
+    >>> sk_classifier.compare_models_cross_valid_roc_auc()
+    >>> sk_classifier.add_ensemble_model(
+    ...     ensemble_name="weighted_avg_ensemble_all_models",
+    ...     model_names_list=all_model_names,
+    ...     combine_strategy="weighted_average",
+    ... )
+    >>> sk_classifier.add_ensemble_model(
+    ...     ensemble_name="weighted_avg_ensemble_best_models",
+    ...     model_names_list=[
+    ...         "adaboost",
+    ...         "hist_gbm",
+    ...         "logistic_regression",
+    ...         "random_forest",
+    ...     ],
+    ...     combine_strategy="weighted_average",
+    ... )
+    >>> sk_classifier.add_ensemble_model(
+    ...     ensemble_name="stacked_classifier_ensemble_all_models",
+    ...     model_names_list=all_model_names,
+    ...     combine_strategy="stacked_classifier",
+    ...     meta_model=sklearn.ensemble.HistGradientBoostingClassifier(),
+    ... )
+    >>> sk_classifier.fit_cross_valid_models(
+    ...     k_folds=10,
+    ...     model_names_list=[
+    ...         "weighted_avg_ensemble_all_models",
+    ...         "weighted_avg_ensemble_best_models",
+    ...         "stacked_classifier_ensemble_all_models",
+    ...     ],
+    ... )
+    >>> sk_classifier.compare_models_cross_valid_roc_auc()
+    >>> final_chosen_model_names_list = [
+    ...     "adaboost",
+    ...     "hist_gbm",
+    ...     "logistic_regression",
+    ...     "weighted_avg_ensemble_best_models",
+    ...     "stacked_classifier_ensemble_all_models",
+    ... ]
+    >>> sk_classifier.fit_models(model_names_list=final_chosen_model_names_list)
+    >>> sk_classifier.generate_test_set_predictions(
+    ...    model_names_list=final_chosen_model_names_list
+    ... )
+    >>> sk_classifier.compare_models_test_set_roc_curves(model_names_list=final_chosen_model_names_list)
+    >>> sk_classifier.compare_models_calibration_test_set(model_names_list=final_chosen_model_names_list, n_bins=10)
+    >>> sk_classifier.compare_models_test_set_precision_recall(model_names_list=final_chosen_model_names_list)
     """
 
     def __init__(self, data_df: pd.DataFrame, verbose: bool, eval_code: bool) -> None:
@@ -411,7 +519,7 @@ for model_name in cv_model_names_list:
 
 plt.figure(figsize=(10, 5))
 plt.scatter(x_axis_values, y_axis_values, alpha=0.5)
-plt.xticks(ticks=range(len(cv_model_names_list)), labels=cv_model_names_list, rotation=45)
+plt.xticks(ticks=range(len(cv_model_names_list)), labels=cv_model_names_list, rotation=90)
 plt.xlabel("Model Name")
 plt.ylabel("ROC AUC")
 plt.title(
@@ -438,7 +546,7 @@ plt.show()
                 model_counter += 1
             plt.figure(figsize=(10, 5))
             plt.scatter(x_axis_values, y_axis_values, alpha=0.5)
-            plt.xticks(ticks=range(len(model_names)), labels=model_names, rotation=45)
+            plt.xticks(ticks=range(len(model_names)), labels=model_names, rotation=90)
             plt.xlabel("Model Name")
             plt.ylabel("ROC AUC")
             plt.title(
@@ -651,8 +759,8 @@ for model_name in models_to_predict_list:
 TPR = "True Positive Rate" = "Recall" = The proportion of true y=1 cases which the model has correctly labelled as y=1
 FPR = "False Positive Rate" = The proportion of y=0 cases which the model incorrectly labelled as y=1
         
-The ROC Curve plots the TPR and FPR achieved under a range of different "decision thresholds" (between 0.0 and 1.0)..
-..where for a given "decision threshold" all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
+The ROC Curve plots the TPR and FPR achieved under a range of different "decision thresholds" (between 0.0 and 1.0)
+For a given "decision threshold", all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
         
 A good resource: https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc        
         """
@@ -785,7 +893,7 @@ A binary classifier model with poor calibration can still be very useful (e.g. i
 The importance of model calibration depends upon the use case
         """
         code_str = f"""
-# plot calibration curves using the test data #        
+# compare models performance on test data: calibration curves #        
 \"\"\"
 {model_calibration_explanation_text}
 \"\"\"
@@ -857,7 +965,7 @@ plt.show()
     def compare_models_test_set_precision_recall(
         self, model_names_list: List[str]
     ) -> None:
-        """Plots a Precision vs Recall Curve for each model (on the same plot) using their test data predictions
+        """Plots a "Precision vs Recall Curve" for each model (on the same plot) using their predictions on the test data
 
         Parameters
         ----------
@@ -867,40 +975,82 @@ plt.show()
         """
         precision_recall_explanation_text = """
 -- Model Precision vs Recall --
-   "Recall" = The proportion of true y=1 cases which the model has correctly labelled as y=1
-"Precision" = The proportion of predicted y=1 cases which are truly y=1 cases
+   "Recall" = The proportion of true positive (y=1) cases which the model has correctly labelled as positive (y=1)
+"Precision" = The proportion of predicted positive (y=1) cases which are truly positive (y=1) cases
         
-The Precision/Recall Curve plots the Precision and Recall achieved under a range of different "decision thresholds" (between 0.0 and 1.0)..
-..where for a given "decision threshold" all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
+The Precision/Recall Curve (for a single model) plots the Precision and Recall achieved under a range of different "decision thresholds" (between 0.0 and 1.0)
+For a given "decision threshold", all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
         """
-        print(precision_recall_explanation_text)
 
-        precision_recall_curve_data = {}
-        for model_name in model_names_list:
-            model_pred_y = self.sklearn_components["test_set_predictions"][model_name]
-            precision, recall, thresholds = sklearn.metrics.precision_recall_curve(
-                y_true=self.data["y_test_for_model"],
-                probas_pred=model_pred_y,
-            )
-            precision_recall_curve_data[model_name] = {
-                "precision": precision,
-                "recall": recall,
-                "thresholds": thresholds,
-            }
-        plt.figure(figsize=(10, 7))
-        for model_name in precision_recall_curve_data:
-            plt.plot(
-                precision_recall_curve_data[model_name]["recall"],
-                precision_recall_curve_data[model_name]["precision"],
-                label=model_name,
-            )
-        plt.legend()
-        plt.title("Precision Recall Curves")
-        plt.xlabel("Recall")
-        plt.ylabel("Precision")
-        [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
-        [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
-        plt.show()
+        code_str = f"""
+# compare models performance on test data: precision vs recall #        
+\"\"\"
+{precision_recall_explanation_text}
+\"\"\"
+precision_recall_curve_data = {{}}
+model_names_list = {model_names_list}
+for model_name in model_names_list:
+    model_pred_y = test_data_predictions[model_name]
+    precision, recall, thresholds = sklearn.metrics.precision_recall_curve(
+        y_true=y_test_for_model,
+        probas_pred=model_pred_y,
+    )
+    precision_recall_curve_data[model_name] = {{
+        "precision": precision,
+        "recall": recall,
+        "thresholds": thresholds,
+    }}
+plt.figure(figsize=(10, 7))
+for model_name in precision_recall_curve_data:
+    plt.plot(
+        precision_recall_curve_data[model_name]["recall"],
+        precision_recall_curve_data[model_name]["precision"],
+        label=model_name,
+    )
+plt.legend()
+plt.title("Precision vs Recall Curves")
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+[plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+[plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+plt.show()        
+        """
+
+        self.full_model_script += code_str
+
+        if self.global_params["verbose"]:
+            print(code_str)
+
+        if self.global_params["eval_code"]:
+            print(precision_recall_explanation_text)
+            precision_recall_curve_data = {}
+            for model_name in model_names_list:
+                model_pred_y = self.sklearn_components["test_set_predictions"][
+                    model_name
+                ]
+                precision, recall, thresholds = sklearn.metrics.precision_recall_curve(
+                    y_true=self.data["y_test_for_model"],
+                    probas_pred=model_pred_y,
+                )
+                precision_recall_curve_data[model_name] = {
+                    "precision": precision,
+                    "recall": recall,
+                    "thresholds": thresholds,
+                }
+            plt.figure(figsize=(10, 7))
+            for model_name in precision_recall_curve_data:
+                plt.plot(
+                    precision_recall_curve_data[model_name]["recall"],
+                    precision_recall_curve_data[model_name]["precision"],
+                    label=model_name,
+                )
+            plt.legend()
+            plt.title("Precision Recall Curves")
+            plt.xlabel("Recall")
+            plt.ylabel("Precision")
+            [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
+            [plt.axvline(x / 10, alpha=0.2) for x in range(0, 10)]
+            plt.show()
 
 
 if __name__ == "__main__":
@@ -925,7 +1075,7 @@ if __name__ == "__main__":
             "native-country",
             "annual_salary",
         ],
-    ).sample(10_000)
+    ).sample(2_000)
     data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(
         int
     )
@@ -967,24 +1117,13 @@ if __name__ == "__main__":
                 max_iter=1_000,
             ),
             "neural_net": sklearn.neural_network.MLPClassifier(
-                hidden_layer_sizes=(30, 20, 10), activation="relu", max_iter=1000
+                hidden_layer_sizes=(50, 30, 10, 5), activation="relu", max_iter=1_000
             ),
             "quadratic_discriminant_analysis": sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis(),
             "random_forest": sklearn.ensemble.RandomForestClassifier(),
         }
     )
-    all_model_names = [
-        "adaboost",
-        "decision_tree",
-        "extremely_random_trees",
-        "gaussian_naive_bayes",
-        # "gaussian_process",
-        "hist_gbm",
-        "logistic_regression",
-        "neural_net",
-        "quadratic_discriminant_analysis",
-        "random_forest",
-    ]
+    all_model_names = list(sk_classifier.sklearn_components["models"].keys())
     sk_classifier.fit_cross_valid_models(
         k_folds=10,
         model_names_list=all_model_names,

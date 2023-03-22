@@ -13,6 +13,7 @@ def move_or_rename_file_in_gcloud_bucket(
     Notes
     -----
     This code is stolen from the google cloud documentation (https://cloud.google.com/storage/docs/copying-renaming-moving-objects#storage-move-object-python)
+    The copy/rename will not work if the destination filename already exists, raising a "PreconditionFailed: 412 POST" error
 
     Parameters
     ----------
@@ -30,11 +31,18 @@ def move_or_rename_file_in_gcloud_bucket(
     source_blob = source_bucket.blob(source_filename)
     destination_bucket = storage_client.bucket(destination_bucket_name)
 
+    destination_generation_match_precondition = 0
+
     blob_copy = source_bucket.copy_blob(
-        source_blob, destination_bucket, destination_filename
+        source_blob,
+        destination_bucket,
+        destination_filename,
+        if_generation_match=destination_generation_match_precondition,
     )
+
     source_bucket.delete_blob(source_filename)
 
-    print(
-        f"File {source_blob.name} in bucket {source_bucket.name} moved to blob {blob_copy.name} in bucket {destination_bucket.name}"
-    )
+    if verbose:
+        print(
+            f"File (blob) {source_blob.name} in bucket {source_bucket.name} moved to file (blob) {blob_copy.name} in bucket {destination_bucket.name}"
+        )
