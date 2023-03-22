@@ -1,4 +1,5 @@
 import re
+import string
 import typing
 
 
@@ -66,11 +67,14 @@ class StringCleaner:
         Remove every character in a given string which is not a letter
     join_single_space_separated_letters_together
         Removes the space characters between sequences of single letter characters separated by a single space (e.g. "a  B c D  e" becomes "a  BcD  e")
+    remove_non_printable_ascii_chars
+        Removes all characters from a given string which are not in the python constant 'string.printable'
     """
 
     def __init__(self, verbose: bool = True) -> None:
         self.operations = {}
         self.verbose = verbose
+        self.printable_ascii_chars = string.printable
 
         def extract_domain_from_url(raw_str: str) -> str:
             """Extracts the base domain from a given website URL
@@ -193,6 +197,10 @@ re.sub(
         def join_single_space_separated_letters_together(raw_str):
             return re.sub(r"\b([a-zA-Z]) (?=[a-zA-Z]\b)", r"\1", raw_str)
 
+        def remove_non_printable_ascii_chars(raw_str):
+            """Removes all characters from a given string which are not in the python constant 'string.printable'"""
+            return "".join(filter(lambda x: x in self.printable_ascii_chars, raw_str))
+
         self.operations["extract_domain_from_url"] = extract_domain_from_url
         self.operations["remove_words_or_phrases"] = remove_words_or_phrases
         self.operations["to_lowercase"] = to_lowercase
@@ -213,6 +221,9 @@ re.sub(
         self.operations[
             "join_single_space_separated_letters_together"
         ] = join_single_space_separated_letters_together
+        self.operations[
+            "remove_non_printable_ascii_chars"
+        ] = remove_non_printable_ascii_chars
 
         if self.verbose:
             print("-- Initiated StringCleaner() --")

@@ -37,4 +37,5 @@ def delete_file_in_gcloud_bucket(
     file_blob.reload()  # Fetch blob metadata to use in generation_match_precondition.
     generation_match_precondition = file_blob.generation
     file_blob.delete(if_generation_match=generation_match_precondition)
-    print(f"Deleted file from google cloud bucket gs://{bucket_name}/{file_name}")
+    if verbose:
+        print(f"Deleted file from google cloud bucket gs://{bucket_name}/{file_name}")
