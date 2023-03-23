@@ -24,6 +24,7 @@ from joes_giant_toolbox.rapid_binary_classifier import RapidBinaryClassifier
 
 # run the tests #
 def test_good_performance_cleveland_heart_disease_dataset():
+    """This test checks that the process can produce a model which achieves an ROC/AUC score of at least 0.85 on the Cleveland Heart Dataset"""
     data_df = pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data",
         sep=",",
@@ -144,3 +145,11 @@ def test_good_performance_cleveland_heart_disease_dataset():
     assert (
         test_data_roc_auc >= 0.85
     ), f"Best model ({best_model_name_cross_valid_test}) achieved roc_auc={test_data_roc_auc:.3f} on Cleveland Heart Dataset (test partition) - should achieve at least 0.85"
+
+
+def test_code_script_output_matches_auto_run():
+    pd.read_csv(
+        "https://archive.ics.uci.edu/ml/machine-learning-databases/acute/diagnosis.data",
+        header=None,
+        encoding="ISO-8859-1",
+    )

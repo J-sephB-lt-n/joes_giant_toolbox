@@ -23,15 +23,18 @@ class RapidBinaryClassifier:
 
     Notes
     -----
-    Scikit-Learn GitHub repository: https://github.com/scikit-learn/scikit-learn
+    This class is useful for quickly assessing the feasibility of supervised learning for a particular problem
+    It provides a quick baseline level of model performance
+    It also provides a lot of boilerplate scikit-learn code, which is a convenient starting point for a project (much easier than coding from scratch)
+    The Scikit-Learn gitHub repo is at "https://github.com/scikit-learn/scikit-learn"
 
-
-    Future Additions
-    ----------------
+    Future Additions (not yet implemented)
+    --------------------------------------
     * Missing data imputation
+    * Feature selection (including removal of collinear features)
     * Hyperparameter tuning (probably using Optuna)
-    * Additional models: Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
-    * Make the automatically generated code more beautiful
+    * Additional models e.g. Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
+    * Make the automatically generated code more beautiful (clean up variable naming etc.)
 
     Example Usage
     -------------
