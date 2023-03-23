@@ -19,6 +19,7 @@ def run_python_function_in_parallel(
     If your function has multiple input parameters, you need to wrap these within the single input argument [x]...
     ...and then unpack [x] within the function itself.
     e.g. [x] could be a dictionary, namedtuple or list (refer to the examples below)
+    If you require logging of the individual workers, then you should put explicit python logging within [func]
 
     Parameters
     ----------
@@ -46,8 +47,13 @@ def run_python_function_in_parallel(
     ...     input_tuple = ( [1,2], [3,4], [5,6,7] ),
     ...     parallel_method = "multi_thread",
     ...     verbose = True,
-    ...     max_workers = 10,
     ... )
+    STARTED: process_ID=19874 thread_ID=1848673
+    STARTED: process_ID=19874 thread_ID=1848674
+    COMPLETED: process_ID=19874 thread_ID=1848674
+    COMPLETED: process_ID=19874 thread_ID=1848673
+    STARTED: process_ID=19874 thread_ID=1848674
+    COMPLETED: process_ID=19874 thread_ID=1848674
     >>> list(run_test)
     [5, 25, 110]
     >>> import time
@@ -64,9 +70,19 @@ def run_python_function_in_parallel(
     ...         {"value": 3, "exponent":5},
     ...     ),
     ...     parallel_method = "multi_thread",
-    ...     verbose = True
+    ...     verbose = True,
     ...     max_workers = 3
     ... )
+    STARTED: process_ID=19874 thread_ID=1849253
+    STARTED: process_ID=19874 thread_ID=1849254
+    STARTED: process_ID=19874 thread_ID=1849255
+    COMPLETED: process_ID=19874 thread_ID=1849253
+    STARTED: process_ID=19874 thread_ID=1849253
+    COMPLETED: process_ID=19874 thread_ID=1849254
+    STARTED: process_ID=19874 thread_ID=1849254
+    COMPLETED: process_ID=19874 thread_ID=1849255
+    COMPLETED: process_ID=19874 thread_ID=1849253
+    COMPLETED: process_ID=19874 thread_ID=1849254
     >>> list(run_test)
     [3, 9, 27, 81, 243]
     """
