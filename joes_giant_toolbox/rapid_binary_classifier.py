@@ -32,6 +32,8 @@ class RapidBinaryClassifier:
     --------------------------------------
     * Missing data imputation
     * Feature selection (including removal of collinear features)
+    * More model understanding:
+        - Feature Explainability (feature importance, partial dependence plots, SHAP values etc.)
     * Hyperparameter tuning (probably using Optuna)
     * Additional models e.g. Tensorflow, Pytorch, CatBoost, LightGBM, XG-Boost
     * Make the automatically generated code more beautiful (clean up variable naming etc.)
@@ -809,7 +811,7 @@ for model_name in roc_curve_data:
     )
 plt.axline([0, 0], [1, 1])
 plt.legend()
-plt.title("ROC Curves")
+plt.title("ROC Curves (Test Data)")
 plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate (Recall)")
 [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
@@ -863,7 +865,7 @@ It is also the probability that a random positive (y=1) case and a random negati
                 )
             plt.axline([0, 0], [1, 1])
             plt.legend()
-            plt.title("ROC Curves")
+            plt.title("ROC Curves (Test Data)")
             plt.xlabel("False Positive Rate")
             plt.ylabel("True Positive Rate (Recall)")
             [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
@@ -922,7 +924,7 @@ for model_name in calibration_curve_data:
     )
 plt.axline([0, 0], [1, 1], color="black", linestyle="dotted")
 plt.legend()
-plt.title("Calibration Curves (Test Set)")
+plt.title("Calibration Curves (Test Data)")
 plt.xlabel("Mean Predicted Pr[Y=1]")
 plt.ylabel("Observed y=1 Proportion")
 [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
@@ -958,7 +960,7 @@ plt.show()
                 )
             plt.axline([0, 0], [1, 1], color="black", linestyle="dotted")
             plt.legend()
-            plt.title("Calibration Curves (Test Set)")
+            plt.title("Calibration Curves (Test Data)")
             plt.xlabel("Mean Predicted Pr[Y=1]")
             plt.ylabel("Observed y=1 Proportion")
             [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
@@ -983,6 +985,9 @@ plt.show()
         
 The Precision/Recall Curve (for a single model) plots the Precision and Recall achieved under a range of different "decision thresholds" (between 0.0 and 1.0)
 For a given "decision threshold", all samples with estimated Pr[y=1] higher than that threshold are labelled as the positive (y=1) class
+
+With decreasing threshold, recall is monotonically increasing.
+Perhaps surprisingly, precision is not necessarily monotonically decreasing with decreasing threshold value.
         """
 
         code_str = f"""
@@ -1011,7 +1016,7 @@ for model_name in precision_recall_curve_data:
         label=model_name,
     )
 plt.legend()
-plt.title("Precision vs Recall Curves")
+plt.title("Precision vs Recall Curves (Test Data)")
 plt.xlabel("Recall")
 plt.ylabel("Precision")
 [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]
@@ -1048,7 +1053,7 @@ plt.show()
                     label=model_name,
                 )
             plt.legend()
-            plt.title("Precision Recall Curves")
+            plt.title("Precision Recall Curves (Test Data)")
             plt.xlabel("Recall")
             plt.ylabel("Precision")
             [plt.axhline(x / 10, alpha=0.2) for x in range(0, 10)]

@@ -151,5 +151,5 @@ def test_code_script_output_matches_auto_run():
     pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/acute/diagnosis.data",
         header=None,
-        encoding="ISO-8859-1",
+        encoding="latin1",
     )
