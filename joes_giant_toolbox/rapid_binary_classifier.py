@@ -19,7 +19,7 @@ from matplotlib import pyplot as plt
 
 
 class RapidBinaryClassifier:
-    """Facilitates the ultra rapid generation of binary classifier models by abstracting away a lot of the decisions and model code
+    """Facilitates the ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code
 
     Notes
     -----
