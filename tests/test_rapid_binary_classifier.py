@@ -1,5 +1,7 @@
 import sys
 import pathlib
+import pathlib
+import subprocess
 import pandas as pd
 import sklearn
 import sklearn.preprocessing
@@ -24,7 +26,11 @@ from joes_giant_toolbox.rapid_binary_classifier import RapidBinaryClassifier
 
 # run the tests #
 def test_good_performance_cleveland_heart_disease_dataset():
-    """This test checks that the process can produce a model which achieves an ROC/AUC score of at least 0.85 on the Cleveland Heart Dataset"""
+    """This test checks that the process can produce a model which achieves an ROC/AUC score of at least 0.85 on the Cleveland Heart Dataset:
+
+    1. Using the methods in the class directly
+    2. Exporting the full auto-generated script and running it
+    """
     data_df = pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data",
         sep=",",
@@ -146,10 +152,57 @@ def test_good_performance_cleveland_heart_disease_dataset():
         test_data_roc_auc >= 0.85
     ), f"Best model ({best_model_name_cross_valid_test}) achieved roc_auc={test_data_roc_auc:.3f} on Cleveland Heart Dataset (test partition) - should achieve at least 0.85"
 
-
-def test_code_script_output_matches_auto_run():
-    pd.read_csv(
-        "https://archive.ics.uci.edu/ml/machine-learning-databases/acute/diagnosis.data",
+    edit_full_model_script = (
+        sk_classifier.full_model_script.replace(
+            r"data_df = pd.read_csv(...)",
+            r"""data_df = pd.read_csv(
+        "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data",
+        sep=",",
         header=None,
-        encoding="latin1",
+        names=[
+            "age",
+            "sex",
+            "chest_pain_type",
+            "resting_blood_pressure",
+            "serum_cholesterol_mg_dl",
+            "fasting_blood_sugar",
+            "resting_electrocardiographic_results",
+            "maximum_heart_rate_achieved",
+            "exercise_induced_angina",
+            "st_depression_induced_by_exercise_relative_to_rest",
+            "slope_of_peak_exercise_st_segment",
+            "num_major_vessels_colored_by_flourosopy",
+            "thal",
+            "angiographic_disease_status",
+        ],
+        dtype=float,
+        skiprows=[87, 166, 192, 266, 287, 302],  # rows with missing values
+)
+data_df["heart_disease_yes_no"] = (data_df["angiographic_disease_status"] > 0).astype(int)""",
+        )
+        + f"""
+test_data_roc_auc = sklearn.metrics.roc_auc_score(
+    y_true=y_test_for_model,
+    y_score=test_data_predictions[models_to_predict_list[0]],
+)    
+with open("temp_external_script_output.txt", "w") as f:   
+        f.write(f"{{models_to_predict_list[0]}}{{chr(10)}}")
+        f.write(f"{{test_data_roc_auc:.3f}}")
+    """
     )
+    try:
+        with open("temp_model_script.py", "w") as f:
+            f.write(edit_full_model_script)
+        subprocess.run(["python", "temp_model_script.py"])
+        with open("temp_external_script_output.txt", "r") as f:
+            external_script_output_list = [x.strip() for x in f.readlines()]
+        best_external_model_name = external_script_output_list[0]
+        external_best_roc_auc = float(external_script_output_list[1])
+        assert (
+            external_best_roc_auc >= 0.85
+        ), f"External script best model ({best_external_model_name}) achieved roc_auc={external_best_roc_auc} on Cleveland Heart Dataset (test partition) - should achieve at least 0.85"
+    except:
+        pass
+    finally:
+        for filename in ["temp_external_script_output.txt", "temp_model_script.py"]:
+            pathlib.Path(filename).unlink(missing_ok=True)

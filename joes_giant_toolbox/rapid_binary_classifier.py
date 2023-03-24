@@ -1083,7 +1083,7 @@ if __name__ == "__main__":
             "native-country",
             "annual_salary",
         ],
-    ).sample(2_000)
+    ).sample(1_000)
     data_df["annual_salary_over_50k"] = (data_df["annual_salary"] == " >50K").astype(
         int
     )
