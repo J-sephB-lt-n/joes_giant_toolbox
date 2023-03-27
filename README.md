@@ -52,6 +52,7 @@ You can search by category:
 
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+[anonymous_view_public_linkedin_page](joes_giant_toolbox/anonymous_view_public_linkedin_page.py) | Function extracts the information (HTML) from a public LinkedIn page using a virtual browser | joes_giant_toolbox/anonymous_view_public_linkedin_page.py | x | x | | 2 |
 [ascii_barplot](joes_giant_toolbox/ascii_barplot.py)           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
 [ascii_density_histogram](joes_giant_toolbox/ascii_density_histogram.py) | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
 [conjugate_prior_beta_binomial](joes_giant_toolbox/conjugate_prior_beta_binomial.py) | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
@@ -75,9 +76,10 @@ Name    | Description                                                           
 
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-duckduckgo_search_multipage | Function fetches search results from the DuckDuckGo Lite search engine | joes_giant_toolbox/duckduckgo_search_multipage.py | x | x | | 2 |
-make_url_request | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
-scrape_webpage_and_all_linked_webpages | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
+[anonymous_view_public_linkedin_page](joes_giant_toolbox/anonymous_view_public_linkedin_page.py) | Function extracts the information (HTML) from a public LinkedIn page using a virtual browser | joes_giant_toolbox/anonymous_view_public_linkedin_page.py | x | x | | 2 |
+[duckduckgo_search_multipage](joes_giant_toolbox/duckduckgo_search_multipage.py) | Function fetches search results from the DuckDuckGo Lite search engine | joes_giant_toolbox/duckduckgo_search_multipage.py | x | x | | 2 |
+[make_url_request](joes_giant_toolbox/make_url_request.py) | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
+[scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_webpages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
 
 ## Data Visualisation
 
