@@ -16,7 +16,7 @@ def upload_file_python_to_gcloud_bucket(
         The desired name of the file on the bucket
     file_type: str
         The file type
-        examples: {"text/csv", "text/json"}
+        examples: {"text/csv", "text/json", "text/html"}
 
     Example usage
     -------------
