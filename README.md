@@ -69,6 +69,7 @@ Name    | Description                                                           
 [scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
 [string_cleaner](joes_giant_toolbox/string_cleaner.py) | A class for chaining common string-cleaning operations | joes_giant_toolbox/string_cleaner.py |                |            | tests/test_string_cleaner.py    | 2                |
 [upload_file_python_to_gcloud_bucket](joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py) | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
+[url_to_filename_to_url_mapper](joes_giant_toolbox/url_to_filename_to_url_mapper.py) | Converts a webpage URL into a useable filename, where the URL can be recovered from the filename | joes_giant_toolbox/url_to_filename_to_url_mapper.py | x | | | 2
 [view_nested_dict_structure](joes_giant_toolbox/view_nested_dict_structure.py) | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py | x               |            |                             | 2                |
 [write_pandas_df_to_google_bigquery_table](joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py)  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
 
@@ -80,6 +81,7 @@ Name    | Description                                                           
 [duckduckgo_search_multipage](joes_giant_toolbox/duckduckgo_search_multipage.py) | Function fetches search results from the DuckDuckGo Lite search engine | joes_giant_toolbox/duckduckgo_search_multipage.py | x | x | | 2 |
 [make_url_request](joes_giant_toolbox/make_url_request.py) | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
 [scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_webpages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
+[url_to_filename_to_url_mapper](joes_giant_toolbox/url_to_filename_to_url_mapper.py) | Converts a webpage URL into a useable filename, where the URL can be recovered from the filename | joes_giant_toolbox/url_to_filename_to_url_mapper.py | x | | | 2
 
 ## Data Visualisation
 

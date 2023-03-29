@@ -1,43 +1,50 @@
 import time
 
+from typing import Tuple, List
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
 
 
 def anonymous_view_public_linkedin_page(
     url_str: str,
-    verify_popup_closed: bool,
-    verify_min_html_char_len: int,
     inter_sleep_n_secs: float = 5.0,
     verbose: bool = True,
-) -> str | None:
+    browser_options: List[str] | None = None,
+    validation_search_strings: List[str] | None = None,
+) -> Tuple[dict, str | None]:
     """Extracts the information (HTML) from a public LinkedIn web page (e.g. person or company) using a virtual browser
+
+    (refer to "Example Usage" later in this documentation)
 
     Parameters
     ----------
     url_str: str
         The URL of the public LinkedIn page
-    verify_popup_closed: bool
-        If this check fails, then the function returns <None> rather than the HTML found on the web page
-        This check verifies that the length of the HTML increases after the pushing the [X] close button on the popup window
-    verify_min_html_char_len: int
-        If this check fails, then the function returns <None> rather than the HTML found on the web page
-        This check verifies that the HTML string has length at least <verify_min_html_char_len>
-        To disable this check, set verify_min_html_char_len=None
-    inter_sleep_n_secs: float, optional (default=5.0)
+    inter_sleep_n_secs: float, optional (default: 5.0)
         The process pauses for this number of seconds between subsequent actions in the virtual browser
-    verbose: bool, optional (default=True)
+    verbose: bool, optional (default: True)
         If verbose=True, progress reporting is printed to the console
+    browser_options: List[str] | None, optional (default: None)
+        Flags to pass to selenium.webdriver.chrome.options.Options()
+    validation_search_strings: List[str] | None, optional (default: None)
+        If included, checks which of the strings in [validation_search_strings] are present within the extracted html (this is case sensitive)
+        This can be used to identify whether the returned html is the actual desired page, or some kind of authorization wall returned by LinkedIn
+        These results are written to the process logging dictionary returned by this function
 
     Returns
     -------
-    str
-        The webpage HTML, as a string
+    Tuple[str, str | None]
+        Returns a tuple of strings
+        The first element of the tuple is a dictionary containing logging information collected during the running of the process
+        The second element of the tuple is either a string containing the extracted page HTML (if function was successful) or else None (if the function was unsuccessful)
 
     Notes
     -----
+    I need to return to this function and simplify/clean up this code
     Selenium is used to locate the [X] close button on the initial popup window in order to make the full public page html visible
     Some pausing is required in order to wait for elements on the page to appear
     This sort of code relies closely on precise html structure, and so will definitely stop working at some point (as the LinkedIn website is modified)
@@ -45,33 +52,61 @@ def anonymous_view_public_linkedin_page(
 
     Example Usage
     -------------
-    >>> extracted_person_html = anonymous_view_public_linkedin_page(
+    >>> from pprint import pprint
+    >>> logging_dict, extracted_person_html = anonymous_view_public_linkedin_page(
     ...     url_str="https://www.linkedin.com/in/williamhgates/",
-    ...     verify_popup_closed=True,
-    ...     verify_min_html_char_len=10_000,
-    ...     inter_sleep_n_secs=5,
+    ...     inter_sleep_n_secs=5.0,
     ...     verbose=True,
+    ...     validation_search_strings=["authwall","og:description"],
     ... )
+    >>> pprint(logging_dict, underscore_numbers=True)
+    {   'close_button_found': True,
+        'html_character_length': {  '1_initial': 20_557,
+                                    '2_after_first_pause': 217_544,
+                                    '3_after_button_click': 217_238,
+                                    '4_final': 217_238
+                                },
+        'initial_popup_successfully_closed': True,
+        'validation_search_strings': {'authwall': False, 'og:description': True}
+    }
+    >>>
     >>> print(extracted_person_html)
     <html lang="en"><head>
         <meta name="pageKey" content="public_profile_v3_desktop">
           <meta name="linkedin:pageTag" content="nonCanonical">
         <meta name="locale" content="en_US">
         ...
-    >>> extracted_company_html = anonymous_view_public_linkedin_page(
-    ...     url_str="https://www.linkedin.com/company/microsoft/",
-    ...     verify_popup_closed=True,
-    ...     verify_min_html_char_len=10_000,
-    ...     inter_sleep_n_secs=5,
+    >>> logging_dict, extracted_company_html = anonymous_view_public_linkedin_page(
+    ...     url_str="https://www.linkedin.com/company/18000429",
+    ...     inter_sleep_n_secs=5.0,
     ...     verbose=True,
+    ...     browser_options=["--headless","--disable-dev-shm-usage","--no-sandbox"],
+    ...     validation_search_strings=["authwall","og:description"]
     ... )
+    >>> pprint(logging_dict, underscore_numbers=True)
+    {   'close_button_found': False,
+        'html_character_length': {  '1_initial': 45_410,
+                                    '2_after_first_pause': 46_661,
+                                    '3_after_button_click': 46_661,
+                                    '4_final': 46_661
+                                },
+        'initial_popup_successfully_closed': False,
+        'validation_search_strings': {'authwall': False, 'og:description': True}
+    }
     >>> print(extracted_company_html)
-    <html lang="en"><head>
-        <meta name="pageKey" content="d_org_guest_company_overview">
-          <meta name="linkedin:pageTag" content="noncanonical_subdomain=control">
-        <meta name="locale" content="en_US">
-        ...
+    <html lang="en-US" class="artdeco " ...
     """
+    logging_info_dict = {
+        "close_button_found": None,
+        "initial_popup_successfully_closed": None,
+        "html_character_length": {
+            "1_initial": None,
+            "2_after_first_pause": None,
+            "3_after_button_click": None,
+            "4_final": None,
+        },
+        "validation_search_strings": {},
+    }
 
     def if_verbose_print(*args, **kwargs) -> None:
         """if verbose=True, behaves identically to the print function (otherwise does nothing)"""
@@ -79,18 +114,30 @@ def anonymous_view_public_linkedin_page(
             print(*args, **kwargs)
 
     if_verbose_print("opening browser..", end="")
-    auto_browser = webdriver.Chrome()  # webdriver.Safari()
+    if browser_options is not None:
+        browser_args = Options()
+        for opt in browser_options:
+            browser_args.add_argument(opt)
+        auto_browser = webdriver.Chrome(options=browser_args)  # webdriver.Safari()
+    else:
+        auto_browser = webdriver.Chrome()  # webdriver.Safari()
     if_verbose_print("..done")
 
     if_verbose_print("loading page..", end="")
     auto_browser.get(url_str)
     if_verbose_print("..done")
 
+    logging_info_dict["html_character_length"]["1_initial"] = len(
+        auto_browser.page_source
+    )
+
     if_verbose_print(f"waiting {inter_sleep_n_secs} seconds..", end="")
     time.sleep(inter_sleep_n_secs)
     if_verbose_print("..done")
 
-    html_len = len(auto_browser.page_source)
+    logging_info_dict["html_character_length"]["2_after_first_pause"] = len(
+        auto_browser.page_source
+    )
 
     if_verbose_print(
         f"clicking close [X] button (after hovering for {inter_sleep_n_secs} seconds prior to click)..",
@@ -109,19 +156,29 @@ def anonymous_view_public_linkedin_page(
         actions.move_to_element_with_offset(x_button, 1, -1).pause(
             inter_sleep_n_secs
         ).click().perform()
+        logging_info_dict["close_button_found"] = True
         if_verbose_print("..done")
     except NoSuchElementException:
         if_verbose_print("\nNo close [X] button found, so no button was clicked")
+        logging_info_dict["close_button_found"] = False
 
-    if verify_popup_closed:
-        if_verbose_print(
-            "checking that initial popup window was successfully closed..", end=""
+    if (
+        len(auto_browser.page_source)
+        == logging_info_dict["html_character_length"]["2_after_first_pause"]
+    ):
+        # if page content has not changed after attempted button click
+        logging_info_dict["initial_popup_successfully_closed"] = False
+        if_verbose_print("did not close initial popup window (or it did not exist)")
+        logging_info_dict["html_character_length"]["3_after_button_click"] = len(
+            auto_browser.page_source
         )
-        if len(auto_browser.page_source) == html_len:
-            if_verbose_print("..TEST FAILED: returning <None>")
-            return None
-        else:
-            if_verbose_print("..done")
+    else:
+        # if page content has changed after attempted button click
+        logging_info_dict["initial_popup_successfully_closed"] = True
+        if_verbose_print("successfully closed initial popup window")
+        logging_info_dict["html_character_length"]["3_after_button_click"] = len(
+            auto_browser.page_source
+        )
 
     if_verbose_print(
         f"pausing for {inter_sleep_n_secs} seconds..",
@@ -130,19 +187,19 @@ def anonymous_view_public_linkedin_page(
     time.sleep(inter_sleep_n_secs)
     if_verbose_print("..done")
 
+    logging_info_dict["html_character_length"]["4_final"] = len(
+        auto_browser.page_source
+    )
+
     if_verbose_print("extracting html..", end="")
     page_html_str = auto_browser.page_source
     auto_browser.close()
     if_verbose_print("..done")
 
-    if verify_min_html_char_len is not None:
-        if_verbose_print(
-            "checking that HTML exceeds minimum character length..", end=""
-        )
-        if len(page_html_str) < verify_min_html_char_len:
-            if_verbose_print("..TEST FAILED: returning <None>")
-            return None
-        else:
-            if_verbose_print("..done")
+    if validation_search_strings is not None:
+        for search_str in validation_search_strings:
+            logging_info_dict["validation_search_strings"][search_str] = (
+                search_str in page_html_str
+            )
 
-    return page_html_str
+    return logging_info_dict, page_html_str
