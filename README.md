@@ -63,6 +63,7 @@ Name    | Description                                                           
 [longest_portion_of_phrase_in_search_string](joes_giant_toolbox/longest_portion_of_phrase_in_search_string.py) | A function for finding the longest subsequence of words in a phrase string that occur within a search string | joes_giant_toolbox/longest_portion_of_phrase_in_search_string.py | x | x | | 2 |
 [make_url_request](joes_giant_toolbox/make_url_request.py) | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
 [move_or_rename_file_in_gcloud_bucket](joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py) | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
+[print_progress_bar](joes_giant_toolbox/print_progress_bar.py) | Prints a progress bar (to standard out) while code is running | joes_giant_toolbox/print_progress_bar.py | x | x | | 2
 [query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 [RapidBinaryClassifier](joes_giant_toolbox/rapid_binary_classifier.py) | Class facilitating the ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code | joes_giant_toolbox/rapid_binary_classifier.py | x | | tests/test_rapid_binary_classifier.py | 2.5 |
 [run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | joes_giant_toolbox/run_python_function_in_parallel.py | x | x | | 2 |
@@ -106,6 +107,7 @@ Name    | Description                                                           
 ## Python Convenience Functions 
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+[print_progress_bar](joes_giant_toolbox/print_progress_bar.py) | Prints a progress bar (to standard out) while code is running | joes_giant_toolbox/print_progress_bar.py | x | x | | 2
 [run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | joes_giant_toolbox/run_python_function_in_parallel.py | x | x | | 2 |
 
 ## Statistical Inference and Hypothesis Testing 

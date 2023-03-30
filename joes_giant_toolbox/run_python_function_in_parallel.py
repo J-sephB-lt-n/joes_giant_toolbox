@@ -26,7 +26,7 @@ def run_python_function_in_parallel(
     func: Callable
         A function taking a single argument (x)
     input_tuple: tuple
-        A tuple (immutable list) containing the list of input objects to process by the function
+        A tuple (immutable list) containing the list of input objects (x) to process by the function
     parallel_method: str
         The method to use for parallelisation: one of ['multi_core', 'multi_thread']
     verbose: bool
