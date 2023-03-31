@@ -36,8 +36,8 @@ class recsys_data_simulator:
         N_USERS                             Number of users in the user population
         N_ITEMS                             Number of items in the item population
         N_USER_TYPES                        Number of user "stereotypes" (user blueprints from which new users are created via mutation)
-        USER_TYPE_DISTRIBUTION              The distribution of user "stereotypes" (a tuple with elements summing to 1)
-        N_ITEM_PREF_MUTATIONS_PER_USER
+        USER_TYPE_DISTRIBUTION              The discrete probability distribution of user "stereotypes" (a tuple with elements summing to 1)
+        N_ITEM_PREF_MUTATIONS_PER_USER      Number of
         N_CONTEXT_MODS_PER_USER
         USER_ATTR_UNIVERSE
         ITEM_ATTR_UNIVERSE
