@@ -40,6 +40,8 @@ You can search by category:
 
 * [Google Cloud](#google-cloud)
 
+* [Project Management](#project-management)
+
 * [Python Convenience Functions](#python-convenience-functions) 
 
 * [Statistical Inference and Hypothesis Testing](#statistical-inference-and-hypothesis-testing)
@@ -56,6 +58,7 @@ Name    | Description                                                           
 [ascii_barplot](joes_giant_toolbox/ascii_barplot.py)           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
 [ascii_density_histogram](joes_giant_toolbox/ascii_density_histogram.py) | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
 [conjugate_prior_beta_binomial](joes_giant_toolbox/conjugate_prior_beta_binomial.py) | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
+[create_project_scope_doc](joes_giant_toolbox/create_project_scope_doc.py) | Creates a basic project scope document (markdown) using user input prompts | joes_giant_toolbox/create_project_scope_doc.py | x | | | 2 | 
 [delete_file_in_gcloud_bucket](joes_giant_toolbox/delete_file_in_gcloud_bucket.py) | Function to delete a file which is in a google cloud bucket | joes_giant_toolbox/delete_file_in_gcloud_bucket.py | x | x | | 4 |
 [download_file_from_gcloud_bucket_to_python](download_file_from_gcloud_bucket_to_python.py) | Function which reads a file from a google cloud bucket into python memory | joes_giant_toolbox/download_file_from_gcloud_bucket_to_python.py | x | x | | 4 |
 [duckduckgo_search_multipage](joes_giant_toolbox/duckduckgo_search_multipage.py) | Function fetches search results from the DuckDuckGo Lite search engine | joes_giant_toolbox/duckduckgo_search_multipage.py | x | x | | 2 |
@@ -104,6 +107,11 @@ Name    | Description                                                           
 [query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
 [upload_file_python_to_gcloud_bucket](joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py) | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
 [write_pandas_df_to_google_bigquery_table](joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py)  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
+
+## Project Management
+Name    | Description | Location | Code Completed | Documentation Completed | Tests | Confidence Score |
+-----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
+[create_project_scope_doc](joes_giant_toolbox/create_project_scope_doc.py) | Creates a basic project scope document (markdown) using user input prompts | joes_giant_toolbox/create_project_scope_doc.py | x | | | 2 | 
 
 ## Python Convenience Functions 
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
