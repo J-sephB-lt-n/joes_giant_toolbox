@@ -69,7 +69,6 @@ def anonymous_view_public_linkedin_page(
         'initial_popup_successfully_closed': True,
         'validation_search_strings': {'authwall': False, 'og:description': True}
     }
-    >>>
     >>> print(extracted_person_html)
     <html lang="en"><head>
         <meta name="pageKey" content="public_profile_v3_desktop">
