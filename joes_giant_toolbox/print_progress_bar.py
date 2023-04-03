@@ -22,9 +22,10 @@ class print_progress_bar:
     -------------
     >>> import time
     >>> progress_printer = print_progress_bar(base_message="running model")
-    >>> for i in [x/100 for x in range(0,101)]:
+    >>> for i in [x/1_000 for x in range(0,1_001)]:
     ...     progress_printer.print_progress(percent_complete=i)
-    ...     time.sleep(0.1)
+    ...     time.sleep(0.05)
+    running model |..................................................| 100.00%
     """
 
     def __init__(

@@ -5,9 +5,28 @@ def ascii_barplot(
     right_labels_list=None,  # labels to appear
     symbol="|",  # symbol to use to build the bars
     baseline_value=0,  # value at which the bars start
-):
+) -> str:
     """
     a function which draws a barplot using only raw text symbols
+
+    Parameters
+    ----------
+    values_list,  # list of non-negative integers
+
+    n_counts_per_symbol,  # each {n_counts_per_symbol} will print 1 symbol
+
+    left_labels_list=None,  # labels to appear to left of bars
+
+    right_labels_list=None,  # labels to appear
+
+    symbol="|",  # symbol to use to build the bars
+
+    baseline_value=0,  # value at which the bars start
+
+    Returns
+    -------
+    str
+        The bar plot, exported as a multi-line string
 
     ## EXAMPLE USAGE ##
     import numpy as np

@@ -3,21 +3,27 @@ import warnings
 from print_progress_bar import print_progress_bar
 
 
-class recsys_data_simulator:
+class RecsysDataSimulator:
     """
-    Simulates data to use for assessing and comparing recommendation models
+    Simulates plausible data to use for assessing and comparing recommendation models
 
-    the class contains a generate_tutorial() method which illustrates its basic usage:
-    >>> sim_obj=recsys_data_simulator()
-    >>> sim_obj.generate_tutorial()
+    Notes
+    -----
+    * The method .print_technical_details() provides detailed design motivation
+        and implementation details
+    * The method .print_tutorial() illustrates basic usage of the class
 
     Explanation
     -----------
-    This class simulates a population of users, a database of items, and user/item interaction
+    This class simulates a population of users, a database of items,
+        and user/item interaction
     The simulated user population is defined by a small number of user "stereotypes"
-    When a new user is simulated, they are created by randomly mutating one of these "stereotypes"
-        (i.e. each simulated user differs slightly - at random - from their base type/blueprint)
-    This strategy results in a population containing subgroups (clusters) of similar (but not identical) users
+    When a new user is simulated, they are created by randomly mutating one of these
+        "stereotypes"
+        (i.e. each simulated user differs slightly - at random - from their base
+        type/blueprint)
+    This strategy results in a population containing subgroups (clusters) of similar
+        (but not identical) users
     When a particular user is exposed to a particular item:
         The user draws a rating at random for that item..
         ..from a truncated normal distribution
@@ -27,16 +33,26 @@ class recsys_data_simulator:
             * (optionally) the recommendation context and user's context preference modifiers
         Here, "rating" refers just to a numeric value quantifying a user's response to an item
             ..it can represent whatever you want (e.g. a probability), to suit your application
-        The variance of this truncated normal distribution can be used to control the amount of noise in the system
+        The variance of this truncated normal distribution can be used to control the amount of
+            noise in the system
             (i.e. user preference for a particular item can be more deterministic or more noisy)
+
+    Methods
+    -------
+    print_technical_details
+        Prints detailed design motivation and implementation details to the standard out
+    print_tutorial
+        Prints out documentation text to the standard out (illustrating basic usage of the class)
 
     Attributes
     ----------
     global_constants
         N_USERS                             Number of users in the user population
         N_ITEMS                             Number of items in the item population
-        N_USER_TYPES                        Number of user "stereotypes" (user blueprints from which new users are created via mutation)
-        USER_TYPE_DISTRIBUTION              The discrete probability distribution of user "stereotypes" (a tuple with elements summing to 1)
+        N_USER_TYPES                        Number of user "stereotypes" (user blueprints from
+                                            which new users are created via mutation)
+        USER_TYPE_DISTRIBUTION              The discrete probability distribution of user
+                                            "stereotypes" (a tuple with elements summing to 1)
         N_ITEM_PREF_MUTATIONS_PER_USER      Number of mutations
         N_CONTEXT_MODS_PER_USER
         USER_ATTR_UNIVERSE
@@ -48,10 +64,6 @@ class recsys_data_simulator:
         MIN_RAW_PREF_SCORE
         MAX_RAW_PREF_SCORE
 
-    Methods
-    -------
-    generate_tutorial
-        prints out documentation text to the standard out (illustrating basic usage of the class)
     """
 
     def __init__(self):
@@ -71,6 +83,71 @@ class recsys_data_simulator:
             "MIN_RAW_PREF_SCORE": None,
             "MAX_RAW_PREF_SCORE": None,
         }
+
+    def print_technical_details(self):
+        """prints detailed design motivation and implementation details to the standard out"""
+        print(
+            """
++---------------------+
+| RecsysDataSimulator |
++---------------------+
+
+The aims of this class are:
+
+    1. To emulate plausible real-world user behaviour and data:
+        * The user population contains subgroups (clusters) of users who exhibit 
+            similar item attribute preferences and recommendation context preferences 
+        * These subgroups or clusters are of different sizes (i.e. some types of 
+            users are common, and some are rare)   
+        * Within each subgroup, users share similar demographic characteristics
+        * Although sharing many characteristics with other users in their subgroup,
+            each user is unique 
+        * User item preferences (and recommendation context preferences) are 
+            multivariate (i.e. predictive variables are dependent)
+            e.g.    item_material item_occasion user_preference
+                    cotton        formal        LIKE
+                    cotton        causal        DISLIKE
+                    wool          formal        DISLIKE
+                    wool          causal        LIKE
+        * The user attribute, item attribute and recommendation context data must
+            contain a mix of categorical and continuous variables, and also some
+            missing values                      
+    2. To keep the data generation process as simple as possible
+
+This is achieved as follows:
+
+    TODO
+
+"""
+        )
+
+    def print_tutorial(self):
+        """Prints out documentation text to the standard out
+        (illustrating basic usage of the class)
+        """
+        print(
+            """
+>>> sim_obj=RecsysDataSimulator()
+>>> help(sim_obj)   # view class and method documentation
+>>> sim_obj.print_technical_details() 
+>>> sim_obj.define_population(
+        # help(sim_obj.define_population)
+        n_users=100,
+        n_items=20,
+        n_item_pref_mutations_per_user=2,
+        n_user_types=5,
+        user_type_distribution = (0.4, 0.3, 0.2, 0.05, 0.05),
+        n_context_modifiers_per_user = 2,
+)
+>>> sim_obj.define_user_attribute_universe(
+    # help(sim_obj.define_user_attribute_universe)
+    {
+        "location": ("cape town", "london", "dubai", "new york", "rotterdam"),
+        "age": ("infant", "teenager", "youth", "middle_aged", "old"),
+    }
+)
+"""
+        )
 
     def define_population(
         self,
@@ -156,31 +233,6 @@ class recsys_data_simulator:
             )
         else:
             self._global_constants["USER_ATTR_UNIVERSE"] = user_attr_dict
-
-    def generate_tutorial(self):
-        """Prints out documentation text to the standard out (illustrating basic usage of the class)"""
-        print(
-            """
->>> sim_obj=recsys_data_simulator()
->>> help(sim_obj)   # view class and method documentation
->>> sim_obj.define_population(
-        # help(sim_obj.define_population)
-        n_users=100,
-        n_items=20,
-        n_item_pref_mutations_per_user=2,
-        n_user_types=5,
-        user_type_distribution = (0.4, 0.3, 0.2, 0.05, 0.05),
-        n_context_modifiers_per_user = 2,
-)
->>> sim_obj.define_user_attribute_universe(
-    # help(sim_obj.define_user_attribute_universe)
-    {
-        "location": ("cape town", "london", "dubai", "new york", "rotterdam"),
-        "age": ("infant", "teenager", "youth", "middle_aged", "old"),
-    }
-)
-"""
-        )
 
 
 # def __init__(

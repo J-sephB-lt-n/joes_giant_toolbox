@@ -55,7 +55,6 @@ You can search by category:
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
 [anonymous_view_public_linkedin_page](joes_giant_toolbox/anonymous_view_public_linkedin_page.py) | Function extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser | joes_giant_toolbox/anonymous_view_public_linkedin_page.py | x | x | | 2 |
-[ascii_barplot](joes_giant_toolbox/ascii_barplot.py)           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
 [ascii_density_histogram](joes_giant_toolbox/ascii_density_histogram.py) | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
 [conjugate_prior_beta_binomial](joes_giant_toolbox/conjugate_prior_beta_binomial.py) | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
 [create_project_scope_doc](joes_giant_toolbox/create_project_scope_doc.py) | Creates a basic project scope document (markdown) using user input prompts | joes_giant_toolbox/create_project_scope_doc.py | x | | | 2 | 
@@ -92,7 +91,6 @@ Name    | Description                                                           
 
 Name           | Description                                                             | Location                             | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 ------------------------|-------------------------------------------------------------------------|--------------------------------------|----------------|------------|-----------------------------|----------
-ascii_barplot           | A function which draws a barplot using only raw text symbols            | joes_giant_toolbox/ascii_barplot.py           |                |            |                             | 2                |
 ascii_density_histogram | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py |                |            |                             | 2                |
 view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py | x              |            |                             | 2                |
 

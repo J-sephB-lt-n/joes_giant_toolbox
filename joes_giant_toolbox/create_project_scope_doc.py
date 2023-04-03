@@ -13,7 +13,7 @@ SECTION_DESC = {
     "Wny Bother?": "A summary of why the problem is important, and why we care about solving it.",
     "Current Solutions and Why They Fail": "",
     "What Would a Solution Look Like?": "This is not a description of an actual solution, but rather the list of attributes that we expect any successful solution to this problem to have.",
-    "How Do I Know If I've Solved It?": "How will a completed solution be evaluated/measured? What specific objective measure would convince all relevant stakeholders that the solution is successful.",
+    "How Do I Know If I've Solved It?": "How will a completed solution be evaluated/measured? What specific objective measure would convince all relevant stakeholders that the solution is successful?",
     "What are the Uncertainties?": "What must be true for the solution to work? What must not be true in order for the solution to work?",
     "Sketch of a Plan": 'A high level "roadmap" of the next steps',
     "Export Scope to Markdown": 'Provide an output filename for the markdown document e.g. "project_scope.md" (it is written to the directory in which this script is being run)',
