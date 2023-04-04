@@ -1,5 +1,5 @@
 import time
-
+import random
 from typing import Tuple, List
 
 from selenium import webdriver
@@ -11,7 +11,8 @@ from selenium.webdriver.chrome.options import Options
 
 def anonymous_view_public_linkedin_page(
     url_str: str,
-    inter_sleep_n_secs: float = 5.0,
+    inter_sleep_n_secs_min_max: dict = {"MIN": 4.0, "MAX": 6.0},
+    click_popup_close_button: bool = True,
     verbose: bool = True,
     browser_options: List[str] | None = None,
     validation_search_strings: List[str] | None = None,
@@ -24,8 +25,10 @@ def anonymous_view_public_linkedin_page(
     ----------
     url_str: str
         The URL of the public LinkedIn page
-    inter_sleep_n_secs: float, optional (default: 5.0)
-        The process pauses for this number of seconds between subsequent actions in the virtual browser
+    inter_sleep_n_secs_min_max: dict, optional (default: {"MIN": 4.0, "MAX": 6.0})
+        The process pauses for a random number of seconds (between "MIN" and "MAX") between subsequent actions in the virtual browser
+    click_popup_close_button: bool, optional (default: True)
+        Whether to close the popup window that opens by default when you view a company page and you are not logged in to LinkedIn
     verbose: bool, optional (default: True)
         If verbose=True, progress reporting is printed to the console
     browser_options: List[str] | None, optional (default: None)
@@ -55,7 +58,8 @@ def anonymous_view_public_linkedin_page(
     >>> from pprint import pprint
     >>> logging_dict, extracted_person_html = anonymous_view_public_linkedin_page(
     ...     url_str="https://www.linkedin.com/in/williamhgates/",
-    ...     inter_sleep_n_secs=5.0,
+    ...     inter_sleep_n_secs_min_max={"MIN": 4.0, "MAX": 6.0},
+    ...     click_popup_close_button=True,
     ...     verbose=True,
     ...     validation_search_strings=["authwall","og:description"],
     ... )
@@ -77,7 +81,7 @@ def anonymous_view_public_linkedin_page(
         ...
     >>> logging_dict, extracted_company_html = anonymous_view_public_linkedin_page(
     ...     url_str="https://www.linkedin.com/company/18000429",
-    ...     inter_sleep_n_secs=5.0,
+    ...     inter_sleep_n_secs_min_max={"MIN":1.0,"MAX":7.0},
     ...     verbose=True,
     ...     browser_options=["--headless","--disable-dev-shm-usage","--no-sandbox"],
     ...     validation_search_strings=["authwall","og:description"]
@@ -130,61 +134,71 @@ def anonymous_view_public_linkedin_page(
         auto_browser.page_source
     )
 
-    if_verbose_print(f"waiting {inter_sleep_n_secs} seconds..", end="")
-    time.sleep(inter_sleep_n_secs)
+    random_n_secs = random.uniform(
+        inter_sleep_n_secs_min_max["MIN"], inter_sleep_n_secs_min_max["MAX"]
+    )
+    if_verbose_print(f"waiting {random_n_secs:.4f} seconds..", end="")
+    time.sleep(random_n_secs)
     if_verbose_print("..done")
 
     logging_info_dict["html_character_length"]["2_after_first_pause"] = len(
         auto_browser.page_source
     )
 
-    if_verbose_print(
-        f"clicking close [X] button (after hovering for {inter_sleep_n_secs} seconds prior to click)..",
-        end="",
-    )
-    try:
-        actions = ActionChains(auto_browser)
-        x_button = auto_browser.find_element(
-            By.XPATH,
-            "//icon[contains(@class,'contextual-sign-in-modal__modal-dismiss-icon lazy-loaded')]",
+    if click_popup_close_button:
+        random_n_secs = random.uniform(
+            inter_sleep_n_secs_min_max["MIN"], inter_sleep_n_secs_min_max["MAX"]
         )
-        actions.move_to_element_with_offset(
-            auto_browser.find_element(By.TAG_NAME, "body"), 0, 0
+        if_verbose_print(
+            f"clicking close [X] button (after hovering for {random_n_secs:.4f} seconds prior to click)..",
+            end="",
         )
-        # actions.move_by_offset(100, 25).pause(5).click().perform()
-        actions.move_to_element_with_offset(x_button, 1, -1).pause(
-            inter_sleep_n_secs
-        ).click().perform()
-        logging_info_dict["close_button_found"] = True
+        try:
+            actions = ActionChains(auto_browser)
+            x_button = auto_browser.find_element(
+                By.XPATH,
+                "//icon[contains(@class,'contextual-sign-in-modal__modal-dismiss-icon lazy-loaded')]",
+            )
+            actions.move_to_element_with_offset(
+                auto_browser.find_element(By.TAG_NAME, "body"), 0, 0
+            )
+            # actions.move_by_offset(100, 25).pause(5).click().perform()
+            actions.move_to_element_with_offset(x_button, 1, -1).pause(
+                random_n_secs
+            ).click().perform()
+            logging_info_dict["close_button_found"] = True
+            if_verbose_print("..done")
+        except NoSuchElementException:
+            if_verbose_print("\nNo close [X] button found, so no button was clicked")
+            logging_info_dict["close_button_found"] = False
+
+        if (
+            len(auto_browser.page_source)
+            == logging_info_dict["html_character_length"]["2_after_first_pause"]
+        ):
+            # if page content has not changed after attempted button click
+            logging_info_dict["initial_popup_successfully_closed"] = False
+            if_verbose_print("did not close initial popup window (or it did not exist)")
+            logging_info_dict["html_character_length"]["3_after_button_click"] = len(
+                auto_browser.page_source
+            )
+        else:
+            # if page content has changed after attempted button click
+            logging_info_dict["initial_popup_successfully_closed"] = True
+            if_verbose_print("successfully closed initial popup window")
+            logging_info_dict["html_character_length"]["3_after_button_click"] = len(
+                auto_browser.page_source
+            )
+
+        random_n_secs = random.uniform(
+            inter_sleep_n_secs_min_max["MIN"], inter_sleep_n_secs_min_max["MAX"]
+        )
+        if_verbose_print(
+            f"pausing for {random_n_secs:.4f} seconds..",
+            end="",
+        )
+        time.sleep(random_n_secs)
         if_verbose_print("..done")
-    except NoSuchElementException:
-        if_verbose_print("\nNo close [X] button found, so no button was clicked")
-        logging_info_dict["close_button_found"] = False
-
-    if (
-        len(auto_browser.page_source)
-        == logging_info_dict["html_character_length"]["2_after_first_pause"]
-    ):
-        # if page content has not changed after attempted button click
-        logging_info_dict["initial_popup_successfully_closed"] = False
-        if_verbose_print("did not close initial popup window (or it did not exist)")
-        logging_info_dict["html_character_length"]["3_after_button_click"] = len(
-            auto_browser.page_source
-        )
-    else:
-        # if page content has changed after attempted button click
-        logging_info_dict["initial_popup_successfully_closed"] = True
-        if_verbose_print("successfully closed initial popup window")
-        logging_info_dict["html_character_length"]["3_after_button_click"] = len(
-            auto_browser.page_source
-        )
-
-    if_verbose_print(
-        f"pausing for {inter_sleep_n_secs} seconds..",
-        end="",
-    )
-    time.sleep(inter_sleep_n_secs)
-    if_verbose_print("..done")
 
     logging_info_dict["html_character_length"]["4_final"] = len(
         auto_browser.page_source
