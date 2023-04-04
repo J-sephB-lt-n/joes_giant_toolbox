@@ -11,7 +11,11 @@ from selenium.webdriver.chrome.options import Options
 
 def anonymous_view_public_linkedin_page(
     url_str: str,
-    inter_sleep_n_secs_min_max: dict = {"MIN": 4.0, "MAX": 6.0},
+    inter_sleep_n_secs: dict = {
+        "after_initial_page_load": {"MIN": 4.5, "MAX": 5.5},
+        "hover_over_button": {"MIN": 3.0, "MAX": 3.0},
+        "after_button_click": {"MIN": 1.0, "MAX": 1.0},
+    },
     click_popup_close_button: bool = True,
     verbose: bool = True,
     browser_options: List[str] | None = None,
@@ -25,8 +29,14 @@ def anonymous_view_public_linkedin_page(
     ----------
     url_str: str
         The URL of the public LinkedIn page
-    inter_sleep_n_secs_min_max: dict, optional (default: {"MIN": 4.0, "MAX": 6.0})
+    inter_sleep_n_secs: dict, optional (default: <see description below>)
         The process pauses for a random number of seconds (between "MIN" and "MAX") between subsequent actions in the virtual browser
+        The default behaviour is:
+        {
+            "after_initial_page_load": {"MIN": 4.5, "MAX": 5.5},    # pause after page is first loaded
+            "hover_over_button": {"MIN": 3.0, "MAX": 3.0},          # pause while hovering over popup close button
+            "after_button_click": {"MIN": 1.0, "MAX": 1.0},         # pause after clicking popup close button
+        }
     click_popup_close_button: bool, optional (default: True)
         Whether to close the popup window that opens by default when you view a company page and you are not logged in to LinkedIn
     verbose: bool, optional (default: True)
@@ -47,8 +57,7 @@ def anonymous_view_public_linkedin_page(
 
     Notes
     -----
-    I need to return to this function and simplify/clean up this code
-    Selenium is used to locate the [X] close button on the initial popup window in order to make the full public page html visible
+    Selenium is used to locate the [X] close button on the initial pop-up window in order to make the full public page html visible
     Some pausing is required in order to wait for elements on the page to appear
     This sort of code relies closely on precise html structure, and so will definitely stop working at some point (as the LinkedIn website is modified)
     At the moment, this function uses ChromeDriver for the browser. You need to install this manually on your system in order for the function to work
@@ -58,7 +67,11 @@ def anonymous_view_public_linkedin_page(
     >>> from pprint import pprint
     >>> logging_dict, extracted_person_html = anonymous_view_public_linkedin_page(
     ...     url_str="https://www.linkedin.com/in/williamhgates/",
-    ...     inter_sleep_n_secs_min_max={"MIN": 4.0, "MAX": 6.0},
+    ...     inter_sleep_n_secs = {
+    ...         "after_initial_page_load": {"MIN": 4.5, "MAX": 5.5},
+    ...         "hover_over_button": {"MIN": 3.0, "MAX": 3.0},
+    ...         "after_button_click": {"MIN": 1.0, "MAX": 1.0},
+    ...     },
     ...     click_popup_close_button=True,
     ...     verbose=True,
     ...     validation_search_strings=["authwall","og:description"],
@@ -81,10 +94,8 @@ def anonymous_view_public_linkedin_page(
         ...
     >>> logging_dict, extracted_company_html = anonymous_view_public_linkedin_page(
     ...     url_str="https://www.linkedin.com/company/18000429",
-    ...     inter_sleep_n_secs_min_max={"MIN":1.0,"MAX":7.0},
     ...     verbose=True,
     ...     browser_options=["--headless","--disable-dev-shm-usage","--no-sandbox"],
-    ...     validation_search_strings=["authwall","og:description"]
     ... )
     >>> pprint(logging_dict, underscore_numbers=True)
     {   'close_button_found': False,
@@ -135,7 +146,8 @@ def anonymous_view_public_linkedin_page(
     )
 
     random_n_secs = random.uniform(
-        inter_sleep_n_secs_min_max["MIN"], inter_sleep_n_secs_min_max["MAX"]
+        inter_sleep_n_secs["after_initial_page_load"]["MIN"],
+        inter_sleep_n_secs["after_initial_page_load"]["MAX"],
     )
     if_verbose_print(f"waiting {random_n_secs:.4f} seconds..", end="")
     time.sleep(random_n_secs)
@@ -147,7 +159,8 @@ def anonymous_view_public_linkedin_page(
 
     if click_popup_close_button:
         random_n_secs = random.uniform(
-            inter_sleep_n_secs_min_max["MIN"], inter_sleep_n_secs_min_max["MAX"]
+            inter_sleep_n_secs["hover_over_button"]["MIN"],
+            inter_sleep_n_secs["hover_over_button"]["MAX"],
         )
         if_verbose_print(
             f"clicking close [X] button (after hovering for {random_n_secs:.4f} seconds prior to click)..",
@@ -191,7 +204,8 @@ def anonymous_view_public_linkedin_page(
             )
 
         random_n_secs = random.uniform(
-            inter_sleep_n_secs_min_max["MIN"], inter_sleep_n_secs_min_max["MAX"]
+            inter_sleep_n_secs["after_button_click"]["MIN"],
+            inter_sleep_n_secs["after_button_click"]["MAX"],
         )
         if_verbose_print(
             f"pausing for {random_n_secs:.4f} seconds..",

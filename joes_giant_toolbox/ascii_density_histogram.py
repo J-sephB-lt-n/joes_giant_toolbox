@@ -1,8 +1,9 @@
+import math
 from typing import List
 
 
 def ascii_density_histogram(
-    value_list: List[int | float],
+    values_list: List[int | float],
     n_bins: int = 50,
     draw_character: str = "|",
     density_per_symbol: float = 0.005,
@@ -13,7 +14,7 @@ def ascii_density_histogram(
 
     Parameters
     ----------
-    value_list: List[int | float]
+    values_list: List[int | float]
         The vector of values whose distribution is to be represented by the histogram
     n_bins: int, optional (default: 50)
         The number of bins to use when building the histogram
@@ -42,7 +43,7 @@ def ascii_density_histogram(
     ).tolist()
     >>> print(
         ascii_density_histogram(
-                value_list = values
+                values_list = values
             ,   n_bins = 20
             ,   draw_character = "|"
             ,   density_per_symbol = 0.005
@@ -54,35 +55,38 @@ def ascii_density_histogram(
     """
     if label_round_n_places <= 0:
         raise ValueError("[label_round_n_places] must be a positive integer")
-    sorted_value_list = value_list.copy()
-    sorted_value_list.sort()
-    min_value = sorted_value_list[0]
-    max_value = sorted_value_list[-1]
-    bin_width = (max_value - min_value) / n_bins
-    bin_ref = []
+    # sorted_value_list = value_list.copy()  # so as not to sort the global value_list
+    # sorted_value_list.sort()
+    min_value = min(values_list)  # sorted_value_list[0]
+    max_value = max(values_list)  # sorted_value_list[-1]
+    bin_width: float = (max_value - min_value) / n_bins
+
+    assigned_bin_idx: list = [
+        math.floor((x - min_value) / bin_width)
+        if x < max_value
+        else (n_bins - 1)  # put max_value into top bin
+        for x in values_list
+    ]
+
+    bin_ref: dict = {}
     for i in range(n_bins):
-        bin_ref += [
-            [
-                min_value + i * bin_width,  # left side of bin (include)
-                min_value + (i + 1) * bin_width,  # right side of bin (exclude)
-                0,  # count of values in this bin (to be populated)
-            ]
-        ]
-    current_bin_idx = 0
-    current_bin = bin_ref[current_bin_idx]
-    i = 0
-    while i < len(sorted_value_list):
-        if sorted_value_list[i] < current_bin[1]:
-            bin_ref[current_bin_idx][2] += 1
-            i += 1
-        elif current_bin_idx < (n_bins - 1):
-            current_bin_idx += 1
-            current_bin = bin_ref[current_bin_idx]
-        else:
-            bin_ref[current_bin_idx][2] += 1
-            i += 1
+        bin_ref[i] = {
+            "BIN_MIN_INCL": min_value + i * bin_width,
+            "BIN_MAX_EXCL": min_value + (i + 1) * bin_width,
+            "n_samples_in_bin": 0,  # count of values in this bin (to be populated)
+        }
+
+    # for idx in range(len(values_list)):
+    #    value = values_list[idx]
+    #    bin_idx = assigned_bin_idx[idx]
+    #    bin_min_incl = bin_ref[bin_idx]["BIN_MIN_INCL"]
+    #    bin_max_excl = bin_ref[bin_idx]["BIN_MAX_EXCL"]
+    #    if (value < bin_min_incl) or (value >= bin_max_excl):
+    #        if value != max_value:
+    #            print(f"issue! idx={idx}")
+
     # build the histogram string:
-    n_values = len(value_list)
+    n_samples = len(values_list)
     bin_densities = [bin_ref[i][2] / n_values for i in range(n_bins)]
     n_symbols_per_bin = [int(i // density_per_symbol) for i in bin_densities]
     longest_label_len = max(
