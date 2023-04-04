@@ -18,6 +18,12 @@ def upload_file_python_to_gcloud_bucket(
         The file type
         examples: {"text/csv", "text/json", "text/html"}
 
+    Notes
+    -----
+    In order to preserve unicode symbols when uploading a string (e.g. when uploading html) use:
+        contents_str = my_string.encode("raw_unicode_escape")
+
+
     Example usage
     -------------
     >>>upload_file_to_cloud_bucket(
