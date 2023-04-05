@@ -1,5 +1,6 @@
 import math
 from typing import List
+import warnings
 
 
 def ascii_density_histogram(
@@ -53,12 +54,18 @@ def ascii_density_histogram(
     >>> # compare to matplotlib histogram #
     >>> plt.hist(values, bins=20)
     """
+
+    warnings.warn(
+        "this function is currently under code refactoring, and is not working"
+    )
+    return None
+
     if label_round_n_places <= 0:
         raise ValueError("[label_round_n_places] must be a positive integer")
     # sorted_value_list = value_list.copy()  # so as not to sort the global value_list
     # sorted_value_list.sort()
-    min_value = min(values_list)  # sorted_value_list[0]
-    max_value = max(values_list)  # sorted_value_list[-1]
+    min_value: float | int = min(values_list)  # sorted_value_list[0]
+    max_value: float | int = max(values_list)  # sorted_value_list[-1]
     bin_width: float = (max_value - min_value) / n_bins
 
     assigned_bin_idx: list = [
@@ -75,6 +82,7 @@ def ascii_density_histogram(
             "BIN_MAX_EXCL": min_value + (i + 1) * bin_width,
             "n_samples_in_bin": 0,  # count of values in this bin (to be populated)
         }
+    bin_ref[n_bins - 1]["NOTE"] = "this bin includes the maximum value in the sample"
 
     # for idx in range(len(values_list)):
     #    value = values_list[idx]
@@ -87,7 +95,7 @@ def ascii_density_histogram(
 
     # build the histogram string:
     n_samples = len(values_list)
-    bin_densities = [bin_ref[i][2] / n_values for i in range(n_bins)]
+    bin_densities = [bin_ref[i][2] / n_samples for i in range(n_bins)]
     n_symbols_per_bin = [int(i // density_per_symbol) for i in bin_densities]
     longest_label_len = max(
         len(str(int(round(sorted_value_list[0])))) + label_round_n_places + 1,
