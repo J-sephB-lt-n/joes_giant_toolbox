@@ -11,3 +11,15 @@ class RapidBagOfWordsClassifier:
 
     def __init__():
         pass
+
+
+if __name__ == "__main__":
+    import sklearn.datasets
+
+    X, y = sklearn.datasets.fetch_20newsgroups(
+        subset="test",
+        shuffle=True,
+        random_state=69,
+        remove=("headers", "footers", "quotes"),
+        return_X_y=True,
+    )

@@ -58,7 +58,7 @@ def ascii_density_histogram(
     warnings.warn(
         "this function is currently under code refactoring, and is not working"
     )
-    return None
+    # return None
 
     if label_round_n_places <= 0:
         raise ValueError("[label_round_n_places] must be a positive integer")

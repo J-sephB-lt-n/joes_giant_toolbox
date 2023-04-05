@@ -176,9 +176,9 @@ def anonymous_view_public_linkedin_page(
                 auto_browser.find_element(By.TAG_NAME, "body"), 0, 0
             )
             # actions.move_by_offset(100, 25).pause(5).click().perform()
-            actions.move_to_element_with_offset(x_button, 1, -1).pause(
-                random_n_secs
-            ).click().perform()
+            actions.move_to_element_with_offset(
+                x_button, random.uniform(-5, 5), random.uniform(-5, 5)
+            ).pause(random_n_secs).click().perform()
             logging_info_dict["close_button_found"] = True
             if_verbose_print("..done")
         except NoSuchElementException:
