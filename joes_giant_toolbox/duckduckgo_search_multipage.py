@@ -23,9 +23,9 @@ def duckduckgo_search_multipage(
     -----
     Code relying on html structure is inherently unstable
     DuckDuckGo is a wonderful free service. Please don't be a wanker and abuse their API by sending too many requests in a short space of time
-    If you wait random.uniform(2,4) seconds between requests, they should never block you
     Fetching just the first page of search results is much easier and more stable than fetching multiple pages, so the multi-page functionality is less stable (but it will fail loudly, so you will know)
     This function uses the service "https://lite.duckduckgo.com/lite/" API to retrieve search results
+    Light string cleaning (e.g. removing white space) is performed on the search results
 
     Parameters
     ----------
@@ -75,7 +75,7 @@ def duckduckgo_search_multipage(
     ...     region="uk-en",
     ...     n_pages=5,
     ...     wait_secs_between_requests_min_max=(2.0, 4.0),
-    ...     restrict_to_site="https://www.linkedin.com/in",
+    ...     restrict_to_site="linkedin.com/in",
     ...     # parameters passed to requests.get()/requests.post() functions #
     ...     timeout=5,
     ...     headers={"User-Agent":"Joe's Giant Toolbox"},
@@ -88,7 +88,8 @@ def duckduckgo_search_multipage(
     if "params" not in kwargs:
         kwargs["params"] = {}
     if restrict_to_site is not None:
-        kwargs["params"]["q"] = f"{query_str} site:{restrict_to_site}"
+        query_str += f" site:{restrict_to_site}"
+        kwargs["params"]["q"] = query_str
     else:
         kwargs["params"]["q"] = query_str
     if region is not None:
@@ -114,14 +115,21 @@ def duckduckgo_search_multipage(
     if ddg_response.status_code == 200:
         soup = bs4.BeautifulSoup(ddg_response.text, "html.parser")
         # extract search results #
-        result_title_list = [x.text for x in soup.find_all(class_="result-link")]
-        result_link_list = [
-            urllib.parse.unquote(
-                re.sub(r"//duckduckgo.com/l/\?uddg=", "", x["href"])
-            ).split("&")[0]
+        result_title_list = [
+            x.text.strip().replace("\n", " ")
             for x in soup.find_all(class_="result-link")
         ]
-        result_desc_list = [x.text for x in soup.find_all(class_="result-snippet")]
+        result_link_list = [
+            urllib.parse.unquote(re.sub(r"//duckduckgo.com/l/\?uddg=", "", x["href"]))
+            .split("&")[0]
+            .strip()
+            .replace("\n", " ")
+            for x in soup.find_all(class_="result-link")
+        ]
+        result_desc_list = [
+            x.text.strip().replace("\n", " ")
+            for x in soup.find_all(class_="result-snippet")
+        ]
         results_dict["request_log"]["page_1"]["n_results"] = len(result_desc_list)
         if verbose:
             print(f"{len(result_link_list)} results returned")
