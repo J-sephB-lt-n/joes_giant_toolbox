@@ -26,20 +26,28 @@ def upload_file_python_to_gcloud_bucket(
 
     Example usage
     -------------
-    >>>upload_file_to_cloud_bucket(
-    ...    contents_str = pd.DataFrame({"x":[1,2,3]}).to_csv(index=False),
-    ...    bucket_name="my-bucket",
-    ...    filename_on_bucket="pd_df.csv",
-    ...    file_type="text/csv"
-    ...)
+    >>> upload_file_to_cloud_bucket(
+    ...     contents_str = pd.DataFrame({"x":[1,2,3]}).to_csv(index=False),
+    ...     bucket_name="my-bucket",
+    ...     filename_on_bucket="pd_df.csv",
+    ...     file_type="text/csv"
+    ... )
 
-    >>>upload_file_to_cloud_bucket(
-    ...    contents_str = json.dumps( {"x":69, "y":[4,20]} ),
-    ...    bucket_name="my-bucket",
-    ...    filename_on_bucket="dict.json",
-    ...    file_type="text/json"
-    ...)
+    >>> upload_file_to_cloud_bucket(
+    ...     contents_str = json.dumps( {"x":69, "y":[4,20]} ),
+    ...     bucket_name="my-bucket",
+    ...     filename_on_bucket="dict.json",
+    ...     file_type="text/json"
+    ... )
     """
     storage_client = google.cloud.storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
     bucket.blob(filename_on_bucket).upload_from_string(contents_str, file_type)
+
+
+def some_func(nums):
+    return [2 * num for num in nums]
+
+
+x = [1, 2, 3]
+x = some_func(x)
