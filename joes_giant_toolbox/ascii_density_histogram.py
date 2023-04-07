@@ -21,7 +21,7 @@ def ascii_density_histogram(
     draw_character: str, optional (default: "|")
         The string character to use to draw the histogram bars
     density_per_symbol: float, optional (default: 0.005)
-        The % of the sample values represented by each printed character in the histogram
+        The percentage of the total sample represented by each printed character in the histogram
         e.g. density_per_symbol=0.01 means that each drawn character represents 1% of the total data
     label_round_n_places: int, optional (default: 2)
         The number of places to round the printed axis bin labels to
@@ -53,8 +53,8 @@ def ascii_density_histogram(
     >>> # compare to matplotlib histogram #
     >>> plt.hist(values, bins=25)
     """
-    if label_round_n_places <= 0:
-        raise ValueError("[label_round_n_places] must be a positive integer")
+    if label_round_n_places < 0:
+        raise ValueError("[label_round_n_places] must be non-negative")
     # sorted_value_list = value_list.copy()  # so as not to sort the global value_list
     # sorted_value_list.sort()
     n_samples_total: int = len(values_list)
@@ -101,6 +101,9 @@ def ascii_density_histogram(
         bin_ref[bin_idx]["drawn_bar_str"] = draw_character * (
             math.floor(bin_ref[bin_idx]["percent_of_total_sample"] / density_per_symbol)
         )
+    bin_ref[bin_idx]["axis_label_str"] = bin_ref[bin_idx]["axis_label_str"].replace(
+        ")", "]"
+    )  # top bin includes maximum value
 
     # build the histogram string #
     max_axis_label_nchars = max([len(bin_ref[k]["axis_label_str"]) for k in bin_ref])
