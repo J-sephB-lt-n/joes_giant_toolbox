@@ -1,6 +1,5 @@
 import math
 from typing import List
-import warnings
 
 
 def ascii_density_histogram(
@@ -22,10 +21,10 @@ def ascii_density_histogram(
     draw_character: str, optional (default: "|")
         The string character to use to draw the histogram bars
     density_per_symbol: float, optional (default: 0.005)
-        TODO
+        The % of the sample values represented by each printed character in the histogram
         e.g. density_per_symbol=0.01 means that each drawn character represents 1% of the total data
     label_round_n_places: int, optional (default: 2)
-        The number of places to round the axis bin labels to
+        The number of places to round the printed axis bin labels to
 
     Returns
     -------
@@ -36,38 +35,34 @@ def ascii_density_histogram(
     -------------
     >>> import numpy as np
     >>> from matplotlib import pyplot as plt
-    >>> sample_size=100_000
+    >>> sample_size=1_000_000
     >>> dbn_choices=np.random.choice(a=[1,2], size=sample_size, replace=True)
     >>> values=(
-        (dbn_choices==1) * np.random.normal(size=100_000, loc=0, scale=1).tolist() +
-        (dbn_choices==2) * np.random.normal(size=100_000, loc=10, scale=3).tolist()
+        (dbn_choices==1) * np.random.normal(size=1_000_000, loc=0, scale=1).tolist() +
+        (dbn_choices==2) * np.random.normal(size=1_000_000, loc=10, scale=4).tolist()
     ).tolist()
     >>> print(
         ascii_density_histogram(
                 values_list = values
-            ,   n_bins = 20
+            ,   n_bins = 25
             ,   draw_character = "|"
             ,   density_per_symbol = 0.005
             ,   label_round_n_places = 1
         )
     )
     >>> # compare to matplotlib histogram #
-    >>> plt.hist(values, bins=20)
+    >>> plt.hist(values, bins=25)
     """
-
-    warnings.warn(
-        "this function is currently under code refactoring, and is not working"
-    )
-    # return None
-
     if label_round_n_places <= 0:
         raise ValueError("[label_round_n_places] must be a positive integer")
     # sorted_value_list = value_list.copy()  # so as not to sort the global value_list
     # sorted_value_list.sort()
+    n_samples_total: int = len(values_list)
     min_value: float | int = min(values_list)  # sorted_value_list[0]
     max_value: float | int = max(values_list)  # sorted_value_list[-1]
     bin_width: float = (max_value - min_value) / n_bins
 
+    # calculate bin assignment for every value in values_list #
     assigned_bin_idx: list = [
         math.floor((x - min_value) / bin_width)
         if x < max_value
@@ -75,44 +70,46 @@ def ascii_density_histogram(
         for x in values_list
     ]
 
+    # create a dictionary containing the bin definitions #
     bin_ref: dict = {}
     for i in range(n_bins):
         bin_ref[i] = {
             "BIN_MIN_INCL": min_value + i * bin_width,
             "BIN_MAX_EXCL": min_value + (i + 1) * bin_width,
-            "n_samples_in_bin": 0,  # count of values in this bin (to be populated)
+            "n_samples_in_bin": 0,  # to be populated later
+            "percent_of_total_sample": None,  # to be populated later
+            "axis_label_str": None,  # to be populated later
+            "drawn_bar_str": None,  # to be populated later
         }
     bin_ref[n_bins - 1]["NOTE"] = "this bin includes the maximum value in the sample"
 
-    # for idx in range(len(values_list)):
-    #    value = values_list[idx]
-    #    bin_idx = assigned_bin_idx[idx]
-    #    bin_min_incl = bin_ref[bin_idx]["BIN_MIN_INCL"]
-    #    bin_max_excl = bin_ref[bin_idx]["BIN_MAX_EXCL"]
-    #    if (value < bin_min_incl) or (value >= bin_max_excl):
-    #        if value != max_value:
-    #            print(f"issue! idx={idx}")
+    # populate the bins #
+    for idx in assigned_bin_idx:
+        bin_ref[idx]["n_samples_in_bin"] += 1
 
-    # build the histogram string:
-    n_samples = len(values_list)
-    bin_densities = [bin_ref[i][2] / n_samples for i in range(n_bins)]
-    n_symbols_per_bin = [int(i // density_per_symbol) for i in bin_densities]
-    longest_label_len = max(
-        len(str(int(round(sorted_value_list[0])))) + label_round_n_places + 1,
-        len(str(int(round(sorted_value_list[-1])))) + label_round_n_places + 1,
-    )
-    closing_bracket_ref = ")" * (n_bins - 1) + "]"
+    # generate the string elements for each histogram bar #
+    for bin_idx in bin_ref:
+        bin_ref[bin_idx]["percent_of_total_sample"] = (
+            bin_ref[bin_idx]["n_samples_in_bin"] / n_samples_total
+        )
+        bin_ref[bin_idx]["axis_label_str"] = (
+            "["
+            + f"{bin_ref[bin_idx]['BIN_MIN_INCL']:.{label_round_n_places}f}, "
+            + f"{bin_ref[bin_idx]['BIN_MAX_EXCL']:.{label_round_n_places}f}"
+            + ")"
+        )
+        bin_ref[bin_idx]["drawn_bar_str"] = draw_character * (
+            math.floor(bin_ref[bin_idx]["percent_of_total_sample"] / density_per_symbol)
+        )
+
+    # build the histogram string #
+    max_axis_label_nchars = max([len(bin_ref[k]["axis_label_str"]) for k in bin_ref])
     histogram_string = ""
-    for j in range(len(bin_ref)):
+    for bin_idx in bin_ref:
         histogram_string += (
             "\n"
-            + "["
-            + str(round(bin_ref[j][0], label_round_n_places)).rjust(longest_label_len)
-            + ", "
-            + str(round(bin_ref[j][1], label_round_n_places)).rjust(longest_label_len)
-            + closing_bracket_ref[j]
-            + " "
-            + draw_character * n_symbols_per_bin[j]
+            + f"{bin_ref[bin_idx]['axis_label_str']:<{max_axis_label_nchars+1}}"
+            + bin_ref[bin_idx]["drawn_bar_str"]
         )
 
     return histogram_string

@@ -239,5 +239,9 @@ def duckduckgo_search_multipage(
                         "additional_desc"
                     ] = "page_received_non_200_response_code"
                     break
+    else:
+        results_dict["request_log"][f"page_1"][
+            "additional_desc"
+        ] = "page_received_non_200_response_code"
 
     return results_dict["request_log"], results_dict["search_results_list"]
