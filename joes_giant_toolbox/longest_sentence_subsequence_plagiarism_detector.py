@@ -14,7 +14,7 @@ def longest_sentence_subsequence_plagiarism_detector(
     I had to produce this function in a short space of time so it is:
         *   slow
         *   memory inefficient
-        *   working reliably, even for fairly large documents
+        *   working reliably, even for fairly large documents (e.g. 200 pages)
 
     Notes
     -----
