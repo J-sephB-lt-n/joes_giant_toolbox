@@ -38,18 +38,18 @@ def ascii_density_histogram(
     >>> sample_size=1_000_000
     >>> dbn_choices=np.random.choice(a=[1,2], size=sample_size, replace=True)
     >>> values=(
-        (dbn_choices==1) * np.random.normal(size=1_000_000, loc=0, scale=1).tolist() +
-        (dbn_choices==2) * np.random.normal(size=1_000_000, loc=10, scale=4).tolist()
-    ).tolist()
+    ...     (dbn_choices==1) * np.random.normal(size=1_000_000, loc=0, scale=1).tolist() +
+    ...     (dbn_choices==2) * np.random.normal(size=1_000_000, loc=10, scale=4).tolist()
+    ... ).tolist()
     >>> print(
-        ascii_density_histogram(
-                values_list = values
-            ,   n_bins = 25
-            ,   draw_character = "|"
-            ,   density_per_symbol = 0.005
-            ,   label_round_n_places = 1
-        )
-    )
+    ...     ascii_density_histogram(
+    ...         values_list=values,
+    ...         n_bins=25,
+    ...         draw_character="|",
+    ...         density_per_symbol=0.005,
+    ...         label_round_n_places=1,
+    ...     )
+    ... )
     >>> # compare to matplotlib histogram #
     >>> plt.hist(values, bins=25)
     """

@@ -74,7 +74,7 @@ def anonymous_view_public_linkedin_page(
     ...     },
     ...     click_popup_close_button=True,
     ...     verbose=True,
-    ...     validation_search_strings=["authwall","og:description"],
+    ...     validation_search_strings=["authwall","og:description","could not be found","we can’t seem to find the page you’re looking for"],
     ... )
     >>> pprint(logging_dict, underscore_numbers=True)
     {   'close_button_found': True,
@@ -84,7 +84,11 @@ def anonymous_view_public_linkedin_page(
                                     '4_final': 217_238
                                 },
         'initial_popup_successfully_closed': True,
-        'validation_search_strings': {'authwall': False, 'og:description': True}
+        'validation_search_strings': {  'authwall': False,
+                                        'og:description': True,
+                                        'could not be found': False,
+                                        'we can’t seem to find the page you’re looking for': False,
+                                    }
     }
     >>> print(extracted_person_html)
     <html lang="en"><head>
