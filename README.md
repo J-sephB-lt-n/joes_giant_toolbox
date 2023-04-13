@@ -1,6 +1,6 @@
 # Joe's Giant Tool Box
 
-This is a large collection of general python functions and classes that I use in my daily work
+A large collection of general python functions and classes that I use in my daily work
 
 ```
                                                      .-.
