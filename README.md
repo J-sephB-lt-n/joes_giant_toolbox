@@ -2,6 +2,8 @@
 
 A large collection of general python functions and classes that I use in my daily work
 
+!! THE STRUCTURE OF THIS PROJECT IS GOING THROUGH A REFACTORING IN PREPARATION FOR RELEASE ON PYPI !!
+
 ```
                                                      .-.
                                                     /   \
@@ -140,6 +142,7 @@ Name    | Description                                                           
 # Run Unit Tests
 
 ```bash
+git clone https://github.com/J-sephB-lt-n/joes_giant_toolbox.git
 pip install pytest
 pytest -v
 ```

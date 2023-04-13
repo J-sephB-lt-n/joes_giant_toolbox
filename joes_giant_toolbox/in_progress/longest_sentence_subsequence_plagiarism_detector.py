@@ -1,6 +1,6 @@
 from typing import List
 
-from print_progress_bar import print_progress_bar
+from joes_giant_toolbox.print_progress_bar import print_progress_bar
 
 
 def longest_sentence_subsequence_plagiarism_detector(

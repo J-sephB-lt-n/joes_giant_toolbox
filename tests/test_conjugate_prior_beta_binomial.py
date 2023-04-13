@@ -1,9 +1,9 @@
 # add the root project directory to the system path:
-import sys
-import pathlib
+# import sys
+# import pathlib
 
-parent_dir_path = pathlib.Path(__file__).parent.parent
-sys.path.append(str(parent_dir_path))
+# parent_dir_path = pathlib.Path(__file__).parent.parent
+# sys.path.append(str(parent_dir_path))
 
 # import the function to be tested:
 from joes_giant_toolbox.conjugate_prior_beta_binomial import (
