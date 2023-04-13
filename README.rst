@@ -4,7 +4,6 @@ Joe's Giant Toolbox
 
 A large collection of general python functions and classes that I use in my daily work
 
-```
                                                      .-.
                                                     /   \
                                      _____.....-----|(o) |
@@ -21,7 +20,7 @@ A large collection of general python functions and classes that I use in my dail
     .,.,.,.,.,.,.,.,.,.,.,.,.,                      /     \
    ((O) o o o o ======= o o(O))                 ._.'      /
 LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
-```
+
 source: https://ascii.co.uk
 
 
