@@ -43,11 +43,3 @@ def upload_file_python_to_gcloud_bucket(
     storage_client = google.cloud.storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
     bucket.blob(filename_on_bucket).upload_from_string(contents_str, file_type)
-
-
-def some_func(nums):
-    return [2 * num for num in nums]
-
-
-x = [1, 2, 3]
-x = some_func(x)
