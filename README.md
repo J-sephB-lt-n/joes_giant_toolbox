@@ -42,6 +42,8 @@ You can search by category:
 
 * [Google Cloud](#google-cloud)
 
+* [Project Managment](#project-management)
+
 * [Python Convenience Functions](#python-convenience-functions) 
 
 * [Statistical Inference and Hypothesis Testing](#statistical-inference-and-hypothesis-testing)
@@ -131,6 +133,17 @@ help( joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table )
 | query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
 | upload_file_python_to_gcloud_bucket               | Writes an object in python memory to a file (blob) on a google cloud bucket                                  |         4        |
 | write_pandas_df_to_google_bigquery_table          | Writes a pandas dataframe to a table on Google BigQuery                                                      |         4        |
+
+## Project Management
+```python
+import joes_giant_toolbox.proj_mgmt
+help( joes_giant_toolbox.proj_mgmt.create_project_scope_doc )
+```
+
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| create_project_scope_doc                          | Creates a basic project scope document (markdown) by prompting the user for input                            |         3        | 
+
 
 ## Python Convenience Functions 
 ```python

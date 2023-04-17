@@ -1,1 +1,3 @@
 import joes_giant_toolbox.proj_mgmt
+
+help(joes_giant_toolbox.proj_mgmt.create_project_scope_doc)
