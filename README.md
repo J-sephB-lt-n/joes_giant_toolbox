@@ -42,8 +42,6 @@ You can search by category:
 
 * [Google Cloud](#google-cloud)
 
-* [Project Management](#project-management)
-
 * [Python Convenience Functions](#python-convenience-functions) 
 
 * [Statistical Inference and Hypothesis Testing](#statistical-inference-and-hypothesis-testing)
@@ -124,20 +122,15 @@ help( joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket )
 help( joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table )
 ```
 
-Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-[delete_file_in_gcloud_bucket](joes_giant_toolbox/delete_file_in_gcloud_bucket.py) | Function to delete a file which is in a google cloud bucket | joes_giant_toolbox/delete_file_in_gcloud_bucket.py | x | x | | 4 |
-[download_file_from_gcloud_bucket_to_python](joes_giant_toolbox/download_file_from_gcloud_bucket_to_python.py) | Function which reads a file from a google cloud bucket into python memory | joes_giant_toolbox/download_file_from_gcloud_bucket_to_python.py | x | x | | 4 |
-[list_files_in_gcloud_bucket](joes_giant_toolbox/list_files_in_gcloud_bucket.py) | Function which returns a list of the files present in a specified google cloud bucket | joes_giant_toolbox/list_files_in_gcloud_bucket.py | x              | x          |     | 4                |
-[move_or_rename_file_in_gcloud_bucket](joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py) | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py | x | x | | 2 |
-[query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | joes_giant_toolbox/query_bigquery_to_pandas_df.py | x              | x          |     | 4                |
-[upload_file_python_to_gcloud_bucket](joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py) | Function writes an object in python memory to a file (blob) on a google cloud bucket | joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py | x | x | | 2 |
-[write_pandas_df_to_google_bigquery_table](joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py)  | Function which writes a pandas dataframe to a table on Google BigQuery | joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py | x              | x          |     | 4                |
-
-## Project Management
-Name    | Description | Location | Code Completed | Documentation Completed | Tests | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-[create_project_scope_doc](joes_giant_toolbox/create_project_scope_doc.py) | Creates a basic project scope document (markdown) using user input prompts | joes_giant_toolbox/create_project_scope_doc.py | x | | | 2 | 
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| delete_file_in_gcloud_bucket                      | Deletes a file which is in a google cloud bucket                                                             |         4        |
+| download_file_from_gcloud_bucket_to_python        | Reads a file from a google cloud bucket into python memory                                                   |         4        |
+| list_files_in_gcloud_bucket                       | Returns a list of the files present in a specified google cloud bucket                                       |         4        |
+| move_or_rename_file_in_gcloud_bucket              | Move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket)     |         4        |
+| query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
+| upload_file_python_to_gcloud_bucket               | Writes an object in python memory to a file (blob) on a google cloud bucket                                  |         4        |
+| write_pandas_df_to_google_bigquery_table          | Writes a pandas dataframe to a table on Google BigQuery                                                      |         4        |
 
 ## Python Convenience Functions 
 ```python

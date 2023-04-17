@@ -1,4 +1,1 @@
-import joes_giant_toolbox.dataviz
-
-help(joes_giant_toolbox.dataviz.ascii_density_histogram)
-help(joes_giant_toolbox.dataviz.view_nested_dict_structure)
+import joes_giant_toolbox.proj_mgmt
