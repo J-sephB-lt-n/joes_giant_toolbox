@@ -67,9 +67,9 @@ You can search by category:
 | list_files_in_gcloud_bucket                       | Returns a list of the files present in a specified google cloud bucket                                       |         4        |
 | longest_sentence_subsequence_plagiarism_detector  | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) |    3        |
 | make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
-[move_or_rename_file_in_gcloud_bucket](joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py) | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | x | x | | 2 |
-[print_progress_bar](joes_giant_toolbox/print_progress_bar.py) | Prints a progress bar (to standard out) while code is running | x | x | | 2
-[query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | x              | x          |     | 4                |
+| move_or_rename_file_in_gcloud_bucket              | Move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket)     |         4        |
+| print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
+| query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | x              | x          |     | 4                |
 [RapidBinaryClassifier](joes_giant_toolbox/rapid_binary_classifier.py) | Class facilitating the ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code | x | | tests/test_rapid_binary_classifier.py | 2.5 |
 [run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | x | x | | 2 |
 [scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | x | x | | 2
@@ -123,6 +123,13 @@ Name    | Description | Location | Code Completed | Documentation Completed | Te
 [create_project_scope_doc](joes_giant_toolbox/create_project_scope_doc.py) | Creates a basic project scope document (markdown) using user input prompts | joes_giant_toolbox/create_project_scope_doc.py | x | | | 2 | 
 
 ## Python Convenience Functions 
+```python
+import joes_giant_toolbox.convenience
+help( joes_giant_toolbox.convenience.list_all_python_imports )
+help( joes_giant_toolbox.convenience.print_progress_bar )
+help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
+```
+
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
 [list_all_python_imports](joes_giant_toolbox/list_all_python_imports.py) | Searches every python script in a given folder and lists all python modules imported within those scripts | joes_giant_toolbox/list_all_python_imports.py | x | x | | 2 |
