@@ -1,9 +1,4 @@
-import joes_giant_toolbox.google_cloud
+import joes_giant_toolbox.dataviz
 
-help(joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python)
-help(joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df)
-help(joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table)
+help(joes_giant_toolbox.dataviz.ascii_density_histogram)
+help(joes_giant_toolbox.dataviz.view_nested_dict_structure)

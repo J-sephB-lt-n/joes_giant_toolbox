@@ -90,20 +90,26 @@ help( joes_giant_toolbox.web.scrape_webpage_and_all_linked_webpages )
 help( joes_giant_toolbox.web.url_to_filename_to_url_mapper ) 
 ```
 
-Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-[anonymous_view_public_linkedin_page](joes_giant_toolbox/anonymous_view_public_linkedin_page.py) | Function extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser | joes_giant_toolbox/anonymous_view_public_linkedin_page.py | x | x | | 2 |
-[duckduckgo_search_multipage](joes_giant_toolbox/duckduckgo_search_multipage.py) | Function fetches search results from the DuckDuckGo Lite search engine | joes_giant_toolbox/duckduckgo_search_multipage.py | x | x | | 2 |
-[make_url_request](joes_giant_toolbox/make_url_request.py) | A convenience function for making API requests using the urllib library | joes_giant_toolbox/make_url_request.py | x              | x          | tests/test_make_url_request.py   | 3                |
-[scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_webpages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py | x | x | | 2
-[url_to_filename_to_url_mapper](joes_giant_toolbox/url_to_filename_to_url_mapper.py) | Converts a webpage URL into a useable filename, where the URL can be recovered from the filename | joes_giant_toolbox/url_to_filename_to_url_mapper.py | x | | | 2
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| anonymous_view_public_linkedin_page               | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
+| duckduckgo_search_multipage                       | Fetches search results from the DuckDuckGo Lite search engine                                                |         2        |
+| make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
+| scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
+| url_to_filename_to_url_mapper                     | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
 
 ## Data Visualisation
 
-Name           | Description                                                             | Location                             | Code Completed | Documentation Completed | Tests                       | Confidence Score |
-------------------------|-------------------------------------------------------------------------|--------------------------------------|----------------|------------|-----------------------------|----------
-ascii_density_histogram | A function which draws a histogram using only raw text symbols          | joes_giant_toolbox/ascii_density_histogram.py | x               | x            |                             | 2                |
-view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py | x              |            |                             | 2                |
+```python
+import joes_giant_toolbox.dataviz
+help( joes_giant_toolbox.dataviz.ascii_density_histogram )
+help( joes_giant_toolbox.dataviz.view_nested_dict_structure )
+```
+
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| ascii_density_histogram                           | Draws a histogram using only raw text symbols                                                                |         2        |
+| view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         2        |
 
 ## Google Cloud
 
