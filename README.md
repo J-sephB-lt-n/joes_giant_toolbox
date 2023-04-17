@@ -69,15 +69,15 @@ You can search by category:
 | make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
 | move_or_rename_file_in_gcloud_bucket              | Move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket)     |         4        |
 | print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
-| query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | x              | x          |     | 4                |
-[RapidBinaryClassifier](joes_giant_toolbox/rapid_binary_classifier.py) | Class facilitating the ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code | x | | tests/test_rapid_binary_classifier.py | 2.5 |
-[run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | x | x | | 2 |
-[scrape_webpage_and_all_linked_webpages](joes_giant_toolbox/scrape_webpage_and_all_linked_wepages.py) | Function extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too | x | x | | 2
-[string_cleaner](joes_giant_toolbox/string_cleaner.py) | A class for chaining common string-cleaning operations |                |            | tests/test_string_cleaner.py    | 2                |
-[upload_file_python_to_gcloud_bucket](joes_giant_toolbox/upload_file_python_to_gcloud_bucket.py) | Function writes an object in python memory to a file (blob) on a google cloud bucket | x | x | | 2 |
-[url_to_filename_to_url_mapper](joes_giant_toolbox/url_to_filename_to_url_mapper.py) | Converts a webpage URL into a useable filename, where the URL can be recovered from the filename | x | | | 2
-[view_nested_dict_structure](joes_giant_toolbox/view_nested_dict_structure.py) | Provides a simple printout for understanding the structure of a complex nested python dictionary | x               |            |                             | 2                |
-[write_pandas_df_to_google_bigquery_table](joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py)  | Function which writes a pandas dataframe to a table on Google BigQuery | x              | x          |     | 4                |
+| query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
+| RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
+| run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
+| scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
+| StringCleaner                                     | Applies common string-cleaning operations to a text string, and also allows you to chain them in sequence    |         1        |
+| upload_file_python_to_gcloud_bucket               | Writes an object in python memory to a file (blob) on a google cloud bucket                                  |         4        |
+| url_to_filename_to_url_mapper                     | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
+| view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         2        |
+| write_pandas_df_to_google_bigquery_table          | Writes a pandas dataframe to a table on Google BigQuery                                                      |         4        |
 
 ## API and Web
 
