@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "joes_giant_toolbox"
-version = "0.0.3"
+version = "0.0.4"
 description = "A large collection of general python functions and classes that I use in my daily work"
-readme = "README.md"
+readme = "pypiREADME.rst"
 authors = [{ name = "Joseph Bolton", email = "joseph.jazz.bolton@gmail.com" }]
 license = { file = "LICENSE" }
 classifiers = [
@@ -20,6 +20,7 @@ requires-python = ">=3.9"
 
 [project.optional-dependencies]
 all = ["black", "pytest"]
+doc = ["sphinx"]
 
 [project.urls]
 Homepage = "https://github.com/J-sephB-lt-n/joes_giant_toolbox"
