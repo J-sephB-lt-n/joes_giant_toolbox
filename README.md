@@ -170,10 +170,14 @@ help( joes_giant_toolbox.stats.conjugate_prior_beta_binomial )
 | conjugate_prior_beta_binomial                     | Calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | 4                |
 
 ## Statistical Modelling and Machine Learning 
+```python
+import joes_giant_toolbox.sklearn
+help( joes_giant_toolbox.sklearn.RapidBinaryClassifier )
+```
 
-Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-[RapidBinaryClassifier](joes_giant_toolbox/rapid_binary_classifier.py) | Class facilitating the ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code | joes_giant_toolbox/rapid_binary_classifier.py | x | | tests/test_rapid_binary_classifier.py | 2.5 |
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 
 ## Text and Natural Language Processing
 Name    | Description                                                             | Code Completed | Documentation Completed | Tests                       | Confidence Score |

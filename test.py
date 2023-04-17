@@ -1,5 +1,3 @@
-import joes_giant_toolbox.convenience
+import joes_giant_toolbox.sklearn
 
-help(joes_giant_toolbox.convenience.list_all_python_imports)
-help(joes_giant_toolbox.convenience.print_progress_bar)
-help(joes_giant_toolbox.convenience.run_python_function_in_parallel)
+help(joes_giant_toolbox.sklearn.RapidBinaryClassifier)
