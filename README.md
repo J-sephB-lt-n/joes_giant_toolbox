@@ -153,17 +153,21 @@ help( joes_giant_toolbox.convenience.print_progress_bar )
 help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
 ```
 
-Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-[list_all_python_imports](joes_giant_toolbox/list_all_python_imports.py) | Searches every python script in a given folder and lists all python modules imported within those scripts | joes_giant_toolbox/list_all_python_imports.py | x | x | | 2 |
-[print_progress_bar](joes_giant_toolbox/print_progress_bar.py) | Prints a progress bar (to standard out) while code is running | joes_giant_toolbox/print_progress_bar.py | x | x | | 2
-[run_python_function_in_parallel](joes_giant_toolbox/run_python_function_in_parallel.py) | Convenience function for running a python function in parallel on multiple cores or threads | joes_giant_toolbox/run_python_function_in_parallel.py | x | x | | 2 |
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| list_all_python_imports                           | Searches every python script in a given folder and lists all python modules imported within those scripts    |         2        |
+| print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
+| run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 
 ## Statistical Inference and Hypothesis Testing 
+```python
+import joes_giant_toolbox.stats
+help( joes_giant_toolbox.stats.conjugate_prior_beta_binomial )
+```
 
-Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
-conjugate_prior_beta_binomial | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | joes_giant_toolbox/conjugate_prior_beta_binomial.py | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| conjugate_prior_beta_binomial                     | Calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | 4                |
 
 ## Statistical Modelling and Machine Learning 
 

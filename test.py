@@ -1,3 +1,5 @@
-import joes_giant_toolbox.proj_mgmt
+import joes_giant_toolbox.convenience
 
-help(joes_giant_toolbox.proj_mgmt.create_project_scope_doc)
+help(joes_giant_toolbox.convenience.list_all_python_imports)
+help(joes_giant_toolbox.convenience.print_progress_bar)
+help(joes_giant_toolbox.convenience.run_python_function_in_parallel)

@@ -30,7 +30,7 @@ def list_all_python_imports(dir_path: str) -> dict:
     -------
     dict
         {file_name: tuple_of_module_names}
-        Dictionary, with key=filename as values=(tuple containing list of modules found)
+        Dictionary, with key=filename and values=(tuple containing list of modules found)
     """
     results_dict = {
         filename: f"{dir_path}/{filename}"
