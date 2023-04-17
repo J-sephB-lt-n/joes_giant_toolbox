@@ -1,14 +1,10 @@
-"""
-This script defines the function scrape_webpage_and_all_linked_webpages
-"""
-
 import random
 import time
 from typing import List, Tuple
 import bs4
 
-import make_url_request
-import string_cleaner
+from joes_giant_toolbox.all.make_url_request import make_url_request
+from joes_giant_toolbox.all.string_cleaner import StringCleaner
 
 
 def scrape_webpage_and_all_linked_webpages(
@@ -91,7 +87,7 @@ def scrape_webpage_and_all_linked_webpages(
     started request: https://help.imdb.com/article/imdb/general-information/imdb-site-index/GNCX7BHNSPBTFALQ#so ...
     ..completed request (status code: 200)
     """
-    string_cleaner_inst = string_cleaner.StringCleaner(verbose=False)
+    string_cleaner_inst = StringCleaner(verbose=False)
     base_url = string_cleaner_inst.operations["extract_domain_from_url"](url)
 
     # request initial HTML #

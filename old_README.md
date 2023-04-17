@@ -54,19 +54,19 @@ You can search by category:
 
 ..or you can just scroll through the master list:
 
-| Name                                              | Description                                                                                                  | Confidence Score |
-|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
-| anonymous_view_public_linkedin_page               | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
-| ascii_density_histogram                           | Draws a histogram using only raw text symbols                                                                |         2        |
-| conjugate_prior_beta_binomial                     | Calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | 4                |
-| create_project_scope_doc                          | Creates a basic project scope document (markdown) by prompting the user for input                            |         3        | 
-| delete_file_in_gcloud_bucket                      | Deletes a file which is in a google cloud bucket                                                             |         4        |
-| download_file_from_gcloud_bucket_to_python        | Reads a file from a google cloud bucket into python memory                                                   |         4        |
-| duckduckgo_search_multipage                       | Fetches search results from the DuckDuckGo Lite search engine                                                |         2        |
-| list_all_python_imports                           | Searches every python script in a given folder and lists all python modules imported within those scripts    |         2        |
-| list_files_in_gcloud_bucket                       | Returns a list of the files present in a specified google cloud bucket                                       |         4        |
-| longest_sentence_subsequence_plagiarism_detector  | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) |    3        |
-| make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
+Name    | Description                                                                                   | Code Completed | Documentation Completed | Tests                       | Confidence Score |
+-----------------|-------------------------------------------------------------------------|----------------|------------|-----------------------------|------------------|
+[anonymous_view_public_linkedin_page](joes_giant_toolbox/anonymous_view_public_linkedin_page.py) | Function extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser | x | x | | 2 |
+[ascii_density_histogram](joes_giant_toolbox/ascii_density_histogram.py) | A function which draws a histogram using only raw text symbols          |  x              | x            |                             | 2                |
+[conjugate_prior_beta_binomial](joes_giant_toolbox/conjugate_prior_beta_binomial.py) | Function which calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | x              | x          | tests/test_conjugate_prior_beta_binomial.py    | 4                |
+[create_project_scope_doc](joes_giant_toolbox/create_project_scope_doc.py) | Creates a basic project scope document (markdown) using user input prompts | x | | | 2 | 
+[delete_file_in_gcloud_bucket](joes_giant_toolbox/delete_file_in_gcloud_bucket.py) | Function to delete a file which is in a google cloud bucket | x | x | | 4 |
+[download_file_from_gcloud_bucket_to_python](download_file_from_gcloud_bucket_to_python.py) | Function which reads a file from a google cloud bucket into python memory | x | x | | 4 |
+[duckduckgo_search_multipage](joes_giant_toolbox/duckduckgo_search_multipage.py) | Function fetches search results from the DuckDuckGo Lite search engine | x | x | | 2 |
+[list_all_python_imports](joes_giant_toolbox/list_all_python_imports.py) | Searches every python script in a given folder and lists all python modules imported within those scripts | x | x | | 2 |
+[list_files_in_gcloud_bucket](joes_giant_toolbox/list_files_in_gcloud_bucket.py) | Function which returns a list of the files present in a specified google cloud bucket | x              | x          |     | 4                |
+[longest_sentence_subsequence_plagiarism_detector](joes_giant_toolbox/longest_sentence_subsequence_plagiarism_detector.py) | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) | x | x | tests/test_longest_sentence_subsequence_plagiarism_detector.py | 3 |
+[make_url_request](joes_giant_toolbox/make_url_request.py) | A convenience function for making API requests using the urllib library | x              | x          | tests/test_make_url_request.py   | 3                |
 [move_or_rename_file_in_gcloud_bucket](joes_giant_toolbox/move_or_rename_file_in_gcloud_bucket.py) | Function to move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket) | x | x | | 2 |
 [print_progress_bar](joes_giant_toolbox/print_progress_bar.py) | Prints a progress bar (to standard out) while code is running | x | x | | 2
 [query_bigquery_to_pandas_df](joes_giant_toolbox/query_bigquery_to_pandas_df.py) | Function which runs a query on Google BigQuery and writes the result into a local pandas.DataFrame | x              | x          |     | 4                |
@@ -80,15 +80,6 @@ You can search by category:
 [write_pandas_df_to_google_bigquery_table](joes_giant_toolbox/write_pandas_df_to_google_bigquery_table.py)  | Function which writes a pandas dataframe to a table on Google BigQuery | x              | x          |     | 4                |
 
 ## API and Web
-
-```python
-import joes_giant_toolbox.web
-help( joes_giant_toolbox.web.anonymous_view_public_linkedin_page )
-help( joes_giant_toolbox.web.duckduckgo_search_multipage )
-help( joes_giant_toolbox.web.make_url_request )
-help( joes_giant_toolbox.web.scrape_webpage_and_all_linked_webpages )
-help( joes_giant_toolbox.web.url_to_filename_to_url_mapper ) 
-```
 
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|
