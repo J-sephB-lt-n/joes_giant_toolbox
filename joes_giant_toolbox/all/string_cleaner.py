@@ -88,6 +88,7 @@ class StringCleaner:
             if self.verbose:
                 print(
                     f"""
+# extract domain from URL #
 " ".join(
     re.findall(
         "(?P<url>https?://[^/]+)",
@@ -158,22 +159,62 @@ re.sub(
                 )
 
         def to_lowercase(raw_str):
-            """Converts all upper case characters in a given string to lower case"""
+            """Converts all upper case characters in a given string to lower case
+
+            Example Usage
+            -------------
+            >>> string_cleaner = StringCleaner()
+            >>> string_cleaner.operations["to_lowercase"]("I am SHOUTING")
+            'i am shouting'
+            """
+            if verbose:
+                print(f'"{raw_str}".to_lower()')
             return raw_str.lower()
 
         def punctuation_to_spaces(raw_str):
-            """Turns any character in a given string that is not a number or letter"""
+            """Turns any character in a given string that is not a number or letter
+
+            Example Usage
+            -------------
+            >>> string_cleaner = StringCleaner()
+            >>> string_cleaner.operations["punctuation_to_spaces"]("!@Joe#$is%^the_best&*")
+            ' Joe is the best '
+            """
+            if verbose:
+                print(f're.sub(r"[^A-Za-z0-9 ]+", " ", "{raw_str}")')
             return re.sub(r"[^A-Za-z0-9 ]+", " ", raw_str)
 
         def remove_punctuation(raw_str):
+            """Removes any character which is not a letter or a number
+
+            Example Usage
+            -------------
+            >>> string_cleaner = StringCleaner()
+            >>> string_cleaner.operations["remove_punctuation"]("!@Joe#$Is%^The_Best&*")
+            'JoeIsTheBest'
+            """
+            if verbose:
+                print(f're.sub(r"[^A-Za-z0-9 ]+", "", "{raw_str}")')
             return re.sub(r"[^A-Za-z0-9 ]+", "", raw_str)
 
         def numbers_to_spaces(raw_str):
+            """Turns all number characters in a given string into space characters
+
+            Example Usage
+            -------------
+            TODO
+            """
             return raw_str.translate(
                 str.maketrans("0123456789", " " * len("0123456789"))
             )
 
         def remove_numbers(raw_str):
+            """Removes all number characters from a given string
+
+            Example Usage
+            -------------
+            TODO
+            """
             return raw_str.translate(str.maketrans("", "", "0123456789"))
 
         def remove_spaces(raw_str):
