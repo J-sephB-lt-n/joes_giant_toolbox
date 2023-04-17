@@ -1,3 +1,0 @@
-import joes_giant_toolbox.sklearn
-
-help(joes_giant_toolbox.sklearn.RapidBinaryClassifier)

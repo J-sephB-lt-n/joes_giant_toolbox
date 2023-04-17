@@ -73,7 +73,7 @@ You can search by category:
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 | scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
-| StringCleaner                                     | Applies common string-cleaning operations to a text string, also allowing them to be chained in sequence     |         1        |
+| StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
 | upload_file_python_to_gcloud_bucket               | Writes an object in python memory to a file (blob) on a google cloud bucket                                  |         4        |
 | url_to_filename_to_url_mapper                     | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
 | view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         2        |
@@ -180,11 +180,16 @@ help( joes_giant_toolbox.sklearn.RapidBinaryClassifier )
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 
 ## Text and Natural Language Processing
-Name    | Description                                                             | Code Completed | Documentation Completed | Tests                       | Confidence Score |
------------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|
-[longest_sentence_subsequence_plagiarism_detector](joes_giant_toolbox/longest_sentence_subsequence_plagiarism_detector.py) | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) | x | x | tests/test_longest_sentence_subsequence_plagiarism_detector.py | 3 |
-[StringCleaner](joes_giant_toolbox/string_cleaner.py) | A class for chaining common string-cleaning operations |                |            |                 | 2 |
+```python 
+import joes_giant_toolbox.text
+help( joes_giant_toolbox.text.longest_sentence_subsequence_plagiarism_detector )
+help( joes_giant_toolbox.text.StringCleaner )
+```
 
+| Name                                              | Description                                                                                                  | Confidence Score |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| longest_sentence_subsequence_plagiarism_detector  | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) |    3        |
+| StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
 
 # Run Unit Tests
 

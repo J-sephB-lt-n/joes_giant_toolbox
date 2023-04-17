@@ -1,6 +1,6 @@
 from typing import List
 
-from joes_giant_toolbox.print_progress_bar import print_progress_bar
+from joes_giant_toolbox.all.print_progress_bar import print_progress_bar
 
 
 def longest_sentence_subsequence_plagiarism_detector(
@@ -18,7 +18,7 @@ def longest_sentence_subsequence_plagiarism_detector(
 
     Notes
     -----
-    The word matching is case-sensitive, so the input text should be preprocessed prior to being used in this function (e.g. all text to lower case, and possibly remove certain punctuation)
+    The word matching is case-sensitive and exact, so the input text should be preprocessed prior to being used in this function (e.g. all text to lower case, and possibly remove certain punctuation)
 
     Parameters
     ----------
