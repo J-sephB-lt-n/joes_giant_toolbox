@@ -73,7 +73,7 @@ You can search by category:
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 | scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
-| StringCleaner                                     | Applies common string-cleaning operations to a text string, and also allows you to chain them in sequence    |         1        |
+| StringCleaner                                     | Applies common string-cleaning operations to a text string, also allowing them to be chained in sequence     |         1        |
 | upload_file_python_to_gcloud_bucket               | Writes an object in python memory to a file (blob) on a google cloud bucket                                  |         4        |
 | url_to_filename_to_url_mapper                     | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
 | view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         2        |
@@ -106,6 +106,17 @@ ascii_density_histogram | A function which draws a histogram using only raw text
 view_nested_dict_structure | Provides a simple printout for understanding the structure of a complex nested python dictionary | joes_giant_toolbox/view_nested_dict_structure.py | x              |            |                             | 2                |
 
 ## Google Cloud
+
+```python
+import joes_giant_toolbox.google_cloud
+help( joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python )
+help( joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df )
+help( joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table )
+```
 
 Name    | Description                                                             | Location                      | Code Completed | Documentation Completed | Tests                       | Confidence Score |
 -----------------|-------------------------------------------------------------------------|-------------------------------|----------------|------------|-----------------------------|------------------|

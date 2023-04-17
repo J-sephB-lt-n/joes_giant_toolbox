@@ -1,5 +1,9 @@
-import joes_giant_toolbox.convenience
+import joes_giant_toolbox.google_cloud
 
-help(joes_giant_toolbox.convenience.list_all_python_imports)
-help(joes_giant_toolbox.convenience.print_progress_bar)
-help(joes_giant_toolbox.convenience.run_python_function_in_parallel)
+help(joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python)
+help(joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df)
+help(joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table)
