@@ -2,8 +2,6 @@
 
 A large collection of general python functions and classes that I use in my daily work
 
-!! THE STRUCTURE OF THIS PROJECT IS GOING THROUGH A REFACTORING IN PREPARATION FOR RELEASE ON PYPI !!
-
 ```
                                                      .-.
                                                     /   \
