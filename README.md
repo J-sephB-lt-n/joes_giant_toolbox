@@ -22,6 +22,14 @@ LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
 ```
 source: https://ascii.co.uk
 
+# Installation
+
+```bash
+pip install joes-giant-toolbox
+```
+
+# Usage
+
 The scripts exist at varying levels of completeness (some have seen extensive use in many projects whereas others have been used little or have incomplete documentation and missing unit tests). In order to measure this, I have added in a confidence score for each:
 
 Confidence Score | Description                      
@@ -88,13 +96,13 @@ help( joes_giant_toolbox.web.scrape_webpage_and_all_linked_webpages )
 help( joes_giant_toolbox.web.url_to_filename_to_url_mapper ) 
 ```
 
-| Name                                              | Description                                                                                                  | Confidence Score |
-|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
-| anonymous_view_public_linkedin_page               | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
-| duckduckgo_search_multipage                       | Fetches search results from the DuckDuckGo Lite search engine                                                |         2        |
-| make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
-| scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
-| url_to_filename_to_url_mapper                     | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
+| Name                                                     | Description                                                                                                  | Confidence Score |
+|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| anonymous_view_public_linkedin_page                      | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
+| duckduckgo_search_multipage                              | Fetches search results from the DuckDuckGo Lite search engine                                                |         2        |
+| make_url_request                                         | A convenience function for making API requests using the urllib library                                      |         3        |
+| scrape_webpage_and_all_linked_webpages                   | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
+| url_to_filename_to_url_mapper                            | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
 
 ## Data Visualisation
 
