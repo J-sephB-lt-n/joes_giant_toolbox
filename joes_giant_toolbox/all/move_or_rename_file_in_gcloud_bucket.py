@@ -25,6 +25,18 @@ def move_or_rename_file_in_gcloud_bucket(
         Name of bucket that you want to move file to (can be the same as [source_bucket_name])
     destination_filename: str
         Desired name of the file in the destination bucket
+    verbose: bool (default: True)
+        Print process information to standard out during running of the function
+
+    Example Usage
+    -------------
+    >>> move_or_rename_file_in_gcloud_bucket(
+    ...     source_bucket_name="bucket1",
+    ...     source_filename="folder5/sixty9.json",
+    ...     destination_bucket_name="bucket2",
+    ...     destination_filename="folder5/sixty9.json",
+    ... )
+    File (blob) 'folder5/sixty9.json' in bucket 'bucket1' moved to file (blob) 'folder5/sixty9.json' in bucket 'bucket2'
     """
     storage_client = google.cloud.storage.Client()
     source_bucket = storage_client.bucket(source_bucket_name)
@@ -44,5 +56,5 @@ def move_or_rename_file_in_gcloud_bucket(
 
     if verbose:
         print(
-            f"File (blob) {source_blob.name} in bucket {source_bucket.name} moved to file (blob) {blob_copy.name} in bucket {destination_bucket.name}"
+            f"File (blob) '{source_blob.name}' in bucket '{source_bucket.name}' moved to file (blob) '{blob_copy.name}' in bucket '{destination_bucket.name}'"
         )
