@@ -121,6 +121,10 @@ help( joes_giant_toolbox.dataviz.view_nested_dict_structure )
 
 ## Google Cloud
 
+```bash
+pip install joes-giant-toolbox[google]
+```
+
 ```python
 import joes_giant_toolbox.google_cloud
 help( joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket )
