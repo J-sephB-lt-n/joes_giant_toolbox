@@ -77,6 +77,7 @@ You can search by category:
 | make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
 | move_or_rename_file_in_gcloud_bucket              | Move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket)     |         4        |
 | print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
+| PythonPlottingTutorials                           | Example code snippets for creating common data visualisations in python                                      |         4        |
 | query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
@@ -84,7 +85,7 @@ You can search by category:
 | StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
 | upload_file_python_to_gcloud_bucket               | Writes an object in python memory to a file (blob) on a google cloud bucket                                  |         4        |
 | url_to_filename_to_url_mapper                     | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
-| view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         2        |
+| view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         4        |
 | write_pandas_df_to_google_bigquery_table          | Writes a pandas dataframe to a table on Google BigQuery                                                      |         4        |
 
 ## API and Web
@@ -110,14 +111,17 @@ help( joes_giant_toolbox.web.url_to_filename_to_url_mapper )
 
 ```python
 import joes_giant_toolbox.dataviz
+help( joes_giant_toolbox.dataviz )
 help( joes_giant_toolbox.dataviz.ascii_density_histogram )
+help( joes_giant_toolbox.dataviz.PythonPlottingTutorials )
 help( joes_giant_toolbox.dataviz.view_nested_dict_structure )
 ```
 
 | Name                                              | Description                                                                                                  | Confidence Score |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
 | ascii_density_histogram                           | Draws a histogram using only raw text symbols                                                                |         2        |
-| view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         2        |
+| PythonPlottingTutorials                           | Example code snippets for creating common data visualisations in python                                      |         4        |
+| view_nested_dict_structure                        | Generates a simple printout for understanding the structure of a complex nested python dictionary            |         4        |
 
 ## Google Cloud
 
@@ -127,13 +131,16 @@ pip install joes-giant-toolbox[google]
 
 ```python
 import joes_giant_toolbox.google_cloud
-help( joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket )
-help( joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python )
-help( joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket )
-help( joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket )
-help( joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df )
-help( joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket )
-help( joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table )
+
+help(joes_giant_toolbox.google_cloud)
+
+help(joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python)
+help(joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df)
+help(joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket)
+help(joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table)
 ```
 
 | Name                                              | Description                                                                                                  | Confidence Score |
