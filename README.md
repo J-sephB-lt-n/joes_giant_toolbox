@@ -201,6 +201,7 @@ help( joes_giant_toolbox.sklearn.RapidBinaryClassifier )
 ## Text and Natural Language Processing
 ```python 
 import joes_giant_toolbox.text
+help( joes_giant_toolbox.text )
 help( joes_giant_toolbox.text.longest_sentence_subsequence_plagiarism_detector )
 help( joes_giant_toolbox.text.StringCleaner )
 ```
@@ -213,7 +214,7 @@ help( joes_giant_toolbox.text.StringCleaner )
 # Run Unit Tests
 
 ```bash
-git clone https://github.com/J-sephB-lt-n/joes_giant_toolbox.git
 pip install pytest
+cd joes_giant_toolbox/
 pytest -v
 ```

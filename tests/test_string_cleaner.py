@@ -1,12 +1,6 @@
-# # add the root project directory to the system path:
-# import sys
-# import pathlib
+import joes_giant_toolbox.text
 
-# parent_dir_path = pathlib.Path(__file__).parent.parent
-# sys.path.append(str(parent_dir_path))
-
-# # import the function to be tested:
-# from joes_giant_toolbox.string_cleaner import StringCleaner
+string_cleaner = joes_giant_toolbox.text.StringCleaner()
 
 # # run the tests:
 # def test_remove_words_or_phrases():
