@@ -184,6 +184,7 @@ help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
 ## Statistical Inference and Hypothesis Testing 
 ```python
 import joes_giant_toolbox.stats
+help( joes_giant_toolbox.stats )
 help( joes_giant_toolbox.stats.conjugate_prior_beta_binomial )
 ```
 
@@ -218,6 +219,6 @@ help( joes_giant_toolbox.text.StringCleaner )
 
 ```bash
 pip install pytest
-cd joes_giant_toolbox/
+cd joes_giant_toolbox/tests
 pytest -v
 ```
