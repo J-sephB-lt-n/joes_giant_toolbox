@@ -1,7 +1,3 @@
-import pandas as pd
-import numpy as np
-
-
 class PythonPlottingTutorials:
     """Example code snippets for creating common data visualisations in python
 
@@ -10,14 +6,42 @@ class PythonPlottingTutorials:
     >>> plot_ref = PythonPlottingTutorials()
     >>> print(plot_ref.available_plots)
     >>> print(plot_ref.tutorials["heatmap"])
+    >>> exec(plot_ref.tutorials["heatmap"])
     """
 
     def __init__(self):
-        self.available_plots: list = ["heatmap"]
+        self.available_plots: list = ["grid_of_matplotlib_plots", "heatmap"]
         self.tutorials: dict = {
+            "grid_of_matplotlib_plots": """
+# https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
+from matplotlib import pyplot as plt
+import numpy as np
+
+n_rows = 3
+n_cols = 5
+
+shared_x = list(range(100))
+
+fig, axs = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(12,8))    # note: figsize is the size of the global plot   
+for row_idx in range(n_rows):
+    for col_idx in range(n_cols):
+        axs[row_idx,col_idx].plot(
+                shared_x
+            ,   np.random.normal(size=100).cumsum()   # a random normal walk
+        )
+        axs[row_idx,col_idx].set_xlabel("x axis label")
+        axs[row_idx,col_idx].set_ylabel("y axis label")
+        axs[row_idx,col_idx].set_title(f"Axis [{row_idx},{col_idx}]")
+for ax in axs.flat:    # only keep the axis labels and axis ticks on the outer plots
+    ax.label_outer()
+fig.suptitle("Global Plot Title")      
+
+plt.show()
+            """,
             "heatmap": """
 # https://seaborn.pydata.org/generated/seaborn.heatmap.html
 import numpy as np
+from matplotlib import pyplot as plt
 import seaborn as sns
 
 sns.set_theme()
@@ -39,5 +63,5 @@ pandas_df_data_for_heatmap = pd.DataFrame(
 ax = sns.heatmap(pandas_df_data_for_heatmap, annot=True)
 
 plt.show()
-            """
+            """,
         }

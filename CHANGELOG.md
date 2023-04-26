@@ -13,7 +13,9 @@
 
 * Added documentation to **joes_giant_toolbox.text**
 
-* Added package dependency group [google]
+* Added package dependency group **[google]**
+
+* Added pypi version and download metrics to **README.md**
 
 * Improved documentation of **joes_giant_toolbox.text.StringCleaner**
 
