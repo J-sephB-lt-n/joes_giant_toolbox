@@ -24,6 +24,9 @@ LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
 ```
 source: https://ascii.co.uk
 
+![PyPI](https://img.shields.io/pypi/v/joes-giant-toolbox?label=pypi%20package)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/joes-giant-toolbox)
+
 # Installation
 
 ```bash
