@@ -1,6 +1,10 @@
 
 # Change Log
 
+## Unreleased
+
+* Added fig.tight_layout() to PythonPlottingTutorials().tutorials["grid_of_matplotlib_plots"]
+
 ## 0.1.0
 
 * Added additional documentation to function **joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket**

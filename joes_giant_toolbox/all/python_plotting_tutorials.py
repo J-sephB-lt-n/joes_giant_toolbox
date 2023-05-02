@@ -35,6 +35,7 @@ for row_idx in range(n_rows):
 for ax in axs.flat:    # only keep the axis labels and axis ticks on the outer plots
     ax.label_outer()
 fig.suptitle("Global Plot Title")      
+fig.tight_layout()
 
 plt.show()
             """,
