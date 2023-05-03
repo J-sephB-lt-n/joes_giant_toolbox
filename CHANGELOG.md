@@ -1,7 +1,7 @@
 
 # Change Log
 
-## Unreleased
+## 0.2.0
 
 * Added fig.tight_layout() to PythonPlottingTutorials().tutorials["grid_of_matplotlib_plots"]
 

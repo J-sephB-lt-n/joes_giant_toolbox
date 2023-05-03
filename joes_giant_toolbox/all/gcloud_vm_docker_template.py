@@ -24,7 +24,13 @@ def create_gcloud_vm_docker_template(
     >>> create_gcloud_vm_docker_template(
     ...     target_dir="temp/docker_test/",
     ...     base_docker_image="python:3.10-slim",
-    ...     package_dependencies=["numpy==1.24.1","tqdm"],
+    ...     package_dependencies=[
+    ...            "beautifulsoup4==4.11.1",
+    ...            "google-cloud-compute==1.10.0",
+    ...            "google-cloud-logging==3.5.0",
+    ...            "google-cloud-storage==2.7.0",
+    ...            "pandas==1.5.2",
+    ...     ],
     ...     gcloud_artifact_registry_domain="europe-west2",
     ...     gcloud_project_name="my_project_name",
     ...     gcloud_repository_id="my_docker_repo_name",
@@ -38,20 +44,7 @@ def create_gcloud_vm_docker_template(
 
     # create files in target directory #
     with open(f"{target_dir}/main.py", "w") as f:
-        f.write(
-            """
-# set up google cloud logging #
-import logging
-import google.cloud.logging
-
-logging_client = google.cloud.logging.Client()
-logging_client.setup_logging()
-
-logging.info("this message will appear in google cloud logging")
-
-# write your python code here #
-"""
-        )
+        f.write("# write your python code here #")
     with open(f"{target_dir}/requirements.txt", "w") as f:
         for x in package_dependencies:
             f.write(x + "\n")

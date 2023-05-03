@@ -83,6 +83,7 @@ You can search by category:
 | PythonPlottingTutorials                           | Example code snippets for creating common data visualisations in python                                      |         4        |
 | query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
+| RegexRulesClassifier | A multi-class text classifier using manual regex rules | 2
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 | scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        | 
 | StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
@@ -207,12 +208,14 @@ help( joes_giant_toolbox.sklearn.RapidBinaryClassifier )
 import joes_giant_toolbox.text
 help( joes_giant_toolbox.text )
 help( joes_giant_toolbox.text.longest_sentence_subsequence_plagiarism_detector )
+help( joes_giant_toolbox.text.RegexRulesClassifier )
 help( joes_giant_toolbox.text.StringCleaner )
 ```
 
 | Name                                              | Description                                                                                                  | Confidence Score |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
 | longest_sentence_subsequence_plagiarism_detector  | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) |    3        |
+RegexRulesClassifier | A multi-class text classifier using manual regex rules | 2
 | StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
 
 # Run Unit Tests
