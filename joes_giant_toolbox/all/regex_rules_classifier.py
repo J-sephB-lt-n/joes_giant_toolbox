@@ -162,7 +162,7 @@ class RegexRulesClassifier:
                 * None if no class label was awarded any points (i.e. no regex matches at all)
         """
         scores_dict: dict = self.__tally_label_scores(text_str)
-        if max(scores_dict).values == 0:
+        if max(scores_dict.values()) == 0:
             return None
         elif ties_handling == "first":
             return max(scores_dict, key=scores_dict.get)
