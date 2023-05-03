@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.2.22 bug fixes
+
+* Improved the behaviour of **joes_giant_toolbox.text.RegexRulesClassifier** for the case where no rules match and ties_handling=="all"
+
 ## 0.2.21 bug fixes
 
 * Fixed a bug introduced in version 0.2.2 in **joes_giant_toolbox.text.RegexRulesClassifier**

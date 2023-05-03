@@ -163,7 +163,10 @@ class RegexRulesClassifier:
         """
         scores_dict: dict = self.__tally_label_scores(text_str)
         if max(scores_dict.values()) == 0:
-            return None
+            if ties_handling == "all":
+                return []
+            else:
+                return None
         elif ties_handling == "first":
             return max(scores_dict, key=scores_dict.get)
         elif ties_handling == "all":
