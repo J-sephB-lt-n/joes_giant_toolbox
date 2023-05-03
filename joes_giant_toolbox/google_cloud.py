@@ -1,6 +1,7 @@
 """Utilities for interacting with Google Cloud
 
 Available modules: 
+    - create_gcloud_vm_docker_template
     - delete_file_in_gcloud_bucket
     - download_file_from_gcloud_bucket_to_python
     - list_files_in_gcloud_bucket
@@ -10,6 +11,10 @@ Available modules:
     - write_pandas_df_to_google_bigquery_table
 
 """
+
+from joes_giant_toolbox.all.create_gcloud_vm_docker_template import (
+    create_gcloud_vm_docker_template,
+)
 
 from joes_giant_toolbox.all.delete_file_in_gcloud_bucket import (
     delete_file_in_gcloud_bucket,

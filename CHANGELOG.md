@@ -5,6 +5,10 @@
 
 * Added fig.tight_layout() to PythonPlottingTutorials().tutorials["grid_of_matplotlib_plots"]
 
+* Added function **joes_giant_toolbox.google_cloud.create_gcloud_vm_docker_template**
+
+* Added class **joes_giant_toolbox.text.RegexRulesClassifier**
+
 ## 0.1.0
 
 * Added additional documentation to function **joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket**

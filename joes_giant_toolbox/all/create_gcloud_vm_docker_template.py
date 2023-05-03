@@ -11,7 +11,7 @@ def create_gcloud_vm_docker_template(
     gcloud_repository_id: str,
     docker_image_name: str,
 ) -> None:
-    """Creates all of the files necessary to quickly build a python docker file
+    """Creates a folder containing the files necessary to quickly build a python docker container to run on a google cloud Virtual Machine
 
     The following structure is created in the target directory:
     /target_dir/
@@ -19,9 +19,27 @@ def create_gcloud_vm_docker_template(
         main.py
         requirements.txt
 
+    Parameters
+    ----------
+    target_dir : str
+        The path to the local directory in which the folder (and contents) should be created
+    base_docker_image : str
+        The base image to use for the docker container (e.g. "python:3.10-slim")
+    package_dependencies : Tuple[str]
+        A tuple containing the package dependencies (these are written to requirements.txt)
+    gcloud_artifact_registry_domain : str
+        The domain of the google cloud artifact registry (e.g. "europe-west2")
+    gcloud_project_name : str
+        The name of the google cloud project in which the docker image will be stored
+    gcloud_repository_id : str
+        The name of the google cloud artifact repository in which the docker image will be stored
+    docker_image_name : str
+        The desired name for the docker image
+
     Example Usage
     -------------
-    >>> create_gcloud_vm_docker_template(
+    >>> import joes_giant_toolbox.google_cloud
+    >>> joes_giant_toolbox.google_cloud.create_gcloud_vm_docker_template(
     ...     target_dir="temp/docker_test/",
     ...     base_docker_image="python:3.10-slim",
     ...     package_dependencies=["numpy==1.24.1","tqdm"],

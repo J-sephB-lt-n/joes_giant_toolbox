@@ -70,6 +70,7 @@ You can search by category:
 | anonymous_view_public_linkedin_page               | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
 | ascii_density_histogram                           | Draws a histogram using only raw text symbols                                                                |         2        |
 | conjugate_prior_beta_binomial                     | Calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | 4                |
+| create_gcloud_vm_docker_template | Creates a folder containing the files necessary to quickly build a python docker container to run on a google cloud Virtual Machine | 4
 | create_project_scope_doc                          | Creates a basic project scope document (markdown) by prompting the user for input                            |         3        | 
 | delete_file_in_gcloud_bucket                      | Deletes a file which is in a google cloud bucket                                                             |         4        |
 | download_file_from_gcloud_bucket_to_python        | Reads a file from a google cloud bucket into python memory                                                   |         4        |
@@ -138,17 +139,19 @@ import joes_giant_toolbox.google_cloud
 
 help(joes_giant_toolbox.google_cloud)
 
-help(joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python)
-help(joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df)
-help(joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket)
-help(joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table)
+help( joes_giant_toolbox.google_cloud.create_gcloud_vm_docker_template ) 
+help( joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python )
+help( joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df )
+help( joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket )
+help( joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table )
 ```
 
 | Name                                              | Description                                                                                                  | Confidence Score |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| create_gcloud_vm_docker_template | Creates a folder containing the files necessary to quickly build a python docker container to run on a google cloud Virtual Machine | 4
 | delete_file_in_gcloud_bucket                      | Deletes a file which is in a google cloud bucket                                                             |         4        |
 | download_file_from_gcloud_bucket_to_python        | Reads a file from a google cloud bucket into python memory                                                   |         4        |
 | list_files_in_gcloud_bucket                       | Returns a list of the files present in a specified google cloud bucket                                       |         4        |
