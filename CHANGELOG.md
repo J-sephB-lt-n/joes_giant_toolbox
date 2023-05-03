@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.2.2 bug fixes
+
+* Fixed the case of score=0 in **joes_giant_toolbox.text.RegexRulesClassifier**
+
 ## 0.2.1 bug and documentation fixes
 
 * Fixed error in code in "Example Usage" of class **joes_giant_toolbox.text.RegexRulesClassifier**

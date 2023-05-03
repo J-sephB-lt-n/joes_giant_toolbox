@@ -137,7 +137,9 @@ class RegexRulesClassifier:
 
         return scores_dict
 
-    def predict(self, text_str: str, ties_handling: str = "first") -> str | List[str]:
+    def predict(
+        self, text_str: str, ties_handling: str = "first"
+    ) -> str | List[str] | None:
         """Generates a single predicted class label for a single input example
 
         Parameters
@@ -153,13 +155,16 @@ class RegexRulesClassifier:
 
         Returns
         -------
-        str | List[str]
-            Returns either:
-                A single predicted class label (if ties_handling in ["first","random"])
-                A list of predicted class labels (if ties_handling=="all")
+        str | List[str] | None
+            Returns one of:
+                * A single predicted class label (if ties_handling in ["first","random"])
+                * A list of predicted class labels (if ties_handling=="all")
+                * None if no class label was awarded any points (i.e. no regex matches at all)
         """
         scores_dict: dict = self.__tally_label_scores(text_str)
-        if ties_handling == "first":
+        if max(scores_dict).values == 0:
+            return None
+        elif ties_handling == "first":
             return max(scores_dict, key=scores_dict.get)
         elif ties_handling == "all":
             return [
