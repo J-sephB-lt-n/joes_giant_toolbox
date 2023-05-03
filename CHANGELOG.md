@@ -1,7 +1,13 @@
 
 # Change Log
 
-## 0.2.0
+## 0.2.1 bug and documentation fixes
+
+* Fixed error in code in "Example Usage" of class **joes_giant_toolbox.text.RegexRulesClassifier**
+
+* Small aesthetic changes to README.md
+
+## 0.2.0 new content release
 
 * Added fig.tight_layout() to PythonPlottingTutorials().tutorials["grid_of_matplotlib_plots"]
 
@@ -9,7 +15,7 @@
 
 * Added class **joes_giant_toolbox.text.RegexRulesClassifier**
 
-## 0.1.0
+## 0.1.0 new content release
 
 * Added additional documentation to function **joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket**
 

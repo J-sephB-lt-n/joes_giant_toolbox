@@ -40,12 +40,12 @@ class RegexRulesClassifier:
     >>> clothing_gender_classifier = joes_giant_toolbox.text.RegexRulesClassifier(verbose=True)
     >>> clothing_gender_classifier.define_rules(
     ...     {
-    ...         r"\bmen": {"mens": 10}, # e.g. will not match "women"
-    ...         r"(\bbikini\b)|(\bskirt)|(\bdress)": {"ladies": 10}, # must match 1 or more of these words
-    ...         r"(\bchild)|(\bkid)": {"childrens": 10}, # will match "child" or "children" or "kid" or "kids" etc.
-    ...         r"\bgirls?\b": {"ladies": 5, "childrens": 5},
-    ...         r"\badult": {"ladies":5, "mens":5},
-    ...         r"\bhawaiian\b.*\bshirt\b": {"mens":10}, # must contain both "hawaiian" and "shirt"
+    ...         r"\\bmen": {"mens": 10}, # e.g. will not match "women"
+    ...         r"(\\bbikini\\b)|(\\bskirt)|(\\bdress)": {"ladies": 10}, # must match 1 or more of these words
+    ...         r"(\\bchild)|(\\bkid)": {"childrens": 10}, # will match "child" or "children" or "kid" or "kids" etc.
+    ...         r"\\bgirls?\\b": {"ladies": 5, "childrens": 5},
+    ...         r"\\badult": {"ladies":5, "mens":5},
+    ...         r"\\bhawaiian\\b.*\\bshirt\\b": {"mens":10}, # must contain both "hawaiian" and "shirt"
     ...     }
     ... )
     defined 6 rules
