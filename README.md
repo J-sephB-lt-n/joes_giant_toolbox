@@ -24,8 +24,8 @@ LGB `-.,.,.,.,.,.,.,.,.,.,.,-'                   `.......'
 ```
 source: https://ascii.co.uk
 
-![PyPI](https://img.shields.io/pypi/v/joes-giant-toolbox?label=pypi%20package)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/joes-giant-toolbox) 
+[![PyPI Status](https://badge.fury.io/py/joes-giant-toolbox.svg)](https://badge.fury.io/py/joes-giant-toolbox)
+[![PyPI Status](https://pepy.tech/badge/joes-giant-toolbox)](https://pepy.tech/project/joes-giant-toolbox)
 (this badge lags by 1 release on pypi)
 
 # Installation
