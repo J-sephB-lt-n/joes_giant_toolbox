@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.2.23 bug fixes
+
+* Method **remove_non_letters()** in **joes_giant_toolbox.text.StringCleaner()** no longer removes whitespace
+
 ## 0.2.22 bug fixes
 
 * Improved the behaviour of **joes_giant_toolbox.text.RegexRulesClassifier** for the case where no rules match and ties_handling=="all"
