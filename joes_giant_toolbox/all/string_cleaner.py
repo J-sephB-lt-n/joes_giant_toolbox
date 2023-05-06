@@ -262,15 +262,17 @@ re.sub(
         def remove_non_letters(raw_str):
             """Remove all non-letter (i.e. not A-Z) characters in given string
 
+            Does not remove white-space
+
             Example Usage
             -------------
             >>> string_cleaner = StringCleaner()
-            >>> string_cleaner.operations["remove_non_letters"]("  joe123is-:the8==|>best  ")
-            'joeisthebest'
+            >>> string_cleaner.operations["remove_non_letters"]("  joe12 3is- :the8== |>best  ")
+            '  joe is the best  '
             """
             if verbose:
-                print(f're.sub("[^a-zA-Z]", "", "{raw_str}")')
-            return re.sub("[^a-zA-Z]", "", raw_str)
+                print(f're.sub("[^a-zA-Z \\n]", "", "{raw_str}")')
+            return re.sub(r"[^a-zA-Z \n]", "", raw_str)
 
         def join_single_space_separated_letters_together(raw_str):
             """Removes the space characters between sequences of single letter characters separated by a single space
