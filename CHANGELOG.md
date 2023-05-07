@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.2.24 bug and documentation fixes
+
+* Improved quality of **joes_giant_toolbox.text.RegexRulesClassifier** code (perfect pylint score)
+
 ## 0.2.23 bug fixes
 
 * Method **remove_non_letters()** in **joes_giant_toolbox.text.StringCleaner()** no longer removes whitespace
