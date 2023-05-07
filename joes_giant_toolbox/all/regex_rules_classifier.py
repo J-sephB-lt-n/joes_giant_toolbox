@@ -1,22 +1,30 @@
+"""Defines the class 'RegexRulesClassifier', which is a multi-class text classifier using manual
+regex rules"""
+
 import random
 import re
 from typing import List
 
 
 class RegexRulesClassifier:
-    """A multi-class text classifier using manual regex rules
+    """A multi-class text classifier model using manual regex rules
 
-    For a particular example, points are awarded to class labels based on which regex rules match for that example..
-        ..and the class label with the highest points is then the model prediction for that example
+    For a particular example, points are awarded to class labels based on which regex rules
+    match for that example, and the class label with the highest total points is then the model
+    prediction for that example.
 
-    Refer to "Example Usage" below
+    Refer to "Example Usage" below.
 
     Notes
     -----
-    Unlike other popular python model packages, this model generates predictions for a single example at a time.
+    Unlike other popular python model packages, this model generates predictions for one
+    example at a time.
     Therefore, to predict for multiple examples, multiple calls must be made to .predict() function
     e.g.
-    >>> predictions: list = [my_model.predict(example_i) for example_i in ("example 1 text", "example 2 text", "example 3 text")]
+    >>> predictions: list = [
+    ...     my_model.predict(example_i)
+    ...     for example_i in ("example 1 text", "example 2 text", "example 3 text")
+    ... ]
 
     Attributes
     ----------
@@ -41,11 +49,11 @@ class RegexRulesClassifier:
     >>> clothing_gender_classifier.define_rules(
     ...     {
     ...         r"\\bmen": {"mens": 10}, # e.g. will not match "women"
-    ...         r"(\\bbikini\\b)|(\\bskirt)|(\\bdress)": {"ladies": 10}, # must match 1 or more of these words
-    ...         r"(\\bchild)|(\\bkid)": {"childrens": 10}, # will match "child" or "children" or "kid" or "kids" etc.
+    ...         r"(\\bbikini\\b)|(\\bskirt)|(\\bdress)": {"ladies": 10}, # must match 1+ of these
+    ...         r"(\\bchild)|(\\bkid)": {"childrens": 10}, # match "child","children","kid","kids"
     ...         r"\\bgirls?\\b": {"ladies": 5, "childrens": 5},
     ...         r"\\badult": {"ladies":5, "mens":5},
-    ...         r"\\bhawaiian\\b.*\\bshirt\\b": {"mens":10}, # must contain both "hawaiian" and "shirt"
+    ...         r"\\bhawaiian\\b.*\\bshirt\\b": {"mens":10}, # must "hawaiian" AND "shirt"
     ...     }
     ... )
     defined 6 rules
@@ -165,20 +173,18 @@ class RegexRulesClassifier:
         if max(scores_dict.values()) == 0:
             if ties_handling == "all":
                 return []
-            else:
-                return None
-        elif ties_handling == "first":
+            return None
+        if ties_handling == "first":
             return max(scores_dict, key=scores_dict.get)
-        elif ties_handling == "all":
+        if ties_handling == "all":
             return [
                 k for k in scores_dict if scores_dict[k] == max(scores_dict.values())
             ]
-        elif ties_handling == "random":
+        if ties_handling == "random":
             return random.choice(
                 [k for k in scores_dict if scores_dict[k] == max(scores_dict.values())]
             )
-        else:
-            raise ValueError("argument 'tie_handling' must be one of ['first','all']")
+        raise ValueError("argument 'tie_handling' must be one of ['first','all']")
 
     def predict_scores(self, text_str: str) -> dict:
         """Returns the total scores for all of the class labels for a single input example
