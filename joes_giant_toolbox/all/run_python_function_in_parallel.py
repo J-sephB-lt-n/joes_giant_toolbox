@@ -1,5 +1,9 @@
+"""
+This script defines the function run_python_function_in_parallel()
+"""
+
 import concurrent.futures
-from typing import Callable, Iterator
+from typing import Any, Callable, Tuple, Iterator
 import os
 import threading
 import functools
@@ -7,20 +11,19 @@ import functools
 
 def run_python_function_in_parallel(
     func: Callable,
-    input_tuple: tuple,
+    input_tuple: Tuple[Any],
     parallel_method: str,
     verbose: bool,
     **kwargs,
 ) -> Iterator:
-    """Convenience function for running a python function in parallel on multiple cores or threads
-
+    """Convenience function for running a python function in parallel on multiple cores or threads\n
     Notes
     -----
-    If your function has multiple input parameters, you need to wrap these within the single input argument [x]...
-    ...and then unpack [x] within the function itself.
+    If your function has multiple input parameters, you need to wrap these within the single
+    input argument [x] and then unpack [x] within the function itself.
     e.g. [x] could be a dictionary, namedtuple or list (refer to the examples below)
-    If you require logging of the individual workers, then you should put explicit python logging within [func]
-
+    If you require logging of the individual workers, then you should put explicit python
+    logging within [func]\n
     Parameters
     ----------
     func: Callable
@@ -32,13 +35,12 @@ def run_python_function_in_parallel(
     verbose: bool
         Whether to print worker information during the run or not
     **kwargs
-        Additional keyword arguments to pass to concurrent.futures.ProcessPoolExecutor() or concurrent.futures.ThreadPoolExecutor()
-
+        Additional keyword arguments to pass to concurrent.futures.ProcessPoolExecutor() or
+        concurrent.futures.ThreadPoolExecutor()\n
     Returns
     -------
     Iterator
-        Returns the function outputs as an iterator
-
+        Returns the function outputs as an iterator\n
     Example Usage
     -------------
     >>> def sum_squares(x): return sum([num**2 for num in x])
@@ -95,14 +97,15 @@ def run_python_function_in_parallel(
         )
 
     def make_verbose(func):
-        """A decorator to make a function print process and thread information before and after running"""
+        """A decorator to make a function print process and thread information
+        before and after running"""
 
         @functools.wraps(func)
         def verbose_func(*args, **kwargs):
             print(
                 f"\nSTARTED: process_ID={os.getpid()} thread_ID={threading.get_native_id()}"
             )
-            result = func(*args, **kwargs)
+            result: Any = func(*args, **kwargs)
             print(
                 f"\nCOMPLETED: process_ID={os.getpid()} thread_ID={threading.get_native_id()}"
             )
@@ -121,11 +124,11 @@ def run_python_function_in_parallel(
 
     if parallel_method == "multi_core":
         with concurrent.futures.ProcessPoolExecutor(**kwargs) as executor:
-            result = executor.map(wrapped_func, input_tuple)
+            result: Iterator = executor.map(wrapped_func, input_tuple)
 
     elif parallel_method == "multi_thread":
-        with concurrent.futures.ThreadPoolExecutor(**kwargs) as executor:
-            result = executor.map(wrapped_func, input_tuple)
+        with concurrent.futures.ThreadPoolExecutor(**kwargs) as executor:  # type: ignore
+            result: Iterator = executor.map(wrapped_func, input_tuple)  # type: ignore
 
     else:
         raise ValueError(

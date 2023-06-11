@@ -21,7 +21,7 @@ requires-python = ">=3.9"
 [project.optional-dependencies]
 all = ["black", "pytest"]
 doc = ["m2r","sphinx"]
-google = ["db-dtypes==1.0.5", "google-cloud-bigquery-storage==2.18", "google-cloud-compute==1.10.0","google-cloud-logging==3.5.0","google-cloud-storage==2.7.0"]
+google = ["db-dtypes==1.0.5", "google-cloud-bigquery==3.4.1", "google-cloud-bigquery-storage==2.18", "google-cloud-compute==1.10.0","google-cloud-logging==3.5.0","google-cloud-storage==2.7.0"]
 
 [project.urls]
 Homepage = "https://github.com/J-sephB-lt-n/joes_giant_toolbox"

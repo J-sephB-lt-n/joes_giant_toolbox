@@ -1,4 +1,8 @@
-import google.cloud.storage
+"""
+This script defines the function upload_file_python_to_gcloud_bucket()
+"""
+
+import google.cloud.storage  # pylint: disable=import-error,no-name-in-module
 
 
 def upload_file_python_to_gcloud_bucket(
@@ -26,14 +30,15 @@ def upload_file_python_to_gcloud_bucket(
 
     Example usage
     -------------
-    >>> upload_file_to_cloud_bucket(
+    >>> import joes_giant_toolbox.google_cloud
+    >>> joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket(
     ...     contents_str = pd.DataFrame({"x":[1,2,3]}).to_csv(index=False),
     ...     bucket_name="my-bucket",
     ...     filename_on_bucket="pd_df.csv",
     ...     file_type="text/csv"
     ... )
 
-    >>> upload_file_to_cloud_bucket(
+    >>> joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket(
     ...     contents_str = json.dumps( {"x":69, "y":[4,20]} ),
     ...     bucket_name="my-bucket",
     ...     filename_on_bucket="dict.json",

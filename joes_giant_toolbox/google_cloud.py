@@ -1,7 +1,8 @@
 """Utilities for interacting with Google Cloud
 
-Available modules: 
+Available modules:
     - create_gcloud_vm_docker_template
+    - create_parallel_google_cloud_run_job_template
     - delete_file_in_gcloud_bucket
     - download_file_from_gcloud_bucket_to_python
     - list_files_in_gcloud_bucket
@@ -12,10 +13,14 @@ Available modules:
 
 """
 
+# pylint: disable=unused-import
+
 from joes_giant_toolbox.all.create_gcloud_vm_docker_template import (
     create_gcloud_vm_docker_template,
 )
-
+from joes_giant_toolbox.all.create_parallel_google_cloud_run_job_template import (
+    create_parallel_google_cloud_run_job_template,
+)
 from joes_giant_toolbox.all.delete_file_in_gcloud_bucket import (
     delete_file_in_gcloud_bucket,
 )

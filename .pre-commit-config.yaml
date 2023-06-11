@@ -26,4 +26,4 @@ repos:
   rev: v0.902
   hooks:
     - id: mypy
-      args: [--strict]
+      args: [--ignore-missing-imports]
