@@ -150,12 +150,12 @@ help( joes_giant_toolbox.google_cloud.create_gcloud_vm_docker_template )
 help( joes_giant_toolbox.google_cloud.create_parallel_google_cloud_run_job_template )
 help( joes_giant_toolbox.google_cloud.delete_file_in_gcloud_bucket )
 help( joes_giant_toolbox.google_cloud.download_file_from_gcloud_bucket_to_python )
+help( joes_giant_toolbox.google_cloud.gcloud_vm_deletes_itself )
 help( joes_giant_toolbox.google_cloud.list_files_in_gcloud_bucket )
 help( joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket )
 help( joes_giant_toolbox.google_cloud.query_bigquery_to_pandas_df )
 help( joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket )
 help( joes_giant_toolbox.google_cloud.write_pandas_df_to_google_bigquery_table )
-help( joes_giant_toolbox.google_cloud.gcloud_vm_deletes_itself )
 ```
 
 | Name                                              | Description                                                                                                  | Confidence Score |

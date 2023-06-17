@@ -117,6 +117,7 @@ import gcloud_utils\n
 SELF_VM_NAME: str = requests.get(
     "http://metadata.google.internal/computeMetadata/v1/instance/name",
     headers={"Metadata-Flavor": "Google"},
+    timeout=10,
 ).text\n
 # set up google cloud logging #
 import logging

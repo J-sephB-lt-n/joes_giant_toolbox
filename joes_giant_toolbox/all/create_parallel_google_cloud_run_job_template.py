@@ -2,7 +2,6 @@
 
 import pathlib
 from typing import Any, Dict, List
-import warnings
 
 
 # pylint: disable=too-many-arguments, too-many-locals
@@ -18,9 +17,7 @@ def create_parallel_google_cloud_run_job_template(
     cloud_run_job_params: Dict[str, Any],
     requirements_list: List[str],
 ) -> None:
-    """!!THIS FUNCTION IS STILL UNDER ACTIVE CONSTRUCTION!!\n
-    Run a task in parallel using a Google Cloud Run job (code-generating function)\n
-
+    """Run a task in parallel using a Google Cloud Run job (code-generating function)\n
     This is a code-generating function.
     It generates all of the scripts necessary to build and run a google Cloud Run job,
         in a user-specified folder.
@@ -95,12 +92,13 @@ def create_parallel_google_cloud_run_job_template(
     ...     file_type="text"
     ... )
     >>> code_output_dir: str = f"{pathlib.Path.home()}/Documents/temp/define_cloud_run_job/"
-    >>> create_parallel_google_cloud_run_job_template(
-    ...     pre_task_code=[
+    >>> joes_giant_toolbox.google_cloud.create_parallel_google_cloud_run_job_template(
+    ...     additional_imports_code=[
     ...         "import random",
     ...         "import time",
     ...         "import joes_giant_toolbox.google_cloud",
     ...     ],
+    ...     pre_task_code=[],
     ...     task_code=[
     ...         "joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket(",
     ...         "   contents_str=str(random.uniform(0,1))[:7], # write random number to file",
@@ -133,9 +131,6 @@ def create_parallel_google_cloud_run_job_template(
     >>> subprocess.run(["bash", "create_cloud_run_job.sh"], check=True)
     < process runs >
     """
-    warnings.warn(
-        "!!THIS FUNCTION IS STILL UNDER ACTIVE CONSTRUCTION!! Use at own risk"
-    )
 
     if "--tasks" not in cloud_run_job_params:
         raise ValueError('cloud_run_job_params must include argument "--tasks"')
@@ -226,7 +221,6 @@ GCP_CLOUD_RUN_JOB_NAME={cloud_run_job_name}
 DOCKER_IMAGE_PATH=gcr.io/${{GCP_PROJECT_ID}}/${{GCP_CLOUD_RUN_JOB_NAME}}
 INSTRUCTION_FILE_BUCKET_NAME={instruction_file_bucket_name}
 INSTRUCTION_FILE_PATH={instruction_file_path}
-N_BATCHES={cloud_run_job_params["--tasks"]}\n
 echo "Setting gcloud to use region=$GCP_REGION for Cloud Run"
 gcloud config set run/region ${{GCP_REGION}}\n
 echo "...done"
@@ -239,7 +233,7 @@ echo "...done"
 echo "Deleting cloud run job (if it already exists)"
 gcloud beta run jobs delete ${{GCP_CLOUD_RUN_JOB_NAME}} --quiet
 echo "Executing Cloud Run Job..."
-echo "  ...with $N_BATCHES batches"
+echo "  ...with {cloud_run_job_params["--tasks"]} batches"
 echo "  ...instructions file is gs://$INSTRUCTION_FILE_BUCKET_NAME/$INSTRUCTION_FILE_PATH"
 gcloud beta run jobs create \\
 ${{GCP_CLOUD_RUN_JOB_NAME}} \\

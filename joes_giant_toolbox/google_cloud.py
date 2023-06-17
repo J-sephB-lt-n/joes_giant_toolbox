@@ -5,6 +5,7 @@ Available modules:
     - create_parallel_google_cloud_run_job_template
     - delete_file_in_gcloud_bucket
     - download_file_from_gcloud_bucket_to_python
+    - gcloud_vm_deletes_itself
     - list_files_in_gcloud_bucket
     - move_or_rename_file_in_gcloud_bucket
     - query_bigquery_to_pandas_df
@@ -27,6 +28,7 @@ from joes_giant_toolbox.all.delete_file_in_gcloud_bucket import (
 from joes_giant_toolbox.all.download_file_from_gcloud_bucket_to_python import (
     download_file_from_gcloud_bucket_to_python,
 )
+from joes_giant_toolbox.all.gcloud_vm_deletes_itself import gcloud_vm_deletes_itself
 from joes_giant_toolbox.all.list_files_in_gcloud_bucket import (
     list_files_in_gcloud_bucket,
 )
