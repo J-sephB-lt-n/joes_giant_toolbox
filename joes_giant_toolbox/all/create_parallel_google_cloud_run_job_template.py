@@ -101,9 +101,9 @@ def create_parallel_google_cloud_run_job_template(
     ...     pre_task_code=[],
     ...     task_code=[
     ...         "joes_giant_toolbox.google_cloud.upload_file_python_to_gcloud_bucket(",
-    ...         "   contents_str=str(random.uniform(0,1))[:7], # write random number to file",
+    ...         '   contents_str=f"batch {BATCH_ID}, item {item_idx}",',
     ...         '   bucket_name="cloud_run_jobs_test",',
-    ...         '   filename_on_bucket=f"completed_files/{x}.txt",',
+    ...         '   filename_on_bucket=f"completed_files/{item}.txt",',
     ...         '   file_type="text"',
     ...         ")",
     ...         "time.sleep( random.uniform(1,5) )",
