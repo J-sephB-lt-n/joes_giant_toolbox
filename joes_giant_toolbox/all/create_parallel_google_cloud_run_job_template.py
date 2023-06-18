@@ -106,7 +106,7 @@ def create_parallel_google_cloud_run_job_template(
     ...         '   filename_on_bucket=f"completed_files/{item}.txt",',
     ...         '   file_type="text"',
     ...         ")",
-    ...         "time.sleep( random.uniform(1,5) )",
+    ...         "time.sleep( random.uniform(0.1,0.5) )",
     ...     ],
     ...     target_dir=code_output_dir,
     ...     gcp_region="europe-west2",

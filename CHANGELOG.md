@@ -1,6 +1,16 @@
 
 # Change Log
 
+## 0.3.02 bug and documentation fixes
+
+* Small change to documentation code example in create_parallel_google_cloud_run_job_template()
+
+## 0.3.01 new features
+
+* Added function **joes_giant_toolbox.google_cloud.create_parallel_google_cloud_run_job_template()**
+
+* Added function **joes_giant_toolbox.google_cloud.gcloud_vm_deletes_itself()**
+
 ## 0.2.24 bug and documentation fixes
 
 * Improved quality of **joes_giant_toolbox.text.RegexRulesClassifier** code (perfect pylint score)
@@ -27,7 +37,7 @@
 
 * Small aesthetic changes to README.md
 
-## 0.2.0 new content release
+## 0.2.0 new features
 
 * Added fig.tight_layout() to PythonPlottingTutorials().tutorials["grid_of_matplotlib_plots"]
 
@@ -35,7 +45,7 @@
 
 * Added class **joes_giant_toolbox.text.RegexRulesClassifier**
 
-## 0.1.0 new content release
+## 0.1.0 new features
 
 * Added additional documentation to function **joes_giant_toolbox.google_cloud.move_or_rename_file_in_gcloud_bucket**
 

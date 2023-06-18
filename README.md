@@ -68,7 +68,7 @@ You can search by category:
 
 | Name                                              | Description                                                                                                  | Confidence Score |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
-| anonymous_view_public_linkedin_page               | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
+| anonymous_view_public_linkedin_page               | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         4        |
 | ascii_density_histogram                           | Draws a histogram using only raw text symbols                                                                |         2        |
 | conjugate_prior_beta_binomial                     | Calculates the posterior distribution of the success probability parameter [p] of a binomial distribution, from observed data and a user-specified beta prior | 4                |
 | cosine_similarity                                 | Calculates the cosine similarity between two 1-dimensional numpy arrays | 2 |
