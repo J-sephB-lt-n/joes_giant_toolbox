@@ -3,7 +3,7 @@ This script defines the function gcloud_vm_deletes_itself()
 """
 
 import sys
-from typing import Any, Dict
+from typing import Any
 
 import google.api_core.extended_operation
 import google.cloud.compute_v1  # pylint: disable=import-error, no-name-in-module
@@ -70,7 +70,7 @@ def gcloud_vm_deletes_itself() -> None:
         google.cloud.compute_v1.InstancesClient()  # pylint: disable=c-extension-no-member
     )
     # fetch Virtual Machine information from the metadata server #
-    metadata_server_headers: Dict[str, str] = {
+    metadata_server_headers: dict[str, str] = {
         "Metadata-Flavor": "Google",
     }
     gcp_project_name: str = requests.get(

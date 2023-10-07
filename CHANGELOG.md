@@ -1,11 +1,21 @@
 
 # Change Log
 
-## 0.3.02 bug and documentation fixes
+## 0.4.1 new features
+
+* Added function **joes_giant_toolbox.text.longest_common_substring()**
+
+* Added function **joes_giant_toolbox.google_cloud.gcloud_vm_deletes_itself()**
+
+* Added function **joes_giant_toolbox.web.parse_mime_email_parts()**
+
+* Added function **joes_giant_toolbox.web.require_api_key()**
+
+## 0.3.2 bug and documentation fixes
 
 * Small change to documentation code example in create_parallel_google_cloud_run_job_template()
 
-## 0.3.01 new features
+## 0.3.1 new features
 
 * Added function **joes_giant_toolbox.google_cloud.create_parallel_google_cloud_run_job_template()**
 

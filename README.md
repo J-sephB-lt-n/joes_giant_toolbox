@@ -81,14 +81,17 @@ You can search by category:
 | gcloud_vm_deletes_itself                          | Running this function on a google cloud Virtual Machine (VM) causes the VM to delete itself                  |         4        |
 | list_all_python_imports                           | Searches every python script in a given folder and lists all python modules imported within those scripts    |         2        |
 | list_files_in_gcloud_bucket                       | Returns a list of the files present in a specified google cloud bucket                                       |         4        |
+| longest_common_substring                          | Identifies the longest substring appearing in both strings | 3 |
 | longest_sentence_subsequence_plagiarism_detector  | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) |    3        |
 | make_url_request                                  | A convenience function for making API requests using the urllib library                                      |         3        |
 | move_or_rename_file_in_gcloud_bucket              | Move or rename a file which is in a google cloud bucket (which includes moving it to a different bucket)     |         4        |
+| parse_mime_email_parts                                   | Extracts parts from an email that is in MIME format | 2 |
 | print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
 | PythonPlottingTutorials                           | Example code snippets for creating common data visualisations in python                                      |         4        |
 | query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 | RegexRulesClassifier | A multi-class text classifier using manual regex rules | 2
+| require_api_key                                          | A decorator adding basic API key authentication to a flask route | 3 |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 | scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        |
 | StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
@@ -105,6 +108,8 @@ import joes_giant_toolbox.web
 help( joes_giant_toolbox.web.anonymous_view_public_linkedin_page )
 help( joes_giant_toolbox.web.duckduckgo_search_multipage )
 help( joes_giant_toolbox.web.make_url_request )
+help( joes_giant_toolbox.web.require_api_key )
+help( joes_giant_toolbox.web.parse_mime_email_parts )
 help( joes_giant_toolbox.web.scrape_webpage_and_all_linked_webpages )
 help( joes_giant_toolbox.web.url_to_filename_to_url_mapper )
 ```
@@ -114,8 +119,12 @@ help( joes_giant_toolbox.web.url_to_filename_to_url_mapper )
 | anonymous_view_public_linkedin_page                      | Extracts the information (HTML) from a public LinkedIn page (e.g. person or company) using a virtual browser |         2        |
 | duckduckgo_search_multipage                              | Fetches search results from the DuckDuckGo Lite search engine                                                |         2        |
 | make_url_request                                         | A convenience function for making API requests using the urllib library                                      |         3        |
+| parse_mime_email_parts                                   | Extracts parts from an email that is in MIME format | 2 |
+| require_api_key                                          | A decorator adding basic API key authentication to a flask route | 3 |
 | scrape_webpage_and_all_linked_webpages                   | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        |
 | url_to_filename_to_url_mapper                            | Converts a webpage URL into a useable filename, where the URL can be recovered directly from the filename    |         2        |
+
+
 
 ## Data Visualisation
 
@@ -234,6 +243,7 @@ import joes_giant_toolbox.text
 
 help( joes_giant_toolbox.text )
 
+help( joes_giant_toolbox.text.longest_common_substring )
 help( joes_giant_toolbox.text.longest_sentence_subsequence_plagiarism_detector )
 help( joes_giant_toolbox.text.RegexRulesClassifier )
 help( joes_giant_toolbox.text.StringCleaner )
@@ -241,6 +251,7 @@ help( joes_giant_toolbox.text.StringCleaner )
 
 | Name                                              | Description                                                                                                  | Confidence Score |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| longest_common_substring                          | Identifies the longest substring appearing in both strings | 3 |
 | longest_sentence_subsequence_plagiarism_detector  | Finds phrases (sequences of consecutive words) common to 2 documents (e.g. to act as a naive plagiarism detector) |    3        |
 RegexRulesClassifier | A multi-class text classifier using manual regex rules | 2
 | StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
@@ -250,5 +261,5 @@ RegexRulesClassifier | A multi-class text classifier using manual regex rules | 
 ```bash
 pip install pytest
 cd joes_giant_toolbox/tests
-pytest -v
+pytest --verbose
 ```
