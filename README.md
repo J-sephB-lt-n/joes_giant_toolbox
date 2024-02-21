@@ -75,6 +75,7 @@ You can search by category:
 | create_gcloud_vm_docker_template | Creates a folder containing the files necessary to quickly build a python docker container to run on a google cloud Virtual Machine | 4
 | create_parallel_google_cloud_run_job_template | Run a task in parallel using a Google Cloud Run job (code-generating function)| 2 |
 | create_project_scope_doc                          | Creates a basic project scope document (markdown) by prompting the user for input                            |         3        |
+| DataBatcher                                       | Breaks a provided iterable up into batches according to a provided batching pattern                          |         4        |
 | delete_file_in_gcloud_bucket                      | Deletes a file which is in a google cloud bucket                                                             |         4        |
 | download_file_from_gcloud_bucket_to_python        | Reads a file from a google cloud bucket into python memory                                                   |         4        |
 | duckduckgo_search_multipage                       | Fetches search results from the DuckDuckGo Lite search engine                                                |         2        |
@@ -195,6 +196,7 @@ help( joes_giant_toolbox.proj_mgmt.create_project_scope_doc )
 ```python
 import joes_giant_toolbox.convenience
 
+help( joes_giant_toolbox.convenience.DataBatcher )
 help( joes_giant_toolbox.convenience.list_all_python_imports )
 help( joes_giant_toolbox.convenience.print_progress_bar )
 help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
@@ -202,6 +204,7 @@ help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
 
 | Name                                              | Description                                                                                                  | Confidence Score |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------|
+| DataBatcher                                       | Breaks a provided iterable up into batches according to a provided batching pattern    | 4
 | list_all_python_imports                           | Searches every python script in a given folder and lists all python modules imported within those scripts    |         2        |
 | print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |

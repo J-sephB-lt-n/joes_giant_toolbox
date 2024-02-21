@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.5.1 new features
+
+* Added class **joes_giant_toolbox.convenience.DataBatcher**
+
 ## 0.4.1 new features
 
 * Added function **joes_giant_toolbox.text.longest_common_substring()**
