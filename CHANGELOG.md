@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.7.1 new features
+
+* Added fixed_batch functionality to **joes_giant_toolbox.convenience.data_batcher**
+
 ## 0.6.1 new features
 
 * Added print depth control to **joes_giant_toolbox.dataviz.view_nested_dict_structure**
