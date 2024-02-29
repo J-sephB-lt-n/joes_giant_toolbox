@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.6.1 new features
+
+* Added print depth control to **joes_giant_toolbox.dataviz.view_nested_dict_structure**
+
 ## 0.5.1 new features
 
 * Added class **joes_giant_toolbox.convenience.DataBatcher**
