@@ -92,7 +92,8 @@ You can search by category:
 | query_bigquery_to_pandas_df                       | Runs a query on Google BigQuery and writes the result into a local pandas.DataFrame                          |         4        |
 | RapidBinaryClassifier                             | Ultra rapid generation of binary classifier models in scikit-learn by abstracting away a lot of the decisions and model code| 3 |
 | RegexRulesClassifier | A multi-class text classifier using manual regex rules | 2
-| require_api_key                                          | A decorator adding basic API key authentication to a flask route | 3 |
+| require_api_key                                   | A decorator adding basic API key authentication to a flask route | 3 |
+| retry_function_call                               | Retries function (if it fails) according to retry pattern | 4 |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 | scrape_webpage_and_all_linked_webpages            | Extracts HTML from given web page, and also follows all of the hyperlinks on that page and scrapes those too |         1        |
 | StringCleaner                                     | Performs common string-cleaning operations to a text string, also allowing them to be chained in sequence    |         1        |
@@ -199,6 +200,7 @@ import joes_giant_toolbox.convenience
 help( joes_giant_toolbox.convenience.DataBatcher )
 help( joes_giant_toolbox.convenience.list_all_python_imports )
 help( joes_giant_toolbox.convenience.print_progress_bar )
+help( joes_giant_toolbox.convenience.retry_function_call )
 help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
 ```
 
@@ -207,6 +209,7 @@ help( joes_giant_toolbox.convenience.run_python_function_in_parallel )
 | DataBatcher                                       | Breaks a provided iterable up into batches according to a provided batching pattern    | 4
 | list_all_python_imports                           | Searches every python script in a given folder and lists all python modules imported within those scripts    |         2        |
 | print_progress_bar                                | Prints a progress bar (to standard out) while code is running                                                |         3        |
+| retry_function_call                               | Retries function (if it fails) according to retry pattern | 4 |
 | run_python_function_in_parallel                   | Runs a python function in parallel on multiple cores or threads                                              |         4        |
 
 ## Statistical Inference and Hypothesis Testing

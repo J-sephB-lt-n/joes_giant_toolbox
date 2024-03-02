@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.8.1 new features
+
+* Added function **joes_giant_toolbox.convenience.retry_function_call**
+
 ## 0.7.1 new features
 
 * Added fixed_batch functionality to **joes_giant_toolbox.convenience.data_batcher**
