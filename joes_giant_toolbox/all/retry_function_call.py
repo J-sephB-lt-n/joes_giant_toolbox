@@ -30,7 +30,7 @@ def retry_function_call(  # pylint: disable=too-many-arguments
         Any: If function executes without error, returns the function result
 
     Raises:
-        MaxRetriesExceededError: if `retry_pattern_seconds` is exhausted successful function call
+        MaxRetriesExceededError: if `retry_pattern_seconds` exhausted before successful function call # pylint: disable=line-too-long
 
     Example:
         >>> import random
