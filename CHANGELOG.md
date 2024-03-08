@@ -1,6 +1,10 @@
 
 # Change Log
 
+## 0.8.3 bug fixes
+
+* Improved behaviour of default arguments in **joes_giant_toolbox.convenience.retry_function_call**
+
 ## 0.8.2 documentation fixes
 
 * Fixed typo in docstring of function **joes_giant_toolbox.convenience.retry_function_call**

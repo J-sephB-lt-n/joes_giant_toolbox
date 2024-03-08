@@ -9,10 +9,10 @@ from joes_giant_toolbox.custom_exceptions import MaxRetriesExceededError
 
 def retry_function_call(  # pylint: disable=too-many-arguments
     func: Callable,
-    func_args: tuple,
-    func_kwargs: dict,
     retry_pattern_seconds: Iterable[int | float],
     exceptions_to_handle: tuple,
+    func_args: tuple | None = None,
+    func_kwargs: dict | None = None,
     verbose: bool = False,
 ) -> Any:
     """
@@ -45,9 +45,15 @@ def retry_function_call(  # pylint: disable=too-many-arguments
         ...        func_kwargs={},
         ...        retry_pattern_seconds=(0.1, 1, 2, 5),
         ...        exceptions_to_handle=(ValueError,),
+        ...        verbose=True
         ...    )
         >>> print("Function output:", func_output)
     """
+    if func_args is None:
+        func_args = tuple()
+    if func_kwargs is None:
+        func_kwargs = {}
+
     for wait_n_seconds in retry_pattern_seconds:
         try:
             return func(*func_args, **func_kwargs)
