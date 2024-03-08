@@ -1,7 +1,9 @@
 
 # Change Log
 
-## 0.8.3 bug fixes
+## 0.9.0 new features and bug fixes
+
+* Implemented random wait times in **joes_giant_toolbox.convenience.retry_function_call**
 
 * Improved behaviour of default arguments in **joes_giant_toolbox.convenience.retry_function_call**
 
